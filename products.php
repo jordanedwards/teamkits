@@ -1,4 +1,5 @@
 <?php
+// Darren types like a little girl
 // Set the page title/height and include the header file:
 define('TITLE', 'Products | ');
 include('shared/header.php');
