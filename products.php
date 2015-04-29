@@ -46,6 +46,7 @@ $products = array($product_1, $product_2, $product_3, $product_4, $product_5, $p
         ?>
     </div>
 
+<!-- oh heyyyyyy -->
 
 <?php
 include('shared/footer.php');
