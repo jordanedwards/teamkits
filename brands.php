@@ -1,4 +1,5 @@
 <?php
+
 // Set the page title/height and include the header file:
 define('TITLE', 'Brands | ');
 include('shared/header.php');
