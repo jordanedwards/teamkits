@@ -64,21 +64,21 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class='navbar-collapse'>
-                <ul class='nav navbar-nav navbar-right'><!--
-                    <li class='hidden'>
-                        <a href='#page-top'></a>
-                    </li>-->
+                <ul class='nav navbar-nav navbar-right'>
                     <li>
-                        <a href='about.php' class='menu-item'>About</a>
+                        <a href='index.php' class='menu-item' id='menu-1'>Home</a>
                     </li>
                     <li>
-                        <a href='brands.php' class='menu-item'>Brands</a>
+                        <a href='about.php' class='menu-item' id='menu-2'>About</a>
                     </li>
                     <li>
-                        <a href='products.php' class='menu-item'>Products</a>
+                        <a href='brands.php' class='menu-item' id='menu-3'>Brands</a>
                     </li>
                     <li>
-                        <a href='contact.php' class='menu-item'>Contact</a>
+                        <a href='products.php' class='menu-item' id='menu-4'>Products</a>
+                    </li>
+                    <li>
+                        <a href='contact.php' class='menu-item' id='menu-5'>Contact</a>
                     </li>
                 </ul>
             </div>
