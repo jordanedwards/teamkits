@@ -1,0 +1,138 @@
+body {
+	font: 1.5em 'Open Sans';
+}
+.navbar-brand {
+	padding: 15px 0 15px 15px;
+}
+
+#sortable li:nth-child(even) {background: #CCC}
+#sortable li:nth-child(odd) {background: #FFF}
+
+.errorContainer {
+display:none;
+}
+.navbar-inverse .navbar-nav>li>a {
+color: #222;
+}
+
+/* SORTABLE TABLE CSS */
+
+table.sort_table th {
+	background: #DDAB30 url(../images/carets.gif) no-repeat center right;
+	padding-right: 20px;	
+	cursor: pointer;
+	white-space:nowrap;
+}
+
+table.sort_table tr .sort_asc{
+background: 
+	url(../images/desc.gif) no-repeat center right,
+	#DDAB30 url(../images/lighten.png);
+	padding-right: 20px;	
+}
+
+table.sort_table tr .sort_desc{
+background: 
+	url(../images/asc.gif) no-repeat center right,
+	#DDAB30 url(../images/lighten.png);
+	padding-right: 20px;	
+}
+
+table.sort_table th.nosort{
+	background: #DDAB30;
+	cursor:auto;
+}
+
+/*******************************************************************************
+* Search Bar
+*******************************************************************************/
+#search_toggle{cursor:pointer;color:#602618;}
+#search_toggle:hover{color: #ff0000;}
+div#search{margin-bottom:15px;display:none;border:1px solid #ccc;padding:5px;background:#eeeeee;-moz-border-radius:5px;border-radius:5px;box-shadow:0 1px 3px rgba(0, 0, 0, 0.35);}
+div#addnew{margin-bottom:15px;border:1px solid #ccc;padding:5px;background:#eeeeee;-moz-border-radius:5px;border-radius:5px;box-shadow:0 1px 3px rgba(0, 0, 0, 0.35);}
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+float: right;
+}
+
+h1 {
+	font-weight: bold;
+	/*background: dimgrey;*/
+	color: #fff;
+	padding: 5px;	
+	padding-left: 20px;
+	background-image: linear-gradient(to bottom, #414141 0%, #323232 100%);
+}
+.ui-dialog .ui-dialog-content {
+ overflow: hidden; 
+}
+.right {
+	float: right;
+	margin-right: 5px;
+	position: relative !important;
+}
+.left {
+	float: left;
+	margin-left: 5px;
+	position: relative !important;
+	margin-right: 10px;
+}
+ #sortable { list-style-type: none; margin: 0; padding: 0; max-width: 450px; cursor:pointer;}
+  #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em;}
+  #sortable li span { position: absolute; margin-left: -1.3em; }
+  .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+	background: none;
+}
+.sortableHeader {
+	opacity: 1;
+	background:#DDAB30 !important;
+	font-weight:bold;
+	padding-left: 5px !important;
+}
+
+#sortable li:hover {
+	background-color: #E8C675;
+}
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus {
+	color: #000;
+	background-color: #ccc;
+}
+footer {
+	position: fixed;
+	bottom: 0px;
+	padding: 10px;
+	width: 100%;
+	background: black;
+	color: #fff;
+text-align: center;	
+}
+.pagination>li>a, .pagination>li>span {
+	border: 1px solid #666;
+	background: #fff;
+}
+a.active_link {
+	background: #DDAB30 !important;
+}
+span.price {
+	font-size: 40px;
+	line-height: 1.2;
+}
+span.note {
+	position: relative;
+	top: -20px;
+	display: inline;
+	font-size: 17px;
+	line-height: 0.8em;
+}
+.btn-left {
+	float:left;
+}
+.ui-dialog{
+width: 420px !important;
+}
+.navbar.navbar-inverse {
+  background: #9B9B9B;
+  border-color: #292929;
+  border-bottom: 1px solid #000;
+  background: url('../../img/admin-header1.jpg');
+}
