@@ -1,5 +1,4 @@
 <?php
-// Darren types like a little girl
 // Set the page title/height and include the header file:
 define('TITLE', 'Products | ');
 include('shared/header.php');
@@ -46,7 +45,6 @@ $products = array($product_1, $product_2, $product_3, $product_4, $product_5, $p
             }
         ?>
     </div>
-
 
 <?php
 include('shared/footer.php');
