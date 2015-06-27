@@ -9,9 +9,7 @@ $activeMenuItem = "Orders";
 <html lang="en">
   <head>
 	<?php include(HEAD); ?>
-    <meta name="description" content="Orders List">
     <title><?php  echo $appConfig["app_title"];  ?> | Orders List</title>
-    <meta name="author" content="Orchard City Web Development">
   </head>
   <body>
 

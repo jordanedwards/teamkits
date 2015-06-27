@@ -136,3 +136,25 @@ width: 420px !important;
   border-bottom: 1px solid #000;
   background: url('../../img/admin-header1.jpg');
 }
+.add-icon{
+	color:#fff; 
+	padding:5px; 
+	float:right;
+  cursor: pointer;
+}
+::-webkit-input-placeholder {
+   color: #ccc;
+   font-style:italic;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: #ccc;
+   font-style:italic;}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: #ccc;
+   font-style:italic;}
+
+:-ms-input-placeholder {  
+   color: #6E6E6E;
+   font-style:italic;}

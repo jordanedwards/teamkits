@@ -24,7 +24,7 @@ class ErrorHandler {
 	public function notifyAdminException(Exception $e){
 		try{
 			require_once('../includes/init.php');
-			if ($appConfig["environment"] != "local_development"):
+		/*	if ($appConfig["environment"] != "local_development"):
 				include_once(CLASSES . 'class_phpmailer.php');
 				
 				$body = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><body><p>An unexpected error occured.</p>';
@@ -47,7 +47,8 @@ class ErrorHandler {
 				}
 				$mail = null;
 			endif;
-			
+			*/
+			addTolog($e->getMessage());
 			$_SESSION['alert_msg'] = "An unexpected system error has occurred. The " . $appConfig['app_title'] ." administrators have been notified. We apologize for any inconvenience.";	
 			$_SESSION['alert_color'] = "red";
 			header("location:/error.php");

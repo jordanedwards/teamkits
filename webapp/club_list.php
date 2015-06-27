@@ -9,42 +9,9 @@ $activeMenuItem = "Clubs";
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Orchard City Web Development">
-    <link rel="icon" href="favicon.ico">
-	
+    <?php  include(HEAD);  ?>
     <title><?php  echo $appConfig["app_title"];  ?> | Club List</title>
-
-    <!-- Bootstrap core CSS -->   
-	
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">    
-    
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
-    <link href="./css/bootstrap-responsive.min.css" rel="stylesheet">
-    
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
-    <link href="./css/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css">        
-    
-    <link href="./css/ui-lightness/jquery-ui-1.10.0.custom.min.css" rel="stylesheet">
-    
-    <link href="./css/base-admin-3.css" rel="stylesheet">
-    <link href="./css/base-admin-3-responsive.css" rel="stylesheet">
-    
-    <link href="./css/pages/dashboard.css" rel="stylesheet">   
-    <link href="./css/custom.css" rel="stylesheet">
-    <link href="./css/styles.css" rel="stylesheet">
-	
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
-
   <body>
 
 <?php  require(INCLUDES . "navbar.php");  ?>
@@ -222,17 +189,8 @@ $activeMenuItem = "Clubs";
 
 
 <?php  include(INCLUDES. "footer.php");  ?>
+<?php require(INCLUDES_LIST);?>	
 
-	
-<script src="../js/jquery.js"></script>
-<script src="../js/jquery-ui.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-
-<script src="../js/Application.js"></script>
-
-<script type="text/javascript" src="../js/jquery.metadata.js"></script>
-<script type="text/javascript" src="../js/jquery.validate.js"></script>
-    
 <?php  if ($session->getSort($_SERVER["PHP_SELF"]) != ""){
   // If there is a sort saved in session, print a jquery function to add class to the selected column
    ?>

@@ -45,10 +45,7 @@ $activeMenuItem = "Home";
 </div> 
     
 <?php require(INCLUDES . "footer.php"); ?>
-
-<script src="./js/libs/jquery-1.9.1.min.js"></script>
-<script src="./js/libs/jquery-ui-1.10.0.custom.min.js"></script>
-<script src="./js/libs/bootstrap.min.js"></script>
+<?php require(INCLUDES_LIST);?>
 
 </body>
 </html>

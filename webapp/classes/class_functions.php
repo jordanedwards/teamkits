@@ -107,5 +107,3 @@ function backup_tables($tables = '*')
 	fwrite($handle,$return);
 	fclose($handle);
 }
-?>
-

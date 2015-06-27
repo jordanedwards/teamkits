@@ -27,31 +27,9 @@ $activeMenuItem = "Orders";
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="Orchard City Web Development">
-    <link rel="icon" href="favicon.ico">
-    <title><?php   echo $appConfig["app_title"];  ?> | Orders Edit</title>
+  <?php  include(HEAD);  ?>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">    
-    
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
-    <link href="./css/bootstrap-responsive.min.css" rel="stylesheet">
-    
-    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet">
-    <link href="./css/font-awesome.css" rel="stylesheet" type="text/css">        
-    
-    <link href="./css/ui-lightness/jquery-ui-1.10.0.custom.min.css" rel="stylesheet">
-    
-    <link href="./css/base-admin-3.css" rel="stylesheet">
-    <link href="./css/base-admin-3-responsive.css" rel="stylesheet">
-    
-    <link href="./css/pages/dashboard.css" rel="stylesheet">   
-    <link href="./css/custom.css" rel="stylesheet">
-    <link href="./css/styles.css" rel="stylesheet">
+    <title><?php   echo $appConfig["app_title"];  ?> | Orders Edit</title>
 
   </head>
 
@@ -77,15 +55,16 @@ $activeMenuItem = "Orders";
 	</div>
 	
 	<div class="row">
-	<div class="col-md-8">
+	<div class="col-md-6">
 	<form id="form_orders" action="<?php  echo ACTIONS_URL; ?>action_orders_edit.php" method="post">
 	<input type="hidden" name="orders_id" value="<?php  echo $orders->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
 	<input type="hidden" name="page_id" value="<?php  echo $page_id  ?>" />	
 	
          <table class="admin_table">
+		 	<tr><th colspan="2">Club details</th></tr>
 				<tr>
-           			<td style="width:1px; white-space:nowrap;">Club id: </td>
+           			<td style="width:1px; white-space:nowrap;">Club:</td>
 				
 					<td>
 					<?php 
@@ -102,11 +81,11 @@ $activeMenuItem = "Orders";
 					
 					</td>
 				</tr>
-				<tr>
+			<!--	<tr>
            			<td style="width:1px; white-space:nowrap;">Customer: </td>
             		<td><input id="order_customer" name="order_customer" type="number" step="any" value="<?php  echo $orders->get_customer();  ?>" style="width:90%" /> </td>
-				</tr>
-				<tr>
+				</tr>-->
+			<!--	<tr>
            			<td style="width:1px; white-space:nowrap;">Item: </td>
 				
 					<td>
@@ -131,32 +110,32 @@ $activeMenuItem = "Orders";
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Quantity: </td>
             		<td><input id="order_quantity" name="order_quantity" type="number" step="any" value="<?php  echo $orders->get_quantity();  ?>" style="width:90%" /> </td>
-				</tr>
+				</tr>-->
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Status: </td>
 				
 					<td>
 					<?php 
 						$dd = new DropDown();
-						$dd->set_table("status");	
-						$dd->set_name_field("status_name");
+						$dd->set_table("orderstatus");	
+						$dd->set_name_field("orderstatus_title");
 						$dd->set_class_name("form-control");
+						$dd->set_order_by("orderstatus_order");							
 						$dd->set_order("ASC");						
-					//	$dd->set_preset("supplier");
-						$dd->set_name("order_status");						
+						$dd->set_name("order_status");	
 						$dd->set_selected_value($orders->get_status());
 						$dd->display();
 					 ?>											
 					
 					</td>
 				</tr>
-				<tr>
+			<!--	<tr>
            			<td style="width:1px; white-space:nowrap;">Tracking number: </td>
             		<td><input id="order_tracking_number" name="order_tracking_number" type="text"  value="<?php  echo $orders->get_tracking_number();  ?>" style="width:90%" /> </td>
-				</tr>
+				</tr>-->
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Notes: </td>
-            		<td><input id="order_notes" name="order_notes" type="textarea"  value="<?php  echo $orders->get_notes();  ?>" style="width:90%" /> </td>
+            		<td><textarea id="order_notes" name="order_notes" style="width:90%" rows="4"><?php  echo $orders->get_notes();  ?></textarea></td>
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Active: </td>
@@ -186,31 +165,98 @@ $activeMenuItem = "Orders";
         <?php  }  ?>			
 	
       </div>
+	<div class="col-md-6">
+		<?php if ($orders_id > 0): ?>
+			<table class="admin_table">
+			<thead>
+			<tr><th colspan="5">Order Items:<i class="fa fa-plus-circle fa-lg add-icon add-item"></i></th></tr>
+			<tr><th></th><th>Item:</th><th>Quantity</th><th>Price</th><th>Total</th></tr>	
+			</thead>
+			
+			<tbody id="order_items_table">
+		 <?php 
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from orderitem 
+			LEFT JOIN item ON orderitem.orderitem_item_number = item.item_id 
+			WHERE orderitem.orderitem_order_id=" . $orders->get_id() . "
+			AND orderitem.is_active = 'Y'";						
+
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result)):
+					echo '<tr><td><a href="orderitem_edit.php?id=' . $row['orderitem_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['item_name'] . '</td><td>' . $row['orderitem_quantity'] . '</td><td style="white-space:normal">$'.sprintf("%.2f",$row['orderitem_price']) .'</td><td style="white-space:normal">$'.number_format(($row['orderitem_price']*$row['orderitem_quantity']),2) .'</td></tr>';
+						$subtotal = $subtotal + number_format(($row['orderitem_price']*$row['orderitem_quantity']),2);
+				endwhile;									
+			endif;
+		 ?>		
+			</tbody>
+			
+			<tfoot>	 	 
+			<tr><td colspan="4">Subtotal:</td><td>$<?php echo number_format($subtotal,2);?></td></tr>
+			</tfoot>
+		</table>
+			<table class="admin_table">
+			<thead>
+			<tr><th colspan="4">Payments:<i class="fa fa-plus-circle fa-lg add-icon add-payment"></i></th></tr>
+			<tr><th></th><th>Amount</th><th>Method</th><th>Date</th></tr>	
+			</thead>
+			
+			<tbody id="payment_table">
+		 <?php 
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from payment 
+			LEFT JOIN paymentmethod ON payment.payment_method = paymentmethod.paymentmethod_id
+			WHERE payment.payment_order_id=" . $orders->get_id() . "
+			AND payment.is_active = 'Y'";						
+
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result)):
+					echo '<tr><td><a href="payment_edit.php?id=' . $row['payment_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . number_format($row['payment_amount'],2) . '</td><td>' . $row['paymentmethod_title'] . '</td><td style="white-space:normal">'.$row['payment_date_created'] .'</td></tr>';
+					$payment_total = $payment_total + $row['payment_amount'];
+				endwhile;									
+			endif;
+		 ?>		
+			</tbody>
+			<?php $total = $subtotal - $payment_total; ?>
+			<tfoot>	 	 
+			<tr><td colspan="3">Balance:</td><td id="total" style="text-align:right">$<?php echo number_format($total,2);?></td></tr>
+			</tfoot>			
+		</table>
+			<br>
+			<table class="admin_table">
+			<thead>
+			<tr><th colspan="5">Shipping details:<i class="fa fa-plus-circle fa-lg add-icon add-shipping"></i></th></tr>
+			<tr><th></th><th>Date</th><th>Carrier</th><th>Tracking #</th></tr>	
+			</thead>
+			
+			<tbody id="shippingrecord_table">
+		 <?php 
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from shippingrecord 
+			WHERE shippingrecord.shippingrecord_order_id=" . $orders->get_id() . "
+			AND shippingrecord.is_active = 'Y'";						
+
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result)):
+					echo '<tr><td><a href="shippingrecord_edit.php?id=' . $row['shippingrecord_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['shippingrecord_date'] . '</td><td>' . $row['shippingrecord_carrier'] . '</td><td style="white-space:normal">'.$row['shippingrecord_tracking'] .'</td></tr>';
+				endwhile;									
+			endif;
+		 ?>		
+			</tbody>
+			
+		</table>
+		<?php endif ?>
+	</div>
     </div> 
 
 </div><!-- /container -->
 </div>
 
-<?php  include(INCLUDES . "/footer.php");  ?>
-	
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-<script src="./js/libs/jquery-1.9.1.min.js"></script>
-<script src="./js/libs/jquery-ui-1.10.0.custom.min.js"></script>
-<script src="./js/libs/bootstrap.min.js"></script>
+<?php  include(INCLUDES . "/footer.php");  ?> 
+<?php require(INCLUDES_LIST);?>	
 
-<script src="./js/Application.js"></script>
-
-<script type="text/javascript" src="./js/jquery.metadata.js"></script>
-<script type="text/javascript" src="./js/jquery.validate.js"></script>
-<script type="text/javascript" src="./js/jquery.mask.js"></script>
-	
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
 	
 <script type="text/javascript">
 		$(document).ready(function() {
@@ -232,5 +278,9 @@ $activeMenuItem = "Orders";
 		 //   $("#student_tel").mask("(999) 999-9999");
 		
   </script>		
+<?php include(SCRIPTS . "order_item_add_dialog.php"); ?>  
+<?php include(SCRIPTS . "shipping_add_dialog.php"); ?>  
+<?php include(SCRIPTS . "payment_add_dialog.php"); ?>  
+
   </body>
 </html>

@@ -15,6 +15,7 @@
  		private $password;
  		private $code;
  		private $account_type;
+ 		private $tax_id;
  		private $active;
  		private $date_created;
  		private $last_updated;
@@ -64,6 +65,9 @@
 		
 		public function get_account_type() { return $this->account_type;}
 		public function set_account_type($value) {$this->account_type=$value;}
+		
+		public function get_tax_id() { return $this->tax_id;}
+		public function set_tax_id($value) {$this->tax_id=$value;}
 		
 		public function get_active() { return $this->active;}
 		public function set_active($value) {$this->active=$value;}
@@ -119,13 +123,12 @@ public function clear(){
 public function save() {
 
 		try{
-			//require_once($class_folder . '/class_data_manager.php');
 			$dm = new DataManager();
 
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
 			
-				$strSQL = "INSERT INTO club (club_id, club_name, club_sport, club_brand, club_tel, club_address, club_city, club_province, club_country, club_postal_code, club_login, club_password, club_code, club_account_type, is_active, club_date_created, club_last_updated, club_last_updated_user) 
+				$strSQL = "INSERT INTO club (club_id, club_name, club_sport, club_brand, club_tel, club_address, club_city, club_province, club_country, club_postal_code, club_login, club_password, club_code, club_account_type, club_tax_id, is_active, club_date_created, club_last_updated, club_last_updated_user) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_name())."',
@@ -141,6 +144,7 @@ public function save() {
 				'".mysqli_real_escape_string($dm->connection, $this->get_password())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_code())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_account_type())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_tax_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_active())."',
 				NOW(),
 				NOW(),
@@ -161,6 +165,7 @@ public function save() {
 						 		club_password='".mysqli_real_escape_string($dm->connection, $this->get_password())."',						 
 						 		club_code='".mysqli_real_escape_string($dm->connection, $this->get_code())."',						 
 						 		club_account_type='".mysqli_real_escape_string($dm->connection, $this->get_account_type())."',						 
+						 		club_tax_id='".mysqli_real_escape_string($dm->connection, $this->get_tax_id())."',						 
 						 		is_active='".mysqli_real_escape_string($dm->connection, $this->get_active())."',						 
 						 		club_last_updated=NOW(),						
 						 		club_last_updated_user='".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."'
@@ -239,7 +244,16 @@ public function save() {
 			exit;
 		}
 	}
-  
+
+  	public function load_from_post($array){
+  		foreach ($array as $key => $val){
+			if(property_exists('club',$key)):
+				$method_name = "set_".$key;
+				$this->$method_name($val);
+			endif;
+		}
+	} 
+	  
 	// loads the object data from a mysql assoc array
   	private function load($row){
 		$this->set_id($row["club_id"]);
@@ -256,6 +270,7 @@ public function save() {
 		$this->set_password($row["club_password"]);
 		$this->set_code($row["club_code"]);
 		$this->set_account_type($row["club_account_type"]);
+		$this->set_tax_id($row["club_tax_id"]);
 		$this->set_active($row["is_active"]);
 		$this->set_date_created($row["club_date_created"]);
 		$this->set_last_updated($row["club_last_updated"]);

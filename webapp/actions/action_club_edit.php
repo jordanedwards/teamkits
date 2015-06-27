@@ -18,6 +18,7 @@ require(INCLUDES . "/acl_module.php");
 	$club_password=$_POST["club_password"];
 	$club_code=$_POST["club_code"];
 	$club_account_type=$_POST["club_account_type"];
+	$club_tax_id=$_POST["club_tax_id"];
 	$is_active=$_POST["is_active"];
 		// add the new record to the database
 	include(CLASSES . "class_club.php");
@@ -37,6 +38,7 @@ require(INCLUDES . "/acl_module.php");
 		$club->set_password($club_password);
 		$club->set_code($club_code);
 		$club->set_account_type($club_account_type);
+		$club->set_tax_id($club_tax_id);
 		$club->set_active($is_active);
 
 	include_once(CLASSES . "class_user.php");

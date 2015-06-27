@@ -11,7 +11,6 @@ $activeMenuItem = "Payments";
 <html lang="en">
   <head>
 	<?php  include(HEAD);  ?>
-    <meta name="description" content="">
     <title><?php  echo $appConfig["app_title"];  ?> | Payment List</title>
   </head>
 
@@ -100,7 +99,9 @@ $dm = new DataManager();
 								$query_where .= ' AND payment_status = "'.$s_status.'"';
 						}		
 
-						$query = "SELECT * from payment WHERE 1=1" . $query_where .$order;
+						$query = "SELECT * from payment 
+						LEFT JOIN paymentmethod ON payment.payment_method = paymentmethod.paymentmethod_id
+						WHERE payment.is_active = 'Y' " . $query_where .$order;
 						
 						//Handle the sorting of the records
 						$session->setQuery($_SERVER["PHP_SELF"],$query);

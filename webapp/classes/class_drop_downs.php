@@ -21,13 +21,14 @@
 // ->required: True/false argument for whether you would like the field to be a required input.
 // ->onchange: Just put in here whatever you would like as the onchange event.
 // ->order: Sets the order by direction. Default is ASC, but you may want DESC, it's a free country.
+// ->order_by: Set this if you want to order the list by a field OTHER than the name field.
 // ->custom_sql: If you need a table join or something funky, write it yourself and stick it in. Table method must still be set.
 // ->class_name: If you want the select to have a specific css class or classes.
 
 // Syntax:
 /*
 // All methods are shown, but only the first two are necessary
-	require_once(CLASSES . "/class_drop_downs_object.php");
+	require_once(CLASS_FOLDER . "/class_drop_downs_object.php");
 	$dd = New DropDown();
 	$dd->set_table("student");
 	$dd->set_name_field("student_first_name");
@@ -38,8 +39,10 @@
 	$dd->set_class_name("form-control");
 	$dd->set_active_only(true);
 	$dd->set_required(false);	
+	$dd->set_placeholder("Select student");
 	$dd->set_onchange("updateStudent();");
 	$dd->set_order("ASC");
+	$dd->set_order_by("student_id");
 	$dd->set_where("student_session_id = '3'");	
 	$dd->add_data("data-name",$data-value);
 	$dd->display();
@@ -50,10 +53,14 @@
 	$dd->set_name("production_status");	
 	$dd->set_selected_value($production_status);
 	$dd->set_required(true);
-	$dd->set_class_name("form-control");		
-	$dd->set_option_list("New,Pending,In Production,Complete,Shipped/Picked up");	
-	$ddt->display();	
+	$dd->set_class_name("form-control");
+		// Option list can be a simple string (if the keys and values are the same, or an array if you want the keys to be different from the values:
+		$option_list = "Superuser,Admin,User";
+		$option_list = array("1"=>"Superuser","2"=>"Admin","3"=>"User");		
+	$dd->set_option_list($option_list);	
+	$dd->display();	
 */
+// Alternatively, use $dd->compile() to return the drop down as a function
 
 // Notes:
 //  - Please be aware that to use the "just_show_active" argument, there must be a field in the table called "is_active" with a simple 1/0 or boolean value 
@@ -70,8 +77,10 @@ class DropDown {
 	private $selected_value;
 	private $active_only;
 	private $required;
+	private $placeholder;
 	private $onchange;
 	private $order;
+	private $order_by;	
 	private $static;
 	private $where;
 	private $custom_sql;
@@ -81,6 +90,7 @@ class DropDown {
 	private $data;
 					
 	function __construct() {
+		$this->data=array();
 	}
 
 		public function get_class_name() { return $this->class_name;}
@@ -110,12 +120,18 @@ class DropDown {
 		public function get_required() { return $this->required;}
 		public function set_required($value) {$this->required=$value;}
 
+		public function get_placeholder() { return $this->placeholder;}
+		public function set_placeholder($value) {$this->placeholder=$value;}
+		
 		public function get_onchange() { return $this->onchange;}
 		public function set_onchange($value) {$this->onchange=$value;}
 
 		public function get_order() { return $this->order;}
 		public function set_order($value) {$this->order=$value;}
 
+		public function get_order_by() { return $this->order_by;}
+		public function set_order_by($value) {$this->order_by=$value;}
+		
 		public function get_custom_sql() { return $this->custom_sql;}
 		public function set_custom_sql($value) {$this->custom_sql=$value;}
 
@@ -189,93 +205,128 @@ public function __toString(){
 		 foreach ($this as $key => $value) {
              $this->$key=NULL;
         }
+		$this->data=array();
 	}	
 			
-	public function display(){
-	if ($this->id == ""){
-		$this->id = $this->name;
-	}
-	$dataArray = $this->data;
-	foreach ($dataArray as $dataItem => $dataValue) {
-    	$dataStr.= " data-" . $dataItem . "='" . $dataValue . "'";
-  	}
-	
-	if ($this->get_static()):
-		// Static drop down	
-		$cssClass = ($this->required ? ' class="{validate:{required:true}} ' . $this->class_name .' "' : " class='". $this->class_name . "'");
-		$ddl = '<select id="'.$this->id.'" name="'.$this->name.'" ' . $cssClass. ' onchange="'.$this->onchange.'" ' . $dataStr . '>';
-		$ddl .= "<option value=''></option>";
-		
-		$options = explode(",", $this->get_option_list());
-		
-		foreach ($options as $key):
-			$selected = "";
-			if ($this->selected_value == $key){
-				$selected = " selected='selected' ";
-			}
-			$ddl .= '<option value="' . $key .'" ' . $selected . '>' . $key .'</option>';
-		endforeach;
-		
-		$ddl .= '</select>';
-		echo $ddl;		
-	else:
-	
-	// Dynamic drop down
-	if (isset($this->table) && isset($this->name_field)):
-		try{
-			$dm = new DataManager();
-			if ($this->index_name == null){
-				$this->find_index();
-			}
+public function display(){
+	echo $this->compile();
+}
 
-			$strSQL = "SELECT * FROM " . $this->table;
-			// Just show active records: requires a field named "is_active";
-			$where_str = " WHERE 1=1 ";
-			$where_str .= ($this->active_only ? " AND is_active = 'Y'" : "");
-			$where_str .= ($this->where != "" ? " AND " . $this->where : "");
-			
-			$strSQL .= $where_str;
-			// Order by field is set:
-			$strSQL .= ($this->name_field != "" ? " ORDER BY " . $this->name_field . " " . $this->order : "");
-			
-			if ($this->custom_sql != ""){
-				$strSQL = $this->custom_sql;
-			}
-			
-			$cssClass = ($this->required ? ' class="{validate:{required:true}} ' . $this->class_name .' "' : " class='". $this->class_name . "'");
-
-			$result = $dm->queryRecords($strSQL);	
-			if ($result){
-			
-				$ddl = '<select id="'.$this->id.'" name="'.$this->name.'" ' . $cssClass. ' onchange="'.$this->onchange .'" ' . $dataStr . '>';
+	public function compile(){
+		if ($this->id == ""){
+			$this->id = $this->name;
+		}
+		$dataArray = $this->data;
+		$dataStr = "";
+		foreach ($dataArray as $dataItem => $dataValue) {
+			$dataStr.= " data-" . $dataItem . "='" . $dataValue . "'";
+		}
+		
+		if ($this->get_static()):
+			// Static drop down	
+			$requiredText = ($this->required ? ' required ' : " ");
+			$cssClass = " class='". $this->class_name . "'";
+			$ddl = '<select id="'.$this->id.'" name="'.$this->name.'" ' . $cssClass. ' onchange="'.$this->onchange.'" ' . $dataStr . ' ' . $requiredText . '>';
+			if (isset($this->placeholder)){
+				if (!isset($this->selected_value)){$selected_text = "selected";}
+				$ddl .= '<option value="" disabled ' . $selected_text . ' style="font-style: italic;">' . $this->placeholder . '</option>';
+			} else { 
 				$ddl .= "<option value=''></option>";
-				
-				while($row = mysqli_fetch_assoc($result)) {
-					$ddl .= '<option value="'.$row[$this->index_name].'" ';
-					if($row[$this->index_name]==$this->selected_value){
-						$ddl .= 'selected="selected"';
-					}
-					if ($this->name_field_2 != null){
-						$ddl .= '>'.$row[$this->name_field].' '.$row[$this->name_field_2].'</option>';
-					} else {
-						$ddl .= '>'.$row[$this->name_field].'</option>';
-					}
-				}
-				$ddl .= '</select>';
-				
-				echo $ddl;
-			}else{
-				return null;
-				exit;
 			}
-		}
-		catch(Exception $e) {
-			echo "drop down object creation failed";
-		}
-	else:
-		echo "drop down class failed: table and name field not set ";
-	endif;	
-	endif; 	
+			$selected_text = "";
+			
+			if (is_array($this->option_list)){
+				foreach ($this->option_list as $key => $val):
+					$selected = "";
+					if ($this->selected_value == $key){
+						$selected = " selected='selected' ";
+					}
+					$ddl .= '<option value="' . $key .'" ' . $selected . '>' . $val .'</option>';
+				endforeach;
+			}else{
+				$options = explode(",", $this->get_option_list());
+				foreach ($options as $key):
+					$selected = "";
+					if ($this->selected_value == $key){
+						$selected = " selected='selected' ";
+					}
+					$ddl .= '<option value="' . $key .'" ' . $selected . '>' . $key .'</option>';
+				endforeach;				
+			}
+			
+
+			
+			$ddl .= '</select>';
+			return $ddl;		
+		else:
+		
+		// Dynamic drop down
+		if (isset($this->table) && isset($this->name_field)):
+			try{
+				$dm = new DataManager();
+				if ($this->index_name == null){
+					$this->find_index();
+				}
+	
+				$strSQL = "SELECT * FROM " . $this->table;
+				// Just show active records: requires a field named "is_active";
+				$where_str = " WHERE 1=1 ";
+				$where_str .= ($this->active_only ? " AND is_active = 'Y'" : "");
+				$where_str .= ($this->where != "" ? " AND " . $this->where : "");
+				
+				$strSQL .= $where_str;
+				
+				// Order by field is set:
+				if(isset($this->order_by)){
+					$strSQL .= " ORDER BY " . $this->order_by . " " . $this->order;
+				} else {
+					$strSQL .= ($this->name_field != "" ? " ORDER BY " . $this->name_field . " " . $this->order : "");
+				}
+				
+				if ($this->custom_sql != ""){
+					$strSQL = $this->custom_sql;
+				}
+				
+				$requiredText = ($this->required ? ' required ' : " ");
+				$cssClass = " class='". $this->class_name . "'";
+				
+				$result = $dm->queryRecords($strSQL);	
+				if ($result){
+				
+					$ddl = '<select id="'.$this->id.'" name="'.$this->name.'" ' . $cssClass. ' onchange="'.$this->onchange .'" ' . $dataStr . ' ' . $requiredText . '>';
+					if (isset($this->placeholder)){
+						if (!isset($this->selected_value)){$selected_text = "selected";}
+						$ddl .= '<option value="" disabled ' .$selected_text . ' style="font-style: italic;">' . $this->placeholder . '</option>';
+					} else { 
+						$ddl .= "<option value=''></option>";
+					}
+					$selected_text = "";
+					
+					while($row = mysqli_fetch_assoc($result)) {
+						$ddl .= '<option value="'.$row[$this->index_name].'" ';
+						if($row[$this->index_name]==$this->selected_value){
+							$ddl .= 'selected="selected"';
+						}
+						if ($this->name_field_2 != null){
+							$ddl .= '>'.$row[$this->name_field].' '.$row[$this->name_field_2].'</option>';
+						} else {
+							$ddl .= '>'.$row[$this->name_field].'</option>';
+						}
+					}
+					$ddl .= '</select>';
+					return $ddl;
+				}else{
+					return null;
+					exit;
+				}
+			}
+			catch(Exception $e) {
+				echo "drop down object creation failed";
+			}
+		else:
+			echo "drop down class failed: table and name field not set ";
+		endif;	
+		endif; 	
 	}
 	
 	public function add_data($field_name,$value){
@@ -286,20 +337,28 @@ public function __toString(){
 	{
 		$this->preset = $preset;
 		switch ($preset):
-			case "frame":
-				$this->set_table("component");
-				$this->set_name_field("component_description");
-				$this->set_name_field_2("component_width");				
-				$this->set_class_name("form-control short");
-				$this->set_active_only(true);
-				$this->set_order("ASC");
-				$this->set_where("component_type = 1");	
+			case "is_active":			
+				$this->set_static(true);	
+				$this->set_name("is_active");
+				$this->set_class_name("form-control");
+				$this->set_option_list("Y,N");	
 			break;
 			case "active":
 				$this->set_static(true);								
 				$this->set_option_list("Y,N");
 				$this->set_name("is_active");		
-			break;	
+			break;				
+			case "supplier":						
+				$this->set_table("supplier");	
+				$this->set_name_field("supplier_name");
+				$this->set_class_name("form-control");
+				$this->set_order("ASC");
+			break;
+			case "province":
+				$this->set_static(true);
+				$this->set_name("province");												
+				$this->set_option_list("AB,BC,MN,NB,NF,NWT,NS,NU,ON,PEI,QC,SK,YK");	
+			break;				
 			default:
 				echo "preset not found";
 				die();

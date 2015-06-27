@@ -3,14 +3,14 @@
 	session_start();
 	date_default_timezone_set("America/Vancouver");
 	
-	define("BASE",$_SERVER['DOCUMENT_ROOT'] . "/teamkits/webapp");
+	define("BASE",$_SERVER['DOCUMENT_ROOT'] . "/webapp");
 	define("INCLUDES", BASE . "/includes/");
 	define("CLASSES", BASE . "/classes/");
 	define("CSS", BASE . "/css/");
 	define("SCRIPTS", BASE . "/js/");
 	define("ACTIONS", BASE . "/actions/");
 
-	define("BASE_URL", "/teamkits/webapp");
+	define("BASE_URL", "/webapp");
 	define("INCLUDES_URL", BASE_URL . "/includes");
 	define("CLASSES_URL", BASE_URL . "/classes/");
 	define("ACTIONS_URL", BASE_URL . "/actions/");

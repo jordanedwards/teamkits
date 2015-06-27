@@ -1,5 +1,5 @@
 <?php 
- class Payment {
+ class Payment extends SessionManager {
  
 		private $id;
 		private $order_id;
@@ -43,9 +43,8 @@
 		public function set_last_updated($value) {$this->last_updated=$value;}
 		
 		public function get_last_updated_user() { return $this->last_updated_user;}
-		public function set_last_updated_user($value) {$this->last_updated_user=$value;}
-		
-		
+	public function set_last_updated_user($value) {$this->last_updated_user=$this->get_user_id();}
+	
 public function __toString(){
 		// Debugging tool
 		// Dumps out the attributes and method names of this object
@@ -88,7 +87,8 @@ public function save() {
 
 		try{
 			$dm = new DataManager();
-
+			$this->set_last_updated_user();
+			
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
 			
@@ -147,11 +147,10 @@ public function save() {
 	}
 
 	// function to delete the record
-	public function delete_by_id($id) {
+	public function delete() {
 		try{
 			$dm = new DataManager();
-
-			$strSQL = "DELETE FROM payment WHERE payment_id=" . $id;
+			$strSQL = "UPDATE payment SET is_active='N' WHERE payment_id=" . $this->id;
 			$result = $dm->updateRecords($strSQL);
 			return $result;
 		}
@@ -162,7 +161,7 @@ public function save() {
 			$errorVar->notifyAdminException($e);
 			exit;
 		}
-	}
+	}	
 
 	// function to fetch the record and populate the object
 	public function get_by_id($id) {
@@ -190,7 +189,16 @@ public function save() {
 			exit;
 		}
 	}
-  
+
+  	public function load_from_post($array){
+  		foreach ($array as $key => $val){
+			if(property_exists('payment',$key)):
+				$method_name = "set_".$key;
+				$this->$method_name($val);
+			endif;
+		}
+	} 
+	  
 	// loads the object data from a mysql assoc array
   	private function load($row){
 		$this->set_id($row["payment_id"]);

@@ -7,7 +7,7 @@
       <span class="sr-only">Toggle navigation</span>
       <i class="fa fa-cog"></i>
     </button>
-    <a class="navbar-brand" href="./index.html"><img src="images/<?php echo LOGO ?>" style="height:80px"></a>
+    <a class="navbar-brand" href="./index.html"><img src="/images/<?php echo LOGO ?>" style="height:80px"></a>
   </div>
 
 <?php if($session->get_user_id() != ""): ?>
@@ -89,32 +89,29 @@
 						</a>	    				
 					</li>	
 					
-					<li <?php if ($activeMenuItem == "Promos") { echo 'class="active"'; } ?>>
-						<a href="./promo_list.php">
-							<i class="fa fa-tags"></i>
-							<span>Promos</span>
-						</a>	    				
-					</li>
+
 					<li <?php if ($activeMenuItem == "Payments") { echo 'class="active"'; } ?>>
 						<a href="./payment_list.php">
 							<i class="fa fa-money"></i>
 							<span>Payments</span>
 						</a>	    				
 					</li>							
-				<!--																					
+																									
 					<li class="dropdown <?php if ($activeMenuItem == "Manage") { echo ' active '; } ?>" >					
 						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
 							<i class="fa fa-th"></i>
-							<span>Website</span>
+							<span>Manage</span>
 							<b class="caret"></b>
 						</a>	    
 					
-						<ul class="dropdown-menu">						
+						<ul class="dropdown-menu">
+							<li><a href="./brand_list.php?reload=true">Brands</a></li>						
+							<li><a href="./item_list.php?reload=true">Items</a></li>						
+							<li><a href="./promo_list.php"><span>Promos</span></a></li>										
 							<li><a href="./user_list.php?reload=true">Users</a></li>
-							<li><a href="./supplier_list.php?reload=true">Suppliers</a></li>						
 						</ul> 				
 					</li> 
--->
+
 					
 				</ul>
 			</div> <!-- /.subnav-collapse -->
