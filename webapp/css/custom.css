@@ -33,6 +33,9 @@ table.admin_table input{
 	padding: .4em;	
 }
 
+table.admin_table input[type=checkbox] {
+  zoom: 1.5;
+ }
 /*******************************************************************************
 * Search Bar
 *******************************************************************************/
@@ -170,6 +173,7 @@ margin-top: 0px;
  }
   .form-control.inline {
   display: inline-block;
+    width: 90%;
 }
 .record-row {
   background: #E5E5E5 !important;

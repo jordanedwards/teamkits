@@ -11,7 +11,7 @@
 	$mailConfig["mail_password"] = "1675thayer";
 	
 	$mailConfig["mail_from"] = "weteachsports@orchardcity.ca";
-	$mailConfig["mail_fromname"] = "weteachsports@orchardcity.ca";
+	$mailConfig["mail_fromname"] = "Teamkits";
 	$mailConfig["mail_sender"] = "weteachsports@orchardcity.ca";
 	$mailConfig["mail_admin"] = "jordan@orchardcity.ca";
 

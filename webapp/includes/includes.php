@@ -7,6 +7,7 @@
 <script src="/js/jquery.metadata.js"></script>
 <script src="/js/jquery.validate.js"></script>
 <script src="/js/jquery.mask.js"></script>
+
 <script>
 	$(".form-control:required").after("<span class='red'>&nbsp;*</span");
 </script>

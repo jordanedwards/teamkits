@@ -14,14 +14,14 @@ include('inc/common.php');
 
 # variable settings
 login_cookie_check();
-$fullpath = suggest_site_path();
-$file			= _id($USR) .'.xml';
+$fullpath 	= suggest_site_path();
+$file		= _id($USR) .'.xml';
 $wfile 		= 'website.xml';
 $data 		= getXML(GSUSERSPATH . $file);
-$USR 			= stripslashes($data->USR);
+$USR 		= stripslashes($data->USR);
 $PASSWD 	= $data->PWD;
 $EMAIL 		= $data->EMAIL;
-$NAME			= $data->NAME;
+$NAME		= $data->NAME;
 
 $lang_array = getFiles(GSLANGPATH);
 
@@ -75,6 +75,12 @@ if(isset($_POST['submitted'])) {
 	if(isset($_POST['sitename'])) { 
 		$SITENAME = htmlentities($_POST['sitename'], ENT_QUOTES, 'UTF-8'); 
 	}
+	if(isset($_POST['address'])) { 
+		$ADDRESS = htmlentities($_POST['address'], ENT_QUOTES, 'UTF-8'); 
+	}
+	if(isset($_POST['tel'])) { 
+		$TEL = htmlentities($_POST['tel'], ENT_QUOTES, 'UTF-8'); 
+	}			
 	if(isset($_POST['siteurl'])) { 
 		$SITEURL = tsl($_POST['siteurl']); 
 	}
@@ -151,6 +157,10 @@ if(isset($_POST['submitted'])) {
 		$xmls = new SimpleXMLExtended('<item></item>');
 		$note = $xmls->addChild('SITENAME');
 		$note->addCData($SITENAME);
+		$note = $xmls->addChild('ADDRESS');
+		$note->addCData($ADDRESS);
+		$note = $xmls->addChild('TEL');
+		$note->addCData($TEL);					
 		$note = $xmls->addChild('SITEURL');
 		$note->addCData($SITEURL);
 		$note = $xmls->addChild('TEMPLATE');
@@ -218,7 +228,15 @@ get_template('header', cl($SITENAME).' &raquo; '.i18n_r('GENERAL_SETTINGS'));
 			<?php	if ( $fullpath != $SITEURL ) {	echo '<p style="margin:-15px 0 20px 0;color:#D94136;font-size:11px;" >'.i18n_r('LABEL_SUGGESTION').': &nbsp; <code>'.$fullpath.'</code></p>';	}	?>
 		</div>
 		<div class="clear"></div>
-		
+
+		<div class="leftsec">
+			<p><label for="address" >Address:</label><input class="text" id="address" name="address" type="text" value="<?php if(isset($ADDRESS1)) { echo stripslashes($ADDRESS1); } else { echo stripslashes($ADDRESS); } ?>" /></p>
+		</div>
+		<div class="rightsec">
+			<p><label for="siteurl" >Phone:</label><input class="text" id="tel" name="tel" type="tel" value="<?php if(isset($TEL1)) { echo $TEL1; } else { echo $TEL; } ?>" /></p>
+		</div>
+		<div class="clear"></div>
+				
 		<p class="inline" ><input name="prettyurls" id="prettyurls" type="checkbox" value="1" <?php echo $prettychck; ?>  /> &nbsp;<label for="prettyurls" ><?php i18n('USE_FANCY_URLS');?></label></p>
 				
 		<div class="leftsec">

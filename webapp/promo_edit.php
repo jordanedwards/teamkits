@@ -7,7 +7,7 @@ include(CLASSES . "/class_promo.php");
 	if(!isset($_GET["id"])) {
 		$session->setAlertMessage("Can not edit - the ID is invalid. Please try again.");
 		$session->setAlertColor("yellow");
-		header("location:" . $base_href . "/index.php");
+		header("location:" . BASE_URL . "/index.php");
 		exit;
 	}
 
@@ -21,7 +21,7 @@ include(CLASSES . "/class_promo.php");
 	} else {
 		$promo->get_by_id($promo_id);
 	}
-$activeMenuItem = "Promos";				
+$activeMenuItem = "Promo";				
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,7 +54,7 @@ $activeMenuItem = "Promos";
 	</div>
 	
 	<div class="row">
-	<div class="col-md-8">
+	<div class="col-md-6">
 	<form id="form_promo" action="<?php  echo ACTIONS_URL; ?>action_promo_edit.php" method="post">
 	<input type="hidden" name="promo_id" value="<?php  echo $promo->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
@@ -69,87 +69,107 @@ $activeMenuItem = "Promos";
 						$dd = new DropDown();
 						$dd->set_table("sport");	
 						$dd->set_name_field("sport_name");
-						$dd->set_class_name("form-control");
+						$dd->set_class_name("form-control inline");
 						$dd->set_order("ASC");						
 						$dd->set_name("promo_sport");						
 						$dd->set_selected_value($promo->get_sport());
+						$dd->set_required("true");						
 						$dd->display();
-					 ?>											
-					
-					</td>
+					 ?>	
+					 </td>
 				</tr>
 				<tr>
-           			<td style="width:1px; white-space:nowrap;">Title: </td>
-            		<td><input id="promo_title" name="promo_title" type="text"  value="<?php  echo $promo->get_title();  ?>" style="width:90%" /> </td>
-				</tr>
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">Description: </td>
-            		<td><input id="promo_description" name="promo_description" type="text"  value="<?php  echo $promo->get_description();  ?>" style="width:90%" /> </td>
-				</tr>
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">View list: </td>
-
-					<td>
-					<?php 					
-						$dd = new DropDown();
-						$dd->set_static(true);	
-						$dd->set_name("promo_view_list");
-						$dd->set_class_name("form-control");
-						$dd->set_option_list("Y,N");						
-						$dd->set_selected_value($promo->get_view_list());
-						$dd->display();
-					 ?>						
-					</td>
-				</tr>
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">Wholesale: </td>
-            		<td><input id="promo_wholesale" name="promo_wholesale" type="text"  value="<?php  echo $promo->get_wholesale();  ?>" style="width:90%" /> </td>
-				</tr>
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">Price: </td>
-            		<td><input id="promo_price" name="promo_price" type="text"  value="<?php  echo $promo->get_price();  ?>" style="width:90%" /> </td>
-				</tr>
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">Image: </td>
-            		<td><input id="promo_image" name="promo_image" type="text"  value="<?php  echo $promo->get_image();  ?>" style="width:90%" /> </td>
-				</tr>
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">Tax: </td>
+           			<td style="width:1px; white-space:nowrap;">Item id: </td>
 				
 					<td>
 					<?php 
 						$dd = new DropDown();
-						$dd->set_table("tax");	
-						$dd->set_name_field("tax_name");
-						$dd->set_class_name("form-control");
+						$dd->set_table("item");	
+						$dd->set_name_field("item_name");
+						$dd->set_class_name("form-control inline");
 						$dd->set_order("ASC");						
-						$dd->set_name("promo_tax");						
-						$dd->set_selected_value($promo->get_tax());
+						$dd->set_name("promo_item_id");						
+						$dd->set_selected_value($promo->get_item_id());
+						$dd->set_required("true");
 						$dd->display();
 					 ?>											
-					
 					</td>
 				</tr>
 				<tr>
-           			<td style="width:1px; white-space:nowrap;">Active: </td>
+           			<td style="width:1px; white-space:nowrap;">Title: </td>
+            		<td><input id="promo_title" name="promo_title" type="text"  value="<?php  echo $promo->get_title();  ?>" style="width:90%"  class="{validate:{required:true}}" /> <span class='red'>*</span> </td>
+				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Description: </td>
+					<td><textarea id="promo_description" name="promo_description" style="width:90%" rows="8" ><?php  echo $promo->get_description();  ?></textarea></td>
+				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">View type: </td>
 
 					<td>
 					<?php 					
 						$dd = new DropDown();
 						$dd->set_static(true);	
-						$dd->set_name("is_active");
-						$dd->set_class_name("form-control");
-						$dd->set_option_list("Y,N");						
-						$dd->set_selected_value($promo->get_active());
+						$dd->set_name("promo_view_type");
+						$dd->set_class_name("form-control inline");
+						$dd->set_option_list("All,Brand,Club Exclusive");						
+						$dd->set_selected_value($promo->get_view_type());
+						$dd->set_required("true");						
 						$dd->display();
 					 ?>						
 					</td>
 				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Club: </td>
+				
+					<td>
+					<?php 
+						$dd = new DropDown();
+						$dd->set_table("club");	
+						$dd->set_name_field("club_name");
+						$dd->set_class_name("form-control inline");
+						$dd->set_order("ASC");						
+						$dd->set_name("promo_club_id");						
+						$dd->set_selected_value($promo->get_club_id());
+						$dd->display();
+					 ?>
+					 <p class="small">* Only fill this field in if this promo is Club Exclusive</p>
+					</td>
+				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Price: </td>
+					<td>$<input id="promo_price" name="promo_price" type="number" step=".01" value="<?php  echo $promo->get_price();  ?>"  style="width:90%" /></td>
+				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Image: </td>
+            		<td><input id="promo_image" name="promo_image" type="text"  value="<?php  echo $promo->get_image();  ?>" style="width:90%" />
+					<p class="small">* PROMOTIONAL graphic, if desired, not the item image.</p>
+					</td>
+				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Expiry: </td>
+            		<td><input id="promo_expiry" name="promo_expiry" type="text"  value="<?php  echo $promo->get_expiry();  ?>" style="width:90%" /> </td>
+				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Active: </td>
+            		<td>
+					<?php 					
+						$dd = new DropDown();
+						$dd->set_static(true);	
+						$dd->set_name("is_active");
+						$dd->set_class_name("form-control inline");
+						$dd->set_option_list("Y,N");						
+						$dd->set_selected_value($promo->get_active());
+						$dd->set_required("true");						
+						$dd->display();
+					 ?>	
+					</td>
+				</tr>
   		
 		</table>
-          <br />
-          <input type="submit" value="Add/Update Promo" />&nbsp;&nbsp;
-          <input type="button" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <br /> 
+          <input type="submit" class="btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
+          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		
@@ -167,22 +187,17 @@ $activeMenuItem = "Promos";
 <?php  include(INCLUDES_LIST);  ?>	
 <script>
 
+$(document).ready(function() {
+	$("#price").mask("999999999999.99"); 
+});	
+
 </script>
 <script type="text/javascript">
-		$(document).ready(function() {
-			var container = $("div.errorContainer");
-			// validate the form when it is submitted
-			var validator = $("#form_customers").validate({
-				errorContainer: container,
-				errorLabelContainer: $("ol", container),
-				wrapper: "li",
-				meta: "validate"
-			});
-	 	});
-
-		$.validator.setDefaults({
-			submitHandler: function() { form.submit();  }
-		});
+	$( "#promo_expiry" ).datepicker({
+		dateFormat: "yy-mm-dd",
+		changeMonth: true,
+		changeYear: true
+	});
 
 // Include any masks here:
 		 //   $("#student_tel").mask("(999) 999-9999");

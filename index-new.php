@@ -15,11 +15,12 @@
 	<link rel="apple-touch-icon" sizes="72x72" href="gfi/apple-touch-icon-72x72-precomposed.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="gfi/apple-touch-icon-114x114-precomposed.png">
 	<link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic'>
+	<link href='http://fonts.googleapis.com/css?family=Rock+Salt' rel='stylesheet' type='text/css'>
 	
 	<link rel="stylesheet" href="css/bootstrap.css">
 	<link rel="stylesheet" href="gfi/css/timeline.css">
 	<link rel="stylesheet" href="gfi/css/main.css">
-	<link href="gfi/css/fonts.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="gfi/css/fonts.css" type="text/css">
 	<link rel='stylesheet' href='font-awesome/css/font-awesome.min.css'>	
 	
 	<script src="gfi/js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
@@ -34,7 +35,11 @@
 			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 			})();
 		</script> 
-	<link rel="stylesheet" href="css/styles.css">		
+	<script src='https://www.google.com/recaptcha/api.js'></script>
+		
+	<link rel="stylesheet" href="css/styles.css">	
+	<link rel="stylesheet" href="css/responsive.css">
+
     </head>
     <body data-spy="scroll" data-target=".navbar">
         
@@ -51,31 +56,36 @@
                         <li class="login"><a href="login.php">Login</a></li>							
 						
                     </ul>
-                    <h1><img src="gfi/img/teamkits_logo_white.png" style="max-height: 250px;" id="logo"></h1>
-                    <div id="slider" style="position: relative; overflow: hidden;"><div class="slide cycle-slide cycle-sentinel" style="position: static; top: 0px; left: 0px; z-index: 100; opacity: 1; visibility: hidden; display: block;">We make <strong style="visibility: hidden;">the finest design</strong> just for you.</div>
+                    <h1><img src="gfi/img/teamkits_logo_white.png" id="logo" ></h1>
 					</div>  
                 </div>
                 <a href="#works" id="arrow_down">What we do<br><span class="glyphicon glyphicon-chevron-down"></span></a>
             </div>                  	
         </section>
 
-        <div class="sticky-wrapper" style="height: 56px;"><div class="navbar">
-            <div class="navbar-inner">
-                <div class="container">
-                    <a class="navbar-brand" href="#"><img src="gfi/img/teamkits.png"></a>
-                    <div class="pull-right">
-                        <ul class="nav">
-                            <li class="active"><a href="gfi/l#home" class="scrollto">Home</a></li>
-                            <li class=""><a href="#about" class="scrollto">About</a></li>
-                            <li class=""><a href="#works" class="scrollto">Brands</a></li>
-                            <li class=""><a href="#timeline" class="scrollto">Order INFO</a></li>							
-                            <li class=""><a href="#contact" class="scrollto">Contact</a></li>
-                            <li class=""><a href="login.php" class="login"><i class="fa fa-sign-in"></i></a></li>							
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div></div>
+        <div class="sticky-wrapper" style="position:relative">
+			<div class="taper taper-top"><img src="img/taper_top.png" alt=""></div>
+			<nav class="navbar" style="height: 56px;">
+			
+	
+				<div class="navbar-inner">
+					<div class="container">
+						<a class="navbar-brand" href="#"><img src="gfi/img/teamkits.png"></a>
+						<div class="pull-right">
+							<ul class="nav">
+								<li class="active" id="homelink"><a href="gfi/l#home" class="scrollto menu-item">Home</a></li>
+								<li class=""><a href="#works" class="scrollto menu-item">Brands</a></li>
+								<li class=""><a href="#about" class="scrollto menu-item">About</a></li>
+								<li class=""><a href="#timeline" class="scrollto menu-item">Order INFO</a></li>							
+								<li class=""><a href="#contact" class="scrollto menu-item">Contact</a></li>
+								<li class=""><a href="login.php" class="login"><i class="fa fa-sign-in"></i></a></li>							
+							</ul>
+						</div>
+					</div>
+				</div>
+			</nav>
+			<div class="taper taper-bottom"><img src="img/taper_bottom.png" alt=""></div>
+		</div>
        
         <section id="works">
             <div class="container">
@@ -150,18 +160,21 @@
             </div><!-- end: #works_items -->
         </section>
 
-		<div class="band-white band-top col-md-12"></div>
+<div style="position:relative">		
+<div class="taper taper-top-full"><img src="img/full_stripe.png" alt=""></div>
+		<!--<div class="band-white band-top col-md-12" style="border:none;"></div>-->
         <div class="container txtblock">
             <p class="text-center lead-style">Style is a way to say who you are without having to speak. <a href="#contact" class="scrollto">Let`s talk.</a></p>
         </div> 
 		<div class="band-white band-bottom col-md-12"></div>
-
+	</div>
+		
         <section id="about">
             <div class="container">
                 <h2 class="text-center">About<i class="icon-about"><img src="gfi/img/icon-about.png"></i></h2>
 
 				<div class="col-md-12" style="padding:10px">
-
+<!--
                 <p class="text-center lead"><span class="little-drop-cap">T</span>eam Kits is based in Kelowna BC with direct-from-factory relationships with Macron, Joma, Inaria, Lotto and dealerships with Xara, New Balance (Warrior), Umbro, Mitre, Molten, Precision Training UK and others.</p>
 								
                 <p class="text-center lead">Team Kits focuses on providing a custom look for pro teams and competitive clubs but also delivers Value Kits for recreational clubs.
@@ -170,6 +183,15 @@
 				<br><br>
 				We look forward to working with clubs in the Pacific Northwest and across the USA and Canada.
 				<br>
+				-->
+				
+				<p class="text-center lead"><span class="little-drop-cap">T</span>eam Kits, based in Kelowna, BC, and having direct-from-factory relationships with Precision Training from the UK, Macron, Joma, Inaria, and Lotto from Italy and dealerships with Xara, Umbro, Mitre, Molten, and others believes that a uniform is not something that you just play in, but much more to make a statement of who your club or team is.</p><br>
+				
+<p class="text-center lead">We are happy to offer our US customers in the Pacific Northwest our unique and exclusive “Made in America” theme that provides an exclusive branded design that is yours and will be always available when you need a kit.</p><br>
+
+<p class="text-center lead">Team Kits provides a custom look for competitive and professional teams but also delivers high volume Value Kits for recreational clubs and teams.  With our designers, Team Kits provides a “Brand Concept” that makes a team or club unique, versus looking the same as the teams they play against.</p><br>
+
+<p class="text-center lead">Soccer is a business, and for a pro team, revenue generation from replica sales is a must have and can make the difference on the profit and loss statement at the end of the year.  For our pro teams, the kits become a value-added revenue source. It doesn’t make sense to ask a fan to part with $70 to buy an off-the-shelf jersey when they can buy the same jersey anywhere online for less.  While a fan is usually happy just to support the team, wanting to show off the jersey because it’s unique is something special.  All this goes towards generating income to make the team stronger.</p><br><br>
 				<a class="btn button-cool scrollto" href="#contact">Contact Us</a>
 				<!--<button class="button-cool">Contact Us</button>-->
 				</p>
@@ -183,7 +205,7 @@
 		
 		<div class="band-white band-top col-md-12"></div>		
         <div class="container txtblock nrtwo">
-            <p class="lead no-background dark">Our team is devoted to your happiness. Integer nec odio. Lorem ipsum dolor sit amet, consectetur adipiscing elit diozo burit burizon. <a href="#contact" class="scrollto">Let`s talk.</a></p>
+				<p class="lead no-background dark cursive">Be Distinctive. Be Original. Be Bold.</p><p class="lead no-background"><a href="#contact" class="scrollto">LET'S TALK.</a></p>
         </div> <!-- end: container txtblock -->
 		<div class="band-white band-bottom  col-md-12"></div>
 
@@ -280,15 +302,18 @@
                 
                 <div class="row"> 
                     <div class="col-md-7" style="padding: 0 15px;"> 
-                        <form name="htmlform" method="post" action="gfi/form_sender.php">
-                            <input type="text" name="first_name" placeholder="Yout name" required="">
-                            <input type="email" name="email" placeholder="E-mail" required="">
+                        <form name="contactform" method="post" action="">
+                            <input type="text" name="first_name" placeholder="Your name" required="">
+                            <input type="email" name="email" placeholder="Your email address" required="">
                             <textarea name="comments" cols="1" rows="5" placeholder="Message" required=""></textarea>
+							<div class="recaptcha-container">
+							<div class="g-recaptcha" data-sitekey="6LfIDwgTAAAAAObfbRQo3BLijhosTQFCa1AySZnR"></div>
+							</div>
                             <button name="send" type="submit" class="btn">Send</button>
                         </form>
                     </div> 
                     
-                    <div class="col-md-5">
+                    <div class="col-md-5" style="text-align:left">
 						<h3>Phone</h3>
 						<p>1-888-584-3211</p>
 						

@@ -1,5 +1,5 @@
 <?php 
- class Club {
+ class Club extends User{
  
 		private $id;
 		private $name;
@@ -11,18 +11,20 @@
  		private $province;
  		private $country;
  		private $postal_code;
- 		private $login;
- 		private $password;
+ 		private $email;
  		private $code;
  		private $account_type;
  		private $tax_id;
  		private $active;
+		private $user_id;
+		private $user_login;
+		private $user_active;
  		private $date_created;
  		private $last_updated;
  		private $last_updated_user;
  		
 	function __construct() {
-	
+		
 	}
 		public function get_id() { return $this->id;}
 		public function set_id($value) {$this->id=$value;}
@@ -54,11 +56,8 @@
 		public function get_postal_code() { return $this->postal_code;}
 		public function set_postal_code($value) {$this->postal_code=$value;}
 		
-		public function get_login() { return $this->login;}
-		public function set_login($value) {$this->login=$value;}
-		
-		public function get_password() { return $this->password;}
-		public function set_password($value) {$this->password=$value;}
+		public function get_email() { return $this->email;}
+		public function set_email($value) {$this->email=$value;}
 		
 		public function get_code() { return $this->code;}
 		public function set_code($value) {$this->code=$value;}
@@ -81,7 +80,15 @@
 		public function get_last_updated_user() { return $this->last_updated_user;}
 		public function set_last_updated_user($value) {$this->last_updated_user=$value;}
 		
+		public function get_user_active() { return $this->user_active;}
+		public function set_user_active($value) {$this->user_active=$value;}
 		
+		public function get_user_login() { return $this->user_login;}
+		public function set_user_login($value) {$this->user_login=$value;}
+		
+		public function get_user_id() { return $this->user_id;}
+		public function set_user_id($value) {$this->user_id=$value;}								
+
 public function __toString(){
 		// Debugging tool
 		// Dumps out the attributes and method names of this object
@@ -128,7 +135,7 @@ public function save() {
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
 			
-				$strSQL = "INSERT INTO club (club_id, club_name, club_sport, club_brand, club_tel, club_address, club_city, club_province, club_country, club_postal_code, club_login, club_password, club_code, club_account_type, club_tax_id, is_active, club_date_created, club_last_updated, club_last_updated_user) 
+				$strSQL = "INSERT INTO club (club_id, club_name, club_sport, club_brand, club_tel, club_address, club_city, club_province, club_country, club_postal_code, club_email, club_code, club_account_type, club_tax_id, is_active, club_date_created, club_last_updated, club_last_updated_user, club_user_id) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_name())."',
@@ -140,37 +147,37 @@ public function save() {
 				'".mysqli_real_escape_string($dm->connection, $this->get_province())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_country())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_postal_code())."',
-				'".mysqli_real_escape_string($dm->connection, $this->get_login())."',
-				'".mysqli_real_escape_string($dm->connection, $this->get_password())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_email())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_code())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_account_type())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_tax_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_active())."',
 				NOW(),
 				NOW(),
-				'".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."')";	
-						}
+				'".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_user_id())."')";	
+			}
 			else {
 				$strSQL = "UPDATE club SET 
-								club_name='".mysqli_real_escape_string($dm->connection, $this->get_name())."',						 
-						 		club_sport='".mysqli_real_escape_string($dm->connection, $this->get_sport())."',						 
-						 		club_brand='".mysqli_real_escape_string($dm->connection, $this->get_brand())."',						 
-						 		club_tel='".mysqli_real_escape_string($dm->connection, $this->get_tel())."',						 
-						 		club_address='".mysqli_real_escape_string($dm->connection, $this->get_address())."',						 
-						 		club_city='".mysqli_real_escape_string($dm->connection, $this->get_city())."',						 
-						 		club_province='".mysqli_real_escape_string($dm->connection, $this->get_province())."',						 
-						 		club_country='".mysqli_real_escape_string($dm->connection, $this->get_country())."',						 
-						 		club_postal_code='".mysqli_real_escape_string($dm->connection, $this->get_postal_code())."',						 
-						 		club_login='".mysqli_real_escape_string($dm->connection, $this->get_login())."',						 
-						 		club_password='".mysqli_real_escape_string($dm->connection, $this->get_password())."',						 
-						 		club_code='".mysqli_real_escape_string($dm->connection, $this->get_code())."',						 
-						 		club_account_type='".mysqli_real_escape_string($dm->connection, $this->get_account_type())."',						 
-						 		club_tax_id='".mysqli_real_escape_string($dm->connection, $this->get_tax_id())."',						 
-						 		is_active='".mysqli_real_escape_string($dm->connection, $this->get_active())."',						 
-						 		club_last_updated=NOW(),						
-						 		club_last_updated_user='".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."'
-							
-						 	WHERE club_id=".mysqli_real_escape_string($dm->connection, $this->get_id());
+					club_name='".mysqli_real_escape_string($dm->connection, $this->get_name())."',						 
+					club_sport='".mysqli_real_escape_string($dm->connection, $this->get_sport())."',						 
+					club_brand='".mysqli_real_escape_string($dm->connection, $this->get_brand())."',						 
+					club_tel='".mysqli_real_escape_string($dm->connection, $this->get_tel())."',						 
+					club_address='".mysqli_real_escape_string($dm->connection, $this->get_address())."',						 
+					club_city='".mysqli_real_escape_string($dm->connection, $this->get_city())."',						 
+					club_province='".mysqli_real_escape_string($dm->connection, $this->get_province())."',						 
+					club_country='".mysqli_real_escape_string($dm->connection, $this->get_country())."',						 
+					club_postal_code='".mysqli_real_escape_string($dm->connection, $this->get_postal_code())."',						 
+					club_email='".mysqli_real_escape_string($dm->connection, $this->get_email())."',						 
+					club_code='".mysqli_real_escape_string($dm->connection, $this->get_code())."',						 
+					club_account_type='".mysqli_real_escape_string($dm->connection, $this->get_account_type())."',						 
+					club_tax_id='".mysqli_real_escape_string($dm->connection, $this->get_tax_id())."',	
+					club_user_id='".mysqli_real_escape_string($dm->connection, $this->get_user_id())."', 
+					is_active='".mysqli_real_escape_string($dm->connection, $this->get_active())."',						 
+					club_last_updated=NOW(),						
+					club_last_updated_user='".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."'
+				
+				WHERE club_id=".mysqli_real_escape_string($dm->connection, $this->get_id());
 			}		
 				
 			$result = $dm->updateRecords($strSQL);
@@ -186,6 +193,8 @@ public function save() {
       
 			// fetch data from the db to update object properties      
       		$this->get_by_id($this->get_id());
+			
+			// Update login info:
       
 			return $result;
 
@@ -245,6 +254,32 @@ public function save() {
 		}
 	}
 
+	public function get_by_user_id($user_id) {
+		try{
+			$status = false;
+			$dm = new DataManager();
+			$strSQL = "SELECT * FROM club WHERE club_user_id=" . $user_id;
+      
+			$result = $dm->queryRecords($strSQL);
+			$num_rows = mysqli_num_rows($result);
+
+			if ($num_rows != 0){
+				$row = mysqli_fetch_assoc($result);
+        		$this->load($row);
+				$status = true;
+			}
+
+			return $status;
+		}
+		catch(Exception $e) {
+			// CATCH EXCEPTION HERE -- DISPLAY ERROR MESSAGE & EMAIL ADMINISTRATOR
+			include_once(CLASSES . 'class_error_handler.php');
+			$errorVar = new ErrorHandler();
+			$errorVar->notifyAdminException($e);
+			exit;
+		}
+	}
+	
   	public function load_from_post($array){
   		foreach ($array as $key => $val){
 			if(property_exists('club',$key)):
@@ -256,6 +291,13 @@ public function save() {
 	  
 	// loads the object data from a mysql assoc array
   	private function load($row){
+		$this->user_id = $row["club_user_id"];
+	
+		//Load user object
+		parent::get_by_id($this->user_id);
+		$this->set_user_active($this->get_active());
+		$this->set_user_login($this->get_email());
+			
 		$this->set_id($row["club_id"]);
 		$this->set_name($row["club_name"]);
 		$this->set_sport($row["club_sport"]);
@@ -266,8 +308,7 @@ public function save() {
 		$this->set_province($row["club_province"]);
 		$this->set_country($row["club_country"]);
 		$this->set_postal_code($row["club_postal_code"]);
-		$this->set_login($row["club_login"]);
-		$this->set_password($row["club_password"]);
+		$this->set_email($row["club_email"]);
 		$this->set_code($row["club_code"]);
 		$this->set_account_type($row["club_account_type"]);
 		$this->set_tax_id($row["club_tax_id"]);
@@ -276,5 +317,7 @@ public function save() {
 		$this->set_last_updated($row["club_last_updated"]);
 		$this->set_last_updated_user($row["club_last_updated_user"]);
 		
+	//	addToLog($this::__toString());
+
   }
 }

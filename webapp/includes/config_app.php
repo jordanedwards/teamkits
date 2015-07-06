@@ -17,6 +17,6 @@ if($_SERVER['HTTP_HOST'] == 'localhost'):
 	$appConfig["environment"] = "local_development";
 else:
 	$appConfig["environment"] = "production";
-	ini_set('display_errors', 'off');
+//	ini_set('display_errors', 'off');
 	error_reporting(E_ERROR | E_WARNING  | E_PARSE);
 endif;

@@ -1,14 +1,26 @@
 <?php 
 $public = true;
 require("includes/init.php"); 
-$activeMenuItem = "Home";
 
-//if($session->get_user_id() != "") {
-//	header("location: dashboard.php");
-//	exit;
-//}
+if($session->get_user_id() != "") {
+	switch ($session->get_user_role()):
+		case 1:
+			header("location: /webapp/dashboard.php");
+		break;
+		case 3:
+			header("location: /webapp/club_admin/dashboard_club.php");
+		break;
+		case 4:
+			header("location: /webapp/dashboard_club_member.php");
+		break;
+	endswitch;
+	exit;
+} else {
+	header("location: /login.php");
+	exit;
+}
 ?>
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -27,17 +39,14 @@ $activeMenuItem = "Home";
     <link href="css/pages/dashboard.css" rel="stylesheet">   
     <link href="css/custom.css" rel="stylesheet">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+
 </head>
 <body>
 
 <?php include(INCLUDES . "navbar.php");?>
 
 <div class="main">
-    <div class="container" style="padding-top:40px;">
+    <div class="container">
 		<div class="row">
 
 			<div class="col-md-12">	  
@@ -89,10 +98,7 @@ $activeMenuItem = "Home";
 </div> 
     
 <?php include(INCLUDES . "footer.php"); ?>
-
-<script src="/teamkits/js/jquery.js"></script>
-<script src="/teamkits/js/jquery-ui.min.js"></script>
-<script src="/teamkits/js/bootstrap.min.js"></script>
+<?php include(INCLUDES_LIST); ?>
 
 </body>
-</html>
+</html>-->

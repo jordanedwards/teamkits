@@ -1,13 +1,3 @@
-
-ul.homenav.left {
-  margin-left: -380px;
-  top: 115px;  
-}
-ul.homenav.right {
-  margin-left: 200px;
-  top: 115px;
-  text-align: right;
-}
 #home .containerblack {
 	background-color: rgba(0,0,0,0.8);
 	height: 340px;
@@ -24,7 +14,7 @@ ul.homenav li a {
   height: 100%;
  background: 
 url(../img/texture_layer.png) repeat, 
-url(../img/bg2.jpg) no-repeat center top fixed;
+url(../img/bg3.jpg) no-repeat center top fixed;
 }
 a#arrow_down {
   padding: 20px 20px 0px 20px;
@@ -39,11 +29,14 @@ a#arrow_down:hover{
  .navbar-brand {
   padding: 15px;
 } 
-.navbar-brand img {
-height: 50px;
+.nav > li > a {
+  padding: 10px 10px 10px 0;
+  /*padding-right: 10px;*/
 }
-.navbar ul.nav li a {
-font-size: 1.2em;
+.menu-item:after {
+	content: "/";
+	padding-left:10px;
+	color: #333;
 }
 .og-grid {
   width: 90%;
@@ -60,7 +53,8 @@ font-size: 1.2em;
 }
 #works {
   padding: 60px 0 0 0;
-  background: #f3f3f3;
+  background: #F2F2F2 url('../img/tsar.gif') center top no-repeat;
+  background-size: cover;
   border-bottom: 1px solid #e3e3e3;
 }
 #works_items {
@@ -126,17 +120,13 @@ color: #fff;
   padding: 40px 0 40px 0;
 /*  background: #F2F2F2;;*/
   border-bottom: 1px solid #e3e3e3;
-  background: #F2F2F2 url('../img/tsar.gif') center top no-repeat;
-  background-size: cover;
+  background: #f3f3f3;  
 }
 .nav>li {
   position: relative;
   display: inline-block;
 }
-.navbar-inner{
-  min-height: 80px;
-border-bottom: 2px #ccc solid;  
-  }
+
 .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
   padding-left: 0px;
   padding-right: 0px;
@@ -156,8 +146,9 @@ ul.homenav li {
 } 
 #contact {
   color: #333;
-  padding: 30px 0 30px 0;  
- }
+  padding: 30px 0 30px 0; 
+  text-align: center;
+}
 #contact form .btn {
   margin: 4px;
   border-radius: 4px;
@@ -181,7 +172,7 @@ transition: height 350ms ease;
 max-width: 250px;
 }
 .container.txtblock.nrtwo {
-  background: #23231F url('../img/testimonial.jpg') left center no-repeat fixed;
+  background: #23231F url('../img/testimonial2.jpg') left center repeat fixed;
 }
 p.text-center {
   font-family: "lato";
@@ -228,7 +219,7 @@ footer {
 	color: #fff;
 	border-radius: 5px;
 	float: right;
-	font-size: 1em; 
+	font-size: 1.2em; 
 	text-decoration: none;
 }
 .button-cool:hover {
@@ -261,6 +252,9 @@ ul.homenav li.login:hover{
 }
 ul.homenav li.login a:hover{
   color: #333;
+}
+.contact-error {
+	background-color:#FF0000;
 }
 @media (min-width: 1079px) and (max-width: 1417px) {
 .brand-icons a img{

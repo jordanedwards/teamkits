@@ -1,15 +1,16 @@
 <?php 
- class Promo {
+ class Promo extends SessionManager {
  
 		private $id;
 		private $sport;
+ 		private $item_id;
  		private $title;
  		private $description;
- 		private $view_list;
- 		private $wholesale;
+ 		private $view_type;
+ 		private $club_id;
  		private $price;
  		private $image;
- 		private $tax;
+ 		private $expiry;
  		private $active;
  		private $date_created;
  		private $last_updated;
@@ -24,17 +25,20 @@
 		public function get_sport() { return $this->sport;}
 		public function set_sport($value) {$this->sport=$value;}
 		
+		public function get_item_id() { return $this->item_id;}
+		public function set_item_id($value) {$this->item_id=$value;}
+		
 		public function get_title() { return $this->title;}
 		public function set_title($value) {$this->title=$value;}
 		
 		public function get_description() { return $this->description;}
 		public function set_description($value) {$this->description=$value;}
 		
-		public function get_view_list() { return $this->view_list;}
-		public function set_view_list($value) {$this->view_list=$value;}
+		public function get_view_type() { return $this->view_type;}
+		public function set_view_type($value) {$this->view_type=$value;}
 		
-		public function get_wholesale() { return $this->wholesale;}
-		public function set_wholesale($value) {$this->wholesale=$value;}
+		public function get_club_id() { return $this->club_id;}
+		public function set_club_id($value) {$this->club_id=$value;}
 		
 		public function get_price() { return $this->price;}
 		public function set_price($value) {$this->price=$value;}
@@ -42,8 +46,8 @@
 		public function get_image() { return $this->image;}
 		public function set_image($value) {$this->image=$value;}
 		
-		public function get_tax() { return $this->tax;}
-		public function set_tax($value) {$this->tax=$value;}
+		public function get_expiry() { return $this->expiry;}
+		public function set_expiry($value) {$this->expiry=$value;}
 		
 		public function get_active() { return $this->active;}
 		public function set_active($value) {$this->active=$value;}
@@ -55,9 +59,8 @@
 		public function set_last_updated($value) {$this->last_updated=$value;}
 		
 		public function get_last_updated_user() { return $this->last_updated_user;}
-		public function set_last_updated_user($value) {$this->last_updated_user=$value;}
-		
-		
+	public function set_last_updated_user($value) {$this->last_updated_user=$this->get_user_id();}
+	
 public function __toString(){
 		// Debugging tool
 		// Dumps out the attributes and method names of this object
@@ -100,21 +103,23 @@ public function save() {
 
 		try{
 			$dm = new DataManager();
-
+			$this->set_last_updated_user();
+			
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
 			
-				$strSQL = "INSERT INTO promo (promo_id, promo_sport, promo_title, promo_description, promo_view_list, promo_wholesale, promo_price, promo_image, promo_tax, is_active, promo_date_created, promo_last_updated, promo_last_updated_user) 
+				$strSQL = "INSERT INTO promo (promo_id, promo_sport, promo_item_id, promo_title, promo_description, promo_view_type, promo_club_id, promo_price, promo_image, promo_expiry, is_active, promo_date_created, promo_last_updated, promo_last_updated_user) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_sport())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_item_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_title())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_description())."',
-				'".mysqli_real_escape_string($dm->connection, $this->get_view_list())."',
-				'".mysqli_real_escape_string($dm->connection, $this->get_wholesale())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_view_type())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_price())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_image())."',
-				'".mysqli_real_escape_string($dm->connection, $this->get_tax())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_expiry())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_active())."',
 				NOW(),
 				NOW(),
@@ -123,13 +128,14 @@ public function save() {
 			else {
 				$strSQL = "UPDATE promo SET 
 								promo_sport='".mysqli_real_escape_string($dm->connection, $this->get_sport())."',						 
+						 		promo_item_id='".mysqli_real_escape_string($dm->connection, $this->get_item_id())."',						 
 						 		promo_title='".mysqli_real_escape_string($dm->connection, $this->get_title())."',						 
 						 		promo_description='".mysqli_real_escape_string($dm->connection, $this->get_description())."',						 
-						 		promo_view_list='".mysqli_real_escape_string($dm->connection, $this->get_view_list())."',						 
-						 		promo_wholesale='".mysqli_real_escape_string($dm->connection, $this->get_wholesale())."',						 
+						 		promo_view_type='".mysqli_real_escape_string($dm->connection, $this->get_view_type())."',						 
+						 		promo_club_id='".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',						 
 						 		promo_price='".mysqli_real_escape_string($dm->connection, $this->get_price())."',						 
 						 		promo_image='".mysqli_real_escape_string($dm->connection, $this->get_image())."',						 
-						 		promo_tax='".mysqli_real_escape_string($dm->connection, $this->get_tax())."',						 
+						 		promo_expiry='".mysqli_real_escape_string($dm->connection, $this->get_expiry())."',						 
 						 		is_active='".mysqli_real_escape_string($dm->connection, $this->get_active())."',						 
 						 		promo_last_updated=NOW(),						
 						 		promo_last_updated_user='".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."'
@@ -165,11 +171,10 @@ public function save() {
 	}
 
 	// function to delete the record
-	public function delete_by_id($id) {
+	public function delete() {
 		try{
 			$dm = new DataManager();
-
-			$strSQL = "DELETE FROM promo WHERE promo_id=" . $id;
+			$strSQL = "UPDATE promo SET is_active='N' WHERE promo_id=" . $this->id;
 			$result = $dm->updateRecords($strSQL);
 			return $result;
 		}
@@ -180,7 +185,7 @@ public function save() {
 			$errorVar->notifyAdminException($e);
 			exit;
 		}
-	}
+	}	
 
 	// function to fetch the record and populate the object
 	public function get_by_id($id) {
@@ -208,18 +213,28 @@ public function save() {
 			exit;
 		}
 	}
-  
+
+  	public function load_from_post($array){
+  		foreach ($array as $key => $val){
+			if(property_exists('promo',$key)):
+				$method_name = "set_".$key;
+				$this->$method_name($val);
+			endif;
+		}
+	} 
+	  
 	// loads the object data from a mysql assoc array
   	private function load($row){
 		$this->set_id($row["promo_id"]);
 		$this->set_sport($row["promo_sport"]);
+		$this->set_item_id($row["promo_item_id"]);
 		$this->set_title($row["promo_title"]);
 		$this->set_description($row["promo_description"]);
-		$this->set_view_list($row["promo_view_list"]);
-		$this->set_wholesale($row["promo_wholesale"]);
+		$this->set_view_type($row["promo_view_type"]);
+		$this->set_club_id($row["promo_club_id"]);
 		$this->set_price($row["promo_price"]);
 		$this->set_image($row["promo_image"]);
-		$this->set_tax($row["promo_tax"]);
+		$this->set_expiry($row["promo_expiry"]);
 		$this->set_active($row["is_active"]);
 		$this->set_date_created($row["promo_date_created"]);
 		$this->set_last_updated($row["promo_last_updated"]);

@@ -49,8 +49,8 @@ $dm = new DataManager();
 		
 			if ($s_sort == ""){
 				// if no sort is set, pick a default
-				$s_sort = "promo_id";
-				$s_sort_dir = "desc";	
+				$s_sort = "promo_expiry";
+				$s_sort_dir = "asc";	
 			}
 
 			$order = " ORDER BY " . $s_sort . " " . $s_sort_dir;		
@@ -71,7 +71,7 @@ $dm = new DataManager();
 				<td><input type="text" name="s_wholesale"  value="<?php  echo $s_wholesale  ?>"/></td>
 				<td><input type="text" name="s_price"  value="<?php  echo $s_price  ?>"/></td>
 				<td><input type="text" name="s_active"  value="<?php  echo $s_active  ?>"/></td>
-								<input type="hidden" id="sort" name="sort" value="<?php echo $sort?>" />
+				<input type="hidden" id="sort" name="sort" value="<?php echo $sort?>" />
 				<input type="hidden" id="sort_dir" name="sort_dir" value="<?php echo $sort_dir?>" />
 								
                 <td valign="top"><input type="submit" class="submit" value="Search" /></td>
@@ -81,54 +81,57 @@ $dm = new DataManager();
         </div>
 			<br>
 <?php 
-					
-					$query = $session->getQuery($_SERVER["PHP_SELF"]);
-					$reload = (isset($_GET['reload']) && $_GET['reload'] == "true" && isset($_GET['page']) == false ? $_GET['reload'] : "");
-					
-					if ($query == "" || $reload == "true") {
-					// Page set to reload (new query)		
-							 
-						if($s_id != ""){
-								$query_where .= ' AND promo_id = "'.$s_id.'"';
-						} 
-						if($s_sport != ""){
-								$query_where .= ' AND promo_sport = "'.$s_sport.'"';
-						} 
-						if($s_title != ""){
-								$query_where .= ' AND promo_title = "'.$s_title.'"';
-						} 
-						if($s_view_list != ""){
-								$query_where .= ' AND promo_view_list = "'.$s_view_list.'"';
-						} 
-						if($s_wholesale != ""){
-								$query_where .= ' AND promo_wholesale = "'.$s_wholesale.'"';
-						} 
-						if($s_price != ""){
-								$query_where .= ' AND promo_price = "'.$s_price.'"';
-						} 
-						if($s_active != ""){
-								$query_where .= ' AND promo_active = "'.$s_active.'"';
-						}		
-
-						$query = "SELECT * from promo WHERE 1=1" . $query_where .$order;
-						
-						//Handle the sorting of the records
-						$session->setQuery($_SERVER["PHP_SELF"],$query);
-						$session->setSort($_SERVER["PHP_SELF"],$s_sort);
-						$session->setSortDir($_SERVER["PHP_SELF"],$s_sort_dir);
-					}else{
-						//The page is not reloaded so use the query from the session
-						$query = $session->getQuery($_SERVER["PHP_SELF"]);
-					}
-
-					if(isset($_GET['page'])){$page = $_GET['page'];}else{$page = 1;}
-					$session->setPage($page);
-					
-					require_once(CLASSES ."/class_record_pager.php");
-					$pager=new Pager($query,'paginglinks',20,0,1,'page_templates/promo_list_template.htm');
-					echo $pager->displayRecords(mysql_escape_string($page));
-					//echo $query;
-			 ?>
+	
+	$query = $session->getQuery($_SERVER["PHP_SELF"]);
+	$reload = (isset($_GET['reload']) && $_GET['reload'] == "true" && isset($_GET['page']) == false ? $_GET['reload'] : "");
+	
+	if ($query == "" || $reload == "true") {
+	// Page set to reload (new query)		
+		 
+	if($s_id != ""){
+			$query_where .= ' AND promo_id = "'.$s_id.'"';
+	} 
+	if($s_sport != ""){
+			$query_where .= ' AND promo_sport = "'.$s_sport.'"';
+	} 
+	if($s_title != ""){
+			$query_where .= ' AND promo_title = "'.$s_title.'"';
+	} 
+	if($s_view_list != ""){
+			$query_where .= ' AND promo_view_list = "'.$s_view_list.'"';
+	} 
+	if($s_wholesale != ""){
+			$query_where .= ' AND promo_wholesale = "'.$s_wholesale.'"';
+	} 
+	if($s_price != ""){
+			$query_where .= ' AND promo_price = "'.$s_price.'"';
+	} 
+	if($s_active != ""){
+			$query_where .= ' AND promo_active = "'.$s_active.'"';
+	}		
+	
+	$query = "SELECT *, promo.is_active AS promo_is_active from promo 
+	LEFT JOIN sport ON promo.promo_sport = sport.sport_id
+	LEFT JOIN item ON promo.promo_item_id = item.item_id
+	WHERE 1=1" . $query_where .$order;
+	
+	//Handle the sorting of the records
+	$session->setQuery($_SERVER["PHP_SELF"],$query);
+	$session->setSort($_SERVER["PHP_SELF"],$s_sort);
+	$session->setSortDir($_SERVER["PHP_SELF"],$s_sort_dir);
+	}else{
+	//The page is not reloaded so use the query from the session
+	$query = $session->getQuery($_SERVER["PHP_SELF"]);
+	}
+	
+	if(isset($_GET['page'])){$page = $_GET['page'];}else{$page = 1;}
+	$session->setPage($page);
+	
+	require_once(CLASSES ."/class_record_pager.php");
+	$pager=new Pager($query,'paginglinks',20,0,1,'page_templates/promo_list_template.htm');
+	echo $pager->displayRecords(mysql_escape_string($page));
+	//echo $query;
+ ?>
         </div>
 
     </div> 

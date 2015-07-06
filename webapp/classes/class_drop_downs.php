@@ -24,6 +24,7 @@
 // ->order_by: Set this if you want to order the list by a field OTHER than the name field.
 // ->custom_sql: If you need a table join or something funky, write it yourself and stick it in. Table method must still be set.
 // ->class_name: If you want the select to have a specific css class or classes.
+// ->disabled: set to "true" if you want this to be disabled
 
 // Syntax:
 /*
@@ -45,6 +46,7 @@
 	$dd->set_order_by("student_id");
 	$dd->set_where("student_session_id = '3'");	
 	$dd->add_data("data-name",$data-value);
+	$dd->disabled("true");
 	$dd->display();
 
 // If NOT using this dynamically, but just with a static list, use like this:
@@ -58,6 +60,7 @@
 		$option_list = "Superuser,Admin,User";
 		$option_list = array("1"=>"Superuser","2"=>"Admin","3"=>"User");		
 	$dd->set_option_list($option_list);	
+	$dd->disabled("false");	
 	$dd->display();	
 */
 // Alternatively, use $dd->compile() to return the drop down as a function
@@ -88,6 +91,7 @@ class DropDown {
 	private $option_list;
 	private $preset;
 	private $data;
+	private $disabled;
 					
 	function __construct() {
 		$this->data=array();
@@ -146,7 +150,10 @@ class DropDown {
 		
 		public function get_option_list() { return $this->option_list;}
 		public function set_option_list($value) {$this->option_list=$value;}	
-
+		
+		public function get_disabled() { return $this->disabled;}
+		public function set_disabled($value) {$this->disabled=$value;}	
+		
 public function __toString(){
 		// Debugging tool
 		// Dumps out the attributes and method names of this object
@@ -219,14 +226,17 @@ public function display(){
 		$dataArray = $this->data;
 		$dataStr = "";
 		foreach ($dataArray as $dataItem => $dataValue) {
-			$dataStr.= " data-" . $dataItem . "='" . $dataValue . "'";
+			$dataStr.= " data-" . $dataItem . "='" . $dataValue . "' ";
 		}
 		
 		if ($this->get_static()):
 			// Static drop down	
-			$requiredText = ($this->required ? ' required ' : " ");
-			$cssClass = " class='". $this->class_name . "'";
-			$ddl = '<select id="'.$this->id.'" name="'.$this->name.'" ' . $cssClass. ' onchange="'.$this->onchange.'" ' . $dataStr . ' ' . $requiredText . '>';
+			$cssClass = " class='". $this->class_name . "' ";
+			$onchangeText = ($this->onchange != "" ? ' onchange="' . $this->onchange . '" ' : "");	
+			$requiredText = ($this->required ? ' required ' : " ");					
+			$disabledText = ($this->disabled ? ' disabled ' : " ");
+			
+			$ddl = '<select id="'.$this->id.'" name="'.$this->name.'" ' . $cssClass. $onchangeText . $dataStr . $requiredText . $disabledText .'>';
 			if (isset($this->placeholder)){
 				if (!isset($this->selected_value)){$selected_text = "selected";}
 				$ddl .= '<option value="" disabled ' . $selected_text . ' style="font-style: italic;">' . $this->placeholder . '</option>';
@@ -286,14 +296,16 @@ public function display(){
 				if ($this->custom_sql != ""){
 					$strSQL = $this->custom_sql;
 				}
-				
-				$requiredText = ($this->required ? ' required ' : " ");
-				$cssClass = " class='". $this->class_name . "'";
+
+				$cssClass = " class='". $this->class_name . "' ";
+				$onchangeText = ($this->onchange != "" ? ' onchange="' . $this->onchange . '" ' : "");	
+				$requiredText = ($this->required ? ' required ' : " ");					
+				$disabledText = ($this->disabled ? ' disabled ' : " ");
 				
 				$result = $dm->queryRecords($strSQL);	
 				if ($result){
 				
-					$ddl = '<select id="'.$this->id.'" name="'.$this->name.'" ' . $cssClass. ' onchange="'.$this->onchange .'" ' . $dataStr . ' ' . $requiredText . '>';
+					$ddl = '<select id="'.$this->id.'" name="'.$this->name.'" ' . $cssClass . $onchangeText . $dataStr . $requiredText . $disabledText . '>';
 					if (isset($this->placeholder)){
 						if (!isset($this->selected_value)){$selected_text = "selected";}
 						$ddl .= '<option value="" disabled ' .$selected_text . ' style="font-style: italic;">' . $this->placeholder . '</option>';

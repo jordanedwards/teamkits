@@ -13,12 +13,12 @@
 <?php if($session->get_user_id() != ""): ?>
   <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav navbar-right">
-    <li class="dropdown"><a href="./settings.php"><i class="fa fa-cog"></i>&nbsp;Settings</a></li>
+    <li class="dropdown"><a href="./settings.php" style="text-shadow:none;"><i class="fa fa-cog"></i>&nbsp;Settings</a></li>
 						
 
 		<li class="dropdown">
 						
-			<a href="javscript:;" class="dropdown-toggle" data-toggle="dropdown">
+			<a href="javscript:;" class="dropdown-toggle" data-toggle="dropdown"  style="text-shadow:none;">
 				<i class="fa fa-user"></i>&nbsp;
 				<?php 
 				if ($currentUser){
@@ -83,7 +83,7 @@
 					</li>	
 							
 					<li <?php if ($activeMenuItem == "Website") { echo 'class="active"'; } ?>>
-						<a href="./timesheet_list.php">
+						<a href="./website.php">
 							<i class="fa fa-laptop"></i>
 							<span>Website</span>
 						</a>	    				

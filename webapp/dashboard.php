@@ -24,22 +24,98 @@ $activeMenuItem = "Home";
 			</div>
 		</div>
 			
-			<div class="col-md-12">
+			<div class="col-md-6">
 				<div class="widget widget-table action-table">
 						
 					<div class="widget-header">
 						<i class="fa fa-th-list"></i>
-						<h3>Most recent activity</h3>
+						<h3>Most recent orders</h3>
 					</div> <!-- /widget-header -->
 					
-					 <!-- /widget-content -->
-				
+					<div class="widget-content">
+						<table class="table table-striped table-bordered">
+							<thead>
+								<tr>
+									<th></th>
+									<th>Club</th>
+									<th>Value</th>
+									<th>Date</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php 
+			$dm = new DataManager();
+			$query="SELECT club_name, order_date_created, order_price, order_id FROM orders
+			LEFT JOIN club ON orders.order_club_id = club.club_id
+			WHERE orders.is_active = 'Y'
+			ORDER BY `order_date_created` DESC LIMIT 5";
+			$result = $dm->queryRecords($query);
+			if($result){
+			while ($row = mysqli_fetch_array($result))
+				{
+					echo '
+					<tr>
+						<td><a href="orders_edit.php?id=' . $row['order_id'] . '"><i class="fa fa-edit"></i></a></td>
+						<td>' . $row['club_name'] . '</td>
+						<td>' . $row['order_price'] . '</td>
+						<td>' . $row['order_date_created'] . '</td>						
+					</tr>
+					';
+				}
+			}
+							?>
+								</tbody>
+							</table>
+						
+					</div>
+					
 				</div>
-				
-				
 			</div>
 			
-							
+			<div class="col-md-6">
+				<div class="widget widget-table action-table">
+						
+					<div class="widget-header">
+						<i class="fa fa-th-list"></i>
+						<h3>Most recent logins</h3>
+					</div> <!-- /widget-header -->
+					
+					<div class="widget-content">
+						<table class="table table-striped table-bordered">
+							<thead>
+								<tr>
+									<th>Club</th>
+									<th>Date/Time</th>
+								</tr>
+							</thead>
+							<tbody>
+							<?php 
+			$dm = new DataManager();
+			$query="SELECT club_name, user_login FROM user
+			LEFT JOIN club ON user.user_id = club.club_user_id
+			WHERE user_role = 3
+			ORDER BY `user_login` DESC LIMIT 5";
+			$result = $dm->queryRecords($query);
+			if($result){
+			while ($row = mysqli_fetch_array($result))
+				{
+					echo '
+					<tr>
+						<td>' . $row['club_name'] . '</td>
+						<td>' . $row['user_login'] . '</td>
+
+					</tr>
+					';
+				}
+			}
+							?>
+								</tbody>
+							</table>
+						
+					</div>
+					
+				</div>
+			</div>				
 		</div>
 	</div>
 </div> 

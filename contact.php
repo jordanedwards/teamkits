@@ -1,64 +1,40 @@
 <?php
-// Set the page title/height and include the header file:
-define('TITLE', 'Contact | ');
-include('shared/header.php');
-?>
 
-    <!-- Google Map -->
-    <div id='map-canvas'></div>
+// Email address verification
+function isEmail($email) {
+    return(preg_match("/^[-_.[:alnum:]]+@((([[:alnum:]]|[[:alnum:]][[:alnum:]-]*[[:alnum:]])\.)+(ad|ae|aero|af|ag|ai|al|am|an|ao|aq|ar|arpa|as|at|au|aw|az|ba|bb|bd|be|bf|bg|bh|bi|biz|bj|bm|bn|bo|br|bs|bt|bv|bw|by|bz|ca|cc|cd|cf|cg|ch|ci|ck|cl|cm|cn|co|com|coop|cr|cs|cu|cv|cx|cy|cz|de|dj|dk|dm|do|dz|ec|edu|ee|eg|eh|er|es|et|eu|fi|fj|fk|fm|fo|fr|ga|gb|gd|ge|gf|gh|gi|gl|gm|gn|gov|gp|gq|gr|gs|gt|gu|gw|gy|hk|hm|hn|hr|ht|hu|id|ie|il|in|info|int|io|iq|ir|is|it|jm|jo|jp|ke|kg|kh|ki|km|kn|kp|kr|kw|ky|kz|la|lb|lc|li|lk|lr|ls|lt|lu|lv|ly|ma|mc|md|mg|mh|mil|mk|ml|mm|mn|mo|mp|mq|mr|ms|mt|mu|museum|mv|mw|mx|my|mz|na|name|nc|ne|net|nf|ng|ni|nl|no|np|nr|nt|nu|nz|om|org|pa|pe|pf|pg|ph|pk|pl|pm|pn|pr|pro|ps|pt|pw|py|qa|re|ro|ru|rw|sa|sb|sc|sd|se|sg|sh|si|sj|sk|sl|sm|sn|so|sr|st|su|sv|sy|sz|tc|td|tf|tg|th|tj|tk|tm|tn|to|tp|tr|tt|tv|tw|tz|ua|ug|uk|um|us|uy|uz|va|vc|ve|vg|vi|vn|vu|wf|ws|ye|yt|yu|za|zm|zw)$|(([0-9][0-9]?|[0-1][0-9][0-9]|[2][0-4][0-9]|[2][5][0-5])\.){3}([0-9][0-9]?|[0-1][0-9][0-9]|[2][0-4][0-9]|[2][5][0-5]))$/i", $email));
+}
 
-    <!-- Email Section -->
-    <div class='container'>
-        <div class='row'>
-            <div class='col-lg-12 text-center'>
-                <h2>Email Us!</h2>
-            </div>
-        </div>
-        <div class='row'>
-            <div class='col-lg-8 col-lg-offset-2'>
-                <!-- To configure the contact form email address, go to mail/contact_me.php and update the email address in the PHP file on line 19. -->
-                <!-- The form should work on most web servers, but if the form is not working you may need to configure your web server differently. -->
-                <form name='sentMessage' id='contactForm' novalidate>
-                    <div class='row control-group'>
-                        <div class='form-group col-xs-12 floating-label-form-group controls'>
-                            <label>Name</label>
-                            <input type='text' class='form-control' placeholder='Name' id='name' required data-validation-required-message='Please enter your name.'>
-                            <p class='help-block text-danger'></p>
-                        </div>
-                    </div>
-                    <div class='row control-group'>
-                        <div class='form-group col-xs-12 floating-label-form-group controls'>
-                            <label>Email Address</label>
-                            <input type='email' class='form-control' placeholder='Email Address' id='email' required data-validation-required-message='Please enter your email address.'>
-                            <p class='help-block text-danger'></p>
-                        </div>
-                    </div>
-                    <div class='row control-group'>
-                        <div class='form-group col-xs-12 floating-label-form-group controls'>
-                            <label>Phone Number</label>
-                            <input type='tel' class='form-control' placeholder='Phone Number' id='phone' required data-validation-required-message='Please enter your phone number.'>
-                            <p class='help-block text-danger'></p>
-                        </div>
-                    </div>
-                    <div class='row control-group'>
-                        <div class='form-group col-xs-12 floating-label-form-group controls'>
-                            <label>Message</label>
-                            <textarea rows='5' class='form-control' placeholder='Message' id='message' required data-validation-required-message='Please enter a message.'></textarea>
-                            <p class='help-block text-danger'></p>
-                        </div>
-                    </div>
-                    <br>
-                    <div id='success'></div>
-                    <div class='row'>
-                        <div class='form-group col-xs-12 submit text-center'>
-                            <button type='submit' class='btn btn-success btn-lg'>Send</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+if($_POST) {
 
-<?php
-include('shared/footer.php');
+    // Enter the email where you want to receive the message
+    $emailTo = 'info@teamkits.net';
+    //$emailTo = 'jordan@orchardcity.ca';
+	
+    $clientEmail = addslashes(trim($_POST['email']));
+    $clientName = addslashes(trim($_POST['clientName']));
+    $message = addslashes(trim($_POST['comments']));
+	$gRecaptchaResponse = addslashes(trim($_POST['g-recaptcha-response']));
+
+    $array = array('emailMessage' => '', 'gRecaptchaResponse' => '', 'messageMessage' => '');
+
+    if(!isEmail($clientEmail)) {
+        $array['emailMessage'] = 'Invalid email!';
+    }
+    if($gRecaptchaResponse == '') {
+        $array['gRecaptchaResponse'] = 'Please click on the recaptcha';
+    }
+    if($message == '') {
+        $array['messageMessage'] = 'Empty message!';
+    }
+    if(isEmail($clientEmail) && $clientName != '' && $message != '') {
+        // Send email
+		$headers = "From: " . $clientEmail . " <" . $clientEmail . ">" . "\r\n" . "Reply-To: " . $clientEmail;
+		mail($emailTo, "Email from website", $message, $headers);
+    }
+
+    echo json_encode($array);
+
+}
+
 ?>

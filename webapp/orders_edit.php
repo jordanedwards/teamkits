@@ -5,7 +5,7 @@ require(INCLUDES . "/acl_module.php");
 include(CLASSES . "/class_orders.php"); 
 $activeMenuItem = "Orders";
  
-	if(!isset($_GET["id"])) {
+	if(!isset($_GET["id"]) && !isset($_GET["club_id"])) {
 		$session->setAlertMessage("Can not edit - the ID is invalid. Please try again.");
 		$session->setAlertColor("yellow");
 		header("location:" . $base_href . "/index.php");
@@ -18,7 +18,7 @@ $activeMenuItem = "Orders";
 	
 	if ($_GET["id"] ==0){
 		// Change this to pass a parent value if creating a new record:
-		//	$orders->set_customer_id($_GET['customer_id']);
+		$orders->set_club_id($_GET['club_id']);
 	} else {
 		$orders->get_by_id($orders_id);
 	}
@@ -57,7 +57,7 @@ $activeMenuItem = "Orders";
 	<div class="row">
 	<div class="col-md-6">
 	<form id="form_orders" action="<?php  echo ACTIONS_URL; ?>action_orders_edit.php" method="post">
-	<input type="hidden" name="orders_id" value="<?php  echo $orders->get_id();  ?>" />
+	<input type="hidden" name="order_id" value="<?php  echo $orders->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
 	<input type="hidden" name="page_id" value="<?php  echo $page_id  ?>" />	
 	
@@ -155,8 +155,8 @@ $activeMenuItem = "Orders";
   		
 		</table>
           <br />
-          <input type="submit" value="Add/Update Orders" />&nbsp;&nbsp;
-          <input type="button" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn-success" value="Add/Update Orders" />&nbsp;&nbsp;
+          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		
@@ -184,7 +184,7 @@ $activeMenuItem = "Orders";
 			$result = $dm->queryRecords($strSQL);	
 			if ($result):
 				while($row = mysqli_fetch_assoc($result)):
-					echo '<tr><td><a href="orderitem_edit.php?id=' . $row['orderitem_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['item_name'] . '</td><td>' . $row['orderitem_quantity'] . '</td><td style="white-space:normal">$'.sprintf("%.2f",$row['orderitem_price']) .'</td><td style="white-space:normal">$'.number_format(($row['orderitem_price']*$row['orderitem_quantity']),2) .'</td></tr>';
+					echo '<tr><td><a href="orderitem_edit.php?id=' . $row['orderitem_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td><a href="item_edit.php?id=' . $row['orderitem_item_number'] . '">' . $row['item_name'] . '</a></td><td>' . $row['orderitem_quantity'] . '</td><td style="white-space:normal">$'.sprintf("%.2f",$row['orderitem_price']) .'</td><td style="white-space:normal">$'.number_format(($row['orderitem_price']*$row['orderitem_quantity']),2) .'</td></tr>';
 						$subtotal = $subtotal + number_format(($row['orderitem_price']*$row['orderitem_quantity']),2);
 				endwhile;									
 			endif;

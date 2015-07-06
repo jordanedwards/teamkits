@@ -20,6 +20,7 @@ include(CLASSES . "/class_club.php");
 		//	$club->set_customer_id($_GET['customer_id']);
 	} else {
 		$club->get_by_id($club_id);
+
 	}
 $activeMenuItem = "Clubs";				
  ?>
@@ -57,63 +58,28 @@ $activeMenuItem = "Clubs";
 	<input type="hidden" name="action" value="edit" />	
 	<input type="hidden" name="page_id" value="<?php  echo $page_id  ?>" />	
 	
-         <table class="admin_table">
+        <table class="admin_table">
+		 <tr><th colspan="2">Contact Info:</th></tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Name: </td>
-            		<td><input id="club_name" name="club_name" type="text"  value="<?php  echo $club->get_name();  ?>" style="width:90%"  class="{validate:{required:true}}" /> <span class='red'>*</span> </td>
+            		<td><input id="club_name" name="club_name" type="text"  value="<?php  echo $club->get_name();  ?>" class="form-control inline" required/></td>
 				</tr>
 				<tr>
-           			<td style="width:1px; white-space:nowrap;">Sport: </td>
-				
-					<td>
-					<?php 
-						$dd = new DropDown();
-						$dd->set_table("sport");	
-						$dd->set_name_field("sport_name");
-						$dd->set_class_name("form-control");
-						$dd->set_order("ASC");						
-						
-						$dd->set_name("club_sport");						
-						$dd->set_selected_value($club->get_sport());
-						$dd->display();
-					 ?>											
-					
-					</td>
-				</tr>
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">Brand: </td>
-				
-					<td>
-					<?php 
-						$dd = new DropDown();
-						$dd->set_table("brand");	
-						$dd->set_name_field("brand_name");
-						$dd->set_class_name("form-control");
-						$dd->set_order("ASC");						
-						
-						$dd->set_name("club_brand");						
-						$dd->set_selected_value($club->get_brand());
-						$dd->display();
-					 ?>											
-					
-					</td>
-				</tr>
+           			<td style="width:1px; white-space:nowrap;">Email: </td>
+            		<td><input id="club_email" name="club_email" type="text"  value="<?php  echo $club->get_email();  ?>" class="form-control inline" /> </td>
+				</tr>				
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Tel: </td>
-					<td><input id="club_tel" name="club_tel" type="tel" value="<?php  echo $club->get_tel();  ?>"  style="width:90%" /></td>
-<script type="text/javascript">
-$(document).ready(function() {
-	$("#club_tel").mask("(999) 999-9999"); 
-});	
-</script>	
+					<td><input id="club_tel" name="club_tel" type="tel" value="<?php  echo $club->get_tel();  ?>"  class="form-control inline" /></td>
+
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Address: </td>
-            		<td><input id="club_address" name="club_address" type="text"  value="<?php  echo $club->get_address();  ?>" style="width:90%" /> </td>
+            		<td><input id="club_address" name="club_address" type="text"  value="<?php  echo $club->get_address();  ?>" class="form-control inline" /> </td>
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">City: </td>
-            		<td><input id="club_city" name="club_city" type="text"  value="<?php  echo $club->get_city();  ?>" style="width:90%" /> </td>
+            		<td><input id="club_city" name="club_city" type="text"  value="<?php  echo $club->get_city();  ?>" class="form-control inline" /> </td>
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Province: </td>
@@ -153,8 +119,48 @@ $(document).ready(function() {
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Postal code: </td>
-            		<td><input id="club_postal_code" name="club_postal_code" type="text"  value="<?php  echo $club->get_postal_code();  ?>" style="width:90%" /> </td>
+            		<td><input id="club_postal_code" name="club_postal_code" type="text"  value="<?php  echo $club->get_postal_code();  ?>" class="form-control inline" /> </td>
 				</tr>
+				</table>
+		<br>
+		<table class="admin_table">
+				<tr><th colspan="2">Account Settings:</th></tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Sport: </td>
+				
+					<td>
+					<?php 
+						$dd = new DropDown();
+						$dd->set_table("sport");	
+						$dd->set_name_field("sport_name");
+						$dd->set_class_name("form-control");
+						$dd->set_order("ASC");						
+						
+						$dd->set_name("club_sport");						
+						$dd->set_selected_value($club->get_sport());
+						$dd->display();
+					 ?>											
+					
+					</td>
+				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Brand: </td>
+				
+					<td>
+					<?php 
+						$dd = new DropDown();
+						$dd->set_table("brand");	
+						$dd->set_name_field("brand_name");
+						$dd->set_class_name("form-control");
+						$dd->set_order("ASC");						
+						
+						$dd->set_name("club_brand");						
+						$dd->set_selected_value($club->get_brand());
+						$dd->display();
+					 ?>											
+					
+					</td>
+				</tr>				
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Tax: </td>
 					<td>
@@ -171,17 +177,10 @@ $(document).ready(function() {
 					
 					</td>
 				</tr>				
+
 				<tr>
-           			<td style="width:1px; white-space:nowrap;">Login: </td>
-            		<td><input id="club_login" name="club_login" type="text"  value="<?php  echo $club->get_login();  ?>" style="width:90%" /> </td>
-				</tr>
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">Password: </td>
-            		<td><input id="club_password" name="club_password" type="password"  value="<?php  echo $club->get_password();  ?>" style="width:90%" /> </td>
-				</tr>
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">Code: </td>
-            		<td><input id="club_code" name="club_code" type="text"  value="<?php  echo $club->get_code();  ?>" style="width:90%" /> </td>
+           			<td style="width:1px; white-space:nowrap;">Club Code: </td>
+            		<td><input id="club_code" name="club_code" type="text"  value="<?php  echo $club->get_code();  ?>" class="form-control inline" /> </td>
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Account type: </td>
@@ -190,9 +189,10 @@ $(document).ready(function() {
 						$dd = new DropDown();
 						$dd->set_table("accounttype");	
 						$dd->set_name_field("accounttype_title");
-						$dd->set_class_name("form-control");
+						$dd->set_class_name("form-control inline");
 						$dd->set_order("ASC");
-						$dd->set_name("club_account_type");						
+						$dd->set_name("club_account_type");		
+						$dd->set_required("true");				
 						$dd->set_selected_value($club->get_account_type());
 						$dd->display();
 					 ?>											
@@ -216,9 +216,36 @@ $(document).ready(function() {
 				</tr>
   		
 		</table>
+		<br>
+		<table class="admin_table">
+			<tr><th colspan="2">Online access:</th></tr>
+			<tr>
+				<td style="width:1px; white-space:nowrap;">Login: </td>
+				<td><input id="user_login" name="user_login" type="text"  value="<?php echo $club->get_user_login() ?>" class="form-control inline" /> </td>
+			</tr>			
+			<tr>
+           		<td style="width:1px; white-space:nowrap;">Password: </td>
+            	<td><input id="user_password" name="user_password" type="password"  value="" placeholder="Enter new password to update" class="form-control inline" /> </td>
+			</tr>
+			<tr>
+           		<td style="width:1px; white-space:nowrap;">Enabled: </td>
+            	<td>
+				<?php 					
+					$dd = new DropDown();
+					$dd->set_static(true);	
+					$dd->set_name("user_active");
+					$dd->set_class_name("form-control");
+					$dd->set_option_list("Y,N");						
+					$dd->set_selected_value($club->get_user_active());
+					$dd->display();
+				?>	
+				</td>
+			</tr>						 
+		 </table>
+		 
           <br />
-          <input type="submit" value="Add/Update Club" />&nbsp;&nbsp;
-          <input type="button" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
+          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		
@@ -226,17 +253,111 @@ $(document).ready(function() {
           <p><em>Last updated: <?php  echo $club->get_last_updated();  ?> by <?php  echo $club->get_last_updated_user();  ?></em></p>
         <?php  }  ?>			
 	
-      </div>
+    </div>
+	<div class="col-md-6">
+		<?php if ($club_id > 0): ?>
+		<table class="admin_table">
+			<thead>
+			<tr><th colspan="5">Contacts:<i class="fa fa-plus-circle fa-lg add-icon add-contact"></i></th></tr>
+			<tr><th></th><th>Name</th><th>Postion</th><th>Tel</th><th>Email</th></tr>
+			</thead>
+			
+			<tbody id="contact_table">
+		 <?php 
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from clubContact
+			WHERE clubContact_club_id = " . $club_id . " AND is_active = 'Y'";						
+
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result))://///
+					echo '<tr><td><a href="clubContact_edit.php?id=' . $row['clubContact_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['clubContact_name'] . '</td><td>' . $row['clubContact_position'] . '</td><td>' . $row['clubContact_tel'] . '</td><td>' . $row['clubContact_email'] . '</td></tr>';
+				endwhile;									
+			endif;
+		 ?>
+		</tbody>
+		</table>
+		<br>
+		<table class="admin_table">
+			<thead>
+			<tr><th colspan="3">Notes:<i class="fa fa-plus-circle fa-lg add-icon add-note"></i></th></tr>
+			<tr><th></th><th>Date</th><th>Note</th></tr>
+			</thead>
+			
+			<tbody id="note_table">
+		 <?php 
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from clubNotes 
+			WHERE clubNotes_club_id = " . $club_id . " AND is_active = 'Y'";						
+
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result)):
+					echo '<tr><td><a href="clubNotes_edit.php?id=' . $row['clubNotes_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['clubNotes_date_created'] . '</a></td><td>' . $row['clubNotes_content'] . '</td></tr>';
+				endwhile;									
+			endif;
+		 ?>
+		</tbody>
+		</table>
+		<br>
+		<table class="admin_table">
+			<thead>
+			<tr><th colspan="5">Orders:<a href="orders_edit.php?club_id=<?php echo $club_id ?>"><i class="fa fa-plus-circle fa-lg add-icon"></i></a></th></tr>
+			<tr><th></th><th>Date:</th><th>Status</th></tr>	
+			</thead>
+			
+			<tbody>
+		 <?php 
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from orders 
+			LEFT JOIN orderstatus ON orders.order_status = orderstatus.orderstatus_id 
+			WHERE order_club_id=" . $club_id . "
+			AND orders.is_active = 'Y'";						
+
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result)):
+					echo '<tr><td><a href="orders_edit.php?id=' . $row['order_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['order_date_created'] . '</a></td><td>' . $row['orderstatus_title'] . '</td></tr>';
+				endwhile;									
+			endif;
+		 ?>		
+			</tbody>
+		</table>
+		<br>
+		<table class="admin_table">
+			<thead>
+			<tr><th colspan="5">Club Uploads:</th></tr>
+			<tr><th></th><th>Title:</th><th>Date</th></tr>	
+			</thead>
+			
+			<tbody>
+		 <?php 
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from clubUploads 
+			WHERE clubUploads_club_id=" . $club_id . "
+			AND is_active = 'Y'";						
+
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result)):
+					echo '<tr><td><a href="clubUploads_edit.php?id=' . $row['clubUploads_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['clubUploads_title'] . '</td><td>' . $row['clubUploads_date_created'] . '</a></td></tr>';
+				endwhile;									
+			endif;
+		 ?>		
+			</tbody>
+		</table>
+		<?php endif ?>
+	</div>
     </div> 
 
 </div><!-- /container -->
 </div>
-
+<?php //echo $club ?>
 <?php  include(INCLUDES . "/footer.php");  ?>
 <?php require(INCLUDES_LIST);?>	 
 
 <script type="text/javascript">
-		$(document).ready(function() {
+	/*	$(document).ready(function() {
 			var container = $("div.errorContainer");
 			// validate the form when it is submitted
 			var validator = $("#form_customers").validate({
@@ -249,11 +370,19 @@ $(document).ready(function() {
 
 		$.validator.setDefaults({
 			submitHandler: function() { form.submit();  }
-		});
+		});*/
 
 // Include any masks here:
-		 //   $("#student_tel").mask("(999) 999-9999");
-		
-  </script>		
+$(function() {
+		 $("#club_tel").mask("(999) 999-9999");
+<?php if ($club_id == 0){ ?>
+		$('#club_email').on("change", function(){
+			$('#user_login').val($('#club_email').val());
+		});
+		<?php } ?>
+});
+  </script>
+  <?php include(SCRIPTS . "note_add_dialog.php"); ?>  
+  <?php include(SCRIPTS . "contact_add_dialog.php"); ?>  
   </body>
 </html>
