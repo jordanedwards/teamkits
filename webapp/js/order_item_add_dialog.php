@@ -19,7 +19,6 @@ $(function() {
 			'Add': {
 				click: function() {
 					var newItem = $('#newComponentForm').serialize();
-					console.log(newItem);
 						$.ajax({
 						url: "ajax/ajax_order_item.php?"+newItem,	
 						success: function (html) {	
@@ -46,13 +45,25 @@ $(function() {
 		e.preventDefault();
 		$('#order_item_add_dialog').dialog('open');
 	});
+	
 });
+
+	function updateSizeList(){
+		var selectedItem = $('#item_id').val();
+		$.ajax({
+			url: "ajax/ajax_get_sizes.php?item_id="+selectedItem,	
+			success: function (html) {	
+				$('#size_div').html(html);
+			}
+		});
+		$('#size_div').show();
+	}
+	
 </script>
 
 
 <div id="order_item_add_dialog" title="Add Order Item" style="display:none">
 <form id="newComponentForm" method="post">
-<h4>Please select:</h4>
  <p>
  <?php
 	$dd = New DropDown();
@@ -63,11 +74,16 @@ $(function() {
 	$dd->set_class_name("form-control inline");
 	$dd->set_order("ASC");
 	$dd->set_placeholder("Select item");	
+	$dd->set_onchange('updateSizeList();');
 	$dd->display();
 	?>	  	  
   </p>
  <p>
 <input type="number" placeholder="Quantity" style="width: 90%;" class="form-control inline" name="item_quantity"/> 
+</p>
+<p style="display:none" id="size_div">
+
+</p>
 <input type="hidden" name="order_id" value="<?php echo  $orders_id ?>"/>
 <input type="hidden" name="action" value="add"/>
   </p>  

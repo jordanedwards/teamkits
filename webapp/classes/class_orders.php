@@ -1,15 +1,14 @@
 <?php 
- class Orders {
+ class Orders extends SessionManager{
  
 		private $id;
 		private $club_id;
- 		private $customer;
- 		private $item;
- 		private $price;
- 		private $quantity;
+ 		private $subtotal;
+ 		private $tax;
+		private $discount;
+		private $total;
  		private $status;
 		private $status_title;
- 		private $tracking_number;
  		private $notes;
  		private $active;
  		private $date_created;
@@ -26,26 +25,23 @@
 		public function get_club_id() { return $this->club_id;}
 		public function set_club_id($value) {$this->club_id=$value;}
 		
-		public function get_customer() { return $this->customer;}
-		public function set_customer($value) {$this->customer=$value;}
+		public function get_subtotal() { return $this->subtotal;}
+		public function set_subtotal($value) {$this->subtotal=$value;}
 		
-		public function get_item() { return $this->item;}
-		public function set_item($value) {$this->item=$value;}
+		public function get_tax() { return $this->tax;}
+		public function set_tax($value) {$this->tax=$value;}
 		
-		public function get_price() { return $this->price;}
-		public function set_price($value) {$this->price=$value;}
+		public function get_discount() { return $this->discount;}
+		public function set_discount($value) {$this->discount=$value;}
 		
-		public function get_quantity() { return $this->quantity;}
-		public function set_quantity($value) {$this->quantity=$value;}
-		
+		public function get_total() { return $this->total;}
+		public function set_total($value) {$this->total=$value;}
+								
 		public function get_status() { return $this->status;}
 		public function set_status($value) {$this->status=$value;}
 		
 		public function get_status_title() { return $this->status_title;}
 		public function set_status_title($value) {$this->status_title=$value;}
-				
-		public function get_tracking_number() { return $this->tracking_number;}
-		public function set_tracking_number($value) {$this->tracking_number=$value;}
 		
 		public function get_notes() { return $this->notes;}
 		public function set_notes($value) {$this->notes=$value;}
@@ -60,7 +56,7 @@
 		public function set_last_updated($value) {$this->last_updated=$value;}
 		
 		public function get_last_updated_user() { return $this->last_updated_user;}
-		public function set_last_updated_user($value) {$this->last_updated_user=$this->get_user_id();}
+		public function set_last_updated_user() {$this->last_updated_user=$this->get_user_id();}
 		
 		
 public function __toString(){
@@ -111,11 +107,13 @@ public function save() {
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
 			
-				$strSQL = "INSERT INTO orders (order_club_id, order_customer, order_price, order_status, order_notes, is_active, order_date_created, order_last_updated, order_last_updated_user) 
+				$strSQL = "INSERT INTO orders (order_club_id, order_subtotal, order_tax, order_discount, order_total, order_status, order_notes, is_active, order_date_created, order_last_updated, order_last_updated_user) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',
-				'".mysqli_real_escape_string($dm->connection, $this->get_customer())."',
-				'".mysqli_real_escape_string($dm->connection, $this->get_price())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_subtotal())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_tax())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_discount())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_total())."',				
 				'".mysqli_real_escape_string($dm->connection, $this->get_status())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_notes())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_active())."',
@@ -126,9 +124,10 @@ public function save() {
 			else {
 				$strSQL = "UPDATE orders SET 
 								order_club_id='".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',						 
-						 		order_customer='".mysqli_real_escape_string($dm->connection, $this->get_customer())."',						 
-						 		order_item='".mysqli_real_escape_string($dm->connection, $this->get_item())."',						 
-						 		order_price='".mysqli_real_escape_string($dm->connection, $this->get_price())."',						 
+						 		order_subtotal='".mysqli_real_escape_string($dm->connection, $this->get_subtotal())."',	
+						 		order_tax='".mysqli_real_escape_string($dm->connection, $this->get_tax())."',						 
+						 		order_discount='".mysqli_real_escape_string($dm->connection, $this->get_discount())."',						 
+						 		order_total='".mysqli_real_escape_string($dm->connection, $this->get_total())."',											 
 						 		order_status='".mysqli_real_escape_string($dm->connection, $this->get_status())."',						 
 						 		order_notes='".mysqli_real_escape_string($dm->connection, $this->get_notes())."',						 
 						 		is_active='".mysqli_real_escape_string($dm->connection, $this->get_active())."',						 
@@ -217,7 +216,7 @@ public function save() {
 			$status = false;
 			$dm = new DataManager();
 			$strSQL = "SELECT * FROM orders 
-			WHERE order_status = 6 AND order_club_id=" . $club_id . "
+			WHERE order_status = 1 AND order_club_id=" . $club_id . "
 			ORDER BY order_date_created DESC
 			LIMIT 1";
       
@@ -241,15 +240,16 @@ public function save() {
 		}	
 	}
 	
-	public function find_existing_order_item($item_id){
+	public function find_existing_order_item($item_id,$item_size){
 	// Find exiting order item for this order of this type:
 	if($this->id >0){
 		try{
 			$retval = false;
 			$dm = new DataManager();
 			$strSQL = "SELECT orderitem_id FROM orderitem 
-			WHERE orderitem_order_id = '" . $this->id. "' 
-			AND orderitem_item_number = '" . $item_id. "'
+			WHERE orderitem_order_id = " . $this->id. "
+			AND orderitem_item_number = " . $item_id. "
+			AND orderitem_size = '" .$item_size. "'
 			AND is_active = 'Y'
 			LIMIT 1";
       
@@ -274,12 +274,55 @@ public function save() {
 	}
 	}
 	
+	public function recalculate(){
+	// Recalculate order subtotal, tax amount, discount amount, total:
+		if($this->id >0){
+			try{
+				$retval = false;
+				$dm = new DataManager();
+				$strSQL = "SELECT 
+SUM(orderitem_price*orderitem_quantity) AS subtotal, 
+SUM(orderitem_price*orderitem_quantity*orderitem_discount) AS discount, 
+((SELECT SUM(orderitem_price*orderitem_quantity) FROM `orderitem` WHERE orderitem_order_id = " . $this->id . ")-(SELECT SUM(orderitem_price*orderitem_quantity*orderitem_discount) FROM orderitem WHERE orderitem_order_id = " . $this->id . ")) AS new_total,
+(SELECT tax_percentage FROM club LEFT JOIN tax ON club.club_tax_id = tax.tax_id WHERE club_id = orders.order_club_id) AS tax
+
+FROM `orderitem` 
+LEFT JOIN orders ON orderitem.orderitem_order_id = orders.order_id
+WHERE orderitem_order_id = " . $this->id;
+				
+				$result = $dm->queryRecords($strSQL);		
+				if ($result):
+					while ($line = mysqli_fetch_assoc($result)):
+						$this->set_subtotal($line['subtotal']);
+						$this->set_discount($line['discount']);
+						$this->set_tax($line['tax']*$line['new_total']);
+						$finaltotal = $line['new_total'] + $this->get_tax();
+						$this->set_total($finaltotal);						
+					endwhile;	
+				endif;
+	
+				return $retval;
+			}
+			catch(Exception $e) {
+				// CATCH EXCEPTION HERE -- DISPLAY ERROR MESSAGE & EMAIL ADMINISTRATOR
+				include_once(CLASSES . 'class_error_handler.php');
+				$errorVar = new ErrorHandler();
+				$errorVar->notifyAdminException($e);
+				exit;
+			}		
+		} else {
+			return "Object is missing order id";
+		}
+	}
+		
 	// loads the object data from a mysql assoc array
   	private function load($row){
 		$this->set_id($row["order_id"]);
 		$this->set_club_id($row["order_club_id"]);
-		$this->set_customer($row["order_customer"]);
-		$this->set_price($row["order_price"]);
+		$this->set_subtotal($row["order_subtotal"]);
+		$this->set_tax($row["order_tax"]);	
+		$this->set_discount($row["order_discount"]);		
+		$this->set_total($row["order_total"]);			
 		$this->set_status($row["order_status"]);
 		$this->set_status_title($row["orderstatus_title"]);		
 		$this->set_notes($row["order_notes"]);

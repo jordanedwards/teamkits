@@ -6,6 +6,7 @@
  		private $item_number;
  		private $price;
  		private $quantity;
+ 		private $size;		
  		private $discount;
  		private $active;
 		private $item_price;
@@ -34,6 +35,9 @@
 		public function get_quantity() { return $this->quantity;}
 		public function set_quantity($value) {$this->quantity=$value;}
 		
+		public function get_size() { return $this->size;}
+		public function set_size($value) {$this->size=$value;}
+				
 		public function get_discount() { return $this->discount;}
 		public function set_discount($value) {$this->discount=$value;}
 		
@@ -47,8 +51,8 @@
 		public function set_last_updated($value) {$this->last_updated=$value;}
 		
 		public function get_last_updated_user() { return $this->last_updated_user;}
-		public function set_last_updated_user($value) {$this->last_updated_user=$this->get_user_id();}
-		
+		public function set_last_updated_user() {$this->last_updated_user=$this->get_user_id();}
+			
 		
 public function __toString(){
 		// Debugging tool
@@ -97,13 +101,14 @@ public function save() {
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
 			
-				$strSQL = "INSERT INTO orderitem (orderitem_id, orderitem_order_id, orderitem_item_number, orderitem_price, orderitem_quantity, orderitem_discount, is_active, orderitem_date_created, orderitem_last_updated, orderitem_last_updated_user) 
+				$strSQL = "INSERT INTO orderitem (orderitem_id, orderitem_order_id, orderitem_item_number, orderitem_price, orderitem_quantity, orderitem_size, orderitem_discount, is_active, orderitem_date_created, orderitem_last_updated, orderitem_last_updated_user) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_order_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_item_number())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_price())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_quantity())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_size())."',				
 				'".mysqli_real_escape_string($dm->connection, $this->get_discount())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_active())."',
 				NOW(),
@@ -114,9 +119,10 @@ public function save() {
 				$strSQL = "UPDATE orderitem SET 
 								orderitem_order_id='".mysqli_real_escape_string($dm->connection, $this->get_order_id())."',						 
 						 		orderitem_item_number='".mysqli_real_escape_string($dm->connection, $this->get_item_number())."',						 
-						 		orderitem_price='".mysqli_real_escape_string($dm->connection, $this->get_price())."',						 
-						 		orderitem_quantity='".mysqli_real_escape_string($dm->connection, $this->get_quantity())."',						 
-						 		orderitem_discount='".mysqli_real_escape_string($dm->connection, $this->get_discount())."',						 
+						 		orderitem_price='".mysqli_real_escape_string($dm->connection, $this->get_price())."',
+						 		orderitem_quantity='".mysqli_real_escape_string($dm->connection, $this->get_quantity())."',	
+						 		orderitem_size='".mysqli_real_escape_string($dm->connection, $this->get_size())."',
+						 		orderitem_discount='".mysqli_real_escape_string($dm->connection, $this->get_discount())."',
 						 		is_active='".mysqli_real_escape_string($dm->connection, $this->get_active())."',						 
 						 		orderitem_last_updated=NOW(),						
 						 		orderitem_last_updated_user='".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."'
@@ -127,7 +133,7 @@ public function save() {
 			$result = $dm->updateRecords($strSQL);
 
 			// if this is a new record get the record id from the database
-			if(!$this->get_id() >= "0") {
+			if($this->get_id() == "0") {
 				$this->set_id(mysqli_insert_id($dm->connection));
 			}
 			
@@ -177,9 +183,7 @@ public function save() {
 			$strSQL = "SELECT * FROM orderitem WHERE orderitem_id=" . $id;
       
 			$result = $dm->queryRecords($strSQL);
-			$num_rows = mysqli_num_rows($result);
-
-			if ($num_rows != 0){
+			if ($result){
 				$row = mysqli_fetch_assoc($result);
         		$this->load($row);
 				$status = true;
@@ -216,9 +220,19 @@ public function save() {
 				$this->item_price = $line['item_price'];
 			endwhile;	
 		endif;
-		
 	}
-	  
+
+	public function get_json_data(){
+		// Used in an ajax function to return the object properties:
+ 		$var = get_object_vars($this);
+        foreach($var as &$value){
+           if(is_object($value) && method_exists($value,'get_json_data')){
+              $value = $value->get_json_data();
+           }
+        }
+        return json_encode($var);
+	}
+		  
 	// loads the object data from a mysql assoc array
   	private function load($row){
 		$this->set_id($row["orderitem_id"]);
@@ -226,6 +240,7 @@ public function save() {
 		$this->set_item_number($row["orderitem_item_number"]);
 		$this->set_price($row["orderitem_price"]);
 		$this->set_quantity($row["orderitem_quantity"]);
+		$this->set_size($row["orderitem_size"]);		
 		$this->set_discount($row["orderitem_discount"]);
 		$this->set_active($row["is_active"]);
 		$this->set_date_created($row["orderitem_date_created"]);

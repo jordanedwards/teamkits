@@ -81,36 +81,7 @@ $activeMenuItem = "Orders";
 					
 					</td>
 				</tr>
-			<!--	<tr>
-           			<td style="width:1px; white-space:nowrap;">Customer: </td>
-            		<td><input id="order_customer" name="order_customer" type="number" step="any" value="<?php  echo $orders->get_customer();  ?>" style="width:90%" /> </td>
-				</tr>-->
-			<!--	<tr>
-           			<td style="width:1px; white-space:nowrap;">Item: </td>
-				
-					<td>
-					<?php 
-						$dd = new DropDown();
-						$dd->set_table("item");	
-						$dd->set_name_field("item_name");
-						$dd->set_class_name("form-control");
-						$dd->set_order("ASC");						
-						//$dd->set_preset("supplier");
-						$dd->set_name("order_item");						
-						$dd->set_selected_value($orders->get_item());
-						$dd->display();
-					 ?>											
-					
-					</td>
-				</tr>
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">Price: </td>
-            		<td><input id="order_price" name="order_price" type="text"  value="<?php  echo $orders->get_price();  ?>" style="width:90%" /> </td>
-				</tr>
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">Quantity: </td>
-            		<td><input id="order_quantity" name="order_quantity" type="number" step="any" value="<?php  echo $orders->get_quantity();  ?>" style="width:90%" /> </td>
-				</tr>-->
+		
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Status: </td>
 				
@@ -129,10 +100,6 @@ $activeMenuItem = "Orders";
 					
 					</td>
 				</tr>
-			<!--	<tr>
-           			<td style="width:1px; white-space:nowrap;">Tracking number: </td>
-            		<td><input id="order_tracking_number" name="order_tracking_number" type="text"  value="<?php  echo $orders->get_tracking_number();  ?>" style="width:90%" /> </td>
-				</tr>-->
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Notes: </td>
             		<td><textarea id="order_notes" name="order_notes" style="width:90%" rows="4"><?php  echo $orders->get_notes();  ?></textarea></td>
@@ -169,8 +136,8 @@ $activeMenuItem = "Orders";
 		<?php if ($orders_id > 0): ?>
 			<table class="admin_table">
 			<thead>
-			<tr><th colspan="5">Order Items:<i class="fa fa-plus-circle fa-lg add-icon add-item"></i></th></tr>
-			<tr><th></th><th>Item:</th><th>Quantity</th><th>Price</th><th>Total</th></tr>	
+			<tr><th colspan="6">Order Items:<i class="fa fa-plus-circle fa-lg add-icon add-item"></i></th></tr>
+			<tr><th></th><th>Item:</th><th>Quant.</th><th>Size</th><th>Price</th><th>Total</th></tr>	
 			</thead>
 			
 			<tbody id="order_items_table">
@@ -184,7 +151,7 @@ $activeMenuItem = "Orders";
 			$result = $dm->queryRecords($strSQL);	
 			if ($result):
 				while($row = mysqli_fetch_assoc($result)):
-					echo '<tr><td><a href="orderitem_edit.php?id=' . $row['orderitem_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td><a href="item_edit.php?id=' . $row['orderitem_item_number'] . '">' . $row['item_name'] . '</a></td><td>' . $row['orderitem_quantity'] . '</td><td style="white-space:normal">$'.sprintf("%.2f",$row['orderitem_price']) .'</td><td style="white-space:normal">$'.number_format(($row['orderitem_price']*$row['orderitem_quantity']),2) .'</td></tr>';
+					echo '<tr><td><a href="orderitem_edit.php?id=' . $row['orderitem_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td><a href="item_edit.php?id=' . $row['orderitem_item_number'] . '">' . $row['item_name'] . '</a></td><td>' . $row['orderitem_quantity'] . '</td><td>' . $row['orderitem_size'] . '</td><td style="white-space:normal">$'.sprintf("%.2f",$row['orderitem_price']) .'</td><td style="white-space:normal">$'.number_format(($row['orderitem_price']*$row['orderitem_quantity']),2) .'</td></tr>';
 						$subtotal = $subtotal + number_format(($row['orderitem_price']*$row['orderitem_quantity']),2);
 				endwhile;									
 			endif;
@@ -192,7 +159,7 @@ $activeMenuItem = "Orders";
 			</tbody>
 			
 			<tfoot>	 	 
-			<tr><td colspan="4">Subtotal:</td><td>$<?php echo number_format($subtotal,2);?></td></tr>
+			<tr><td colspan="5">Subtotal:</td><td>$<?php echo number_format($subtotal,2);?></td></tr>
 			</tfoot>
 		</table>
 			<table class="admin_table">

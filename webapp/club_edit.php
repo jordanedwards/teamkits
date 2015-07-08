@@ -14,15 +14,23 @@ include(CLASSES . "/class_club.php");
 	// load the club		
 	$club_id = $_GET["id"];
 	$club = new Club();
-	
+	$account_type = $_GET["account_type"];
+		
 	if ($_GET["id"] ==0){
 		// Change this to pass a parent value if creating a new record:
-		//	$club->set_customer_id($_GET['customer_id']);
+		$club->set_active("Y");
 	} else {
 		$club->get_by_id($club_id);
-
 	}
-$activeMenuItem = "Clubs";				
+	
+	if($account_type==3) {
+		$club->set_account_type("3");
+		$activeMenuItem = "Leads";	
+		$title = "Lead";	
+	}else{
+		$activeMenuItem = "Clubs";	
+		$title = "Club";			
+	}
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +48,7 @@ $activeMenuItem = "Clubs";
         <div class="col-md-12">
         <?php  include(INCLUDES . "system_messaging.php");  ?>
 
-        <h1><?php if ($_GET["id"] ==0){ ?> Add Club<?php  } else { ?> Edit Club<?php  } ?></h1>
+        <h1><?php if ($_GET["id"] ==0){ ?> Add <?php echo $title;  } else { ?> Edit <?php echo $title;   } ?></h1>
         <p><span class="red">*</span> The red asterisk indicates all mandatory fields.</p>
         <div class="errorContainer">
           <p><strong>There are errors in your form submission. Please read below for details.</strong></p>
@@ -217,6 +225,7 @@ $activeMenuItem = "Clubs";
   		
 		</table>
 		<br>
+		<?php if ($club->get_account_type() != 3): ?>
 		<table class="admin_table">
 			<tr><th colspan="2">Online access:</th></tr>
 			<tr>
@@ -244,6 +253,7 @@ $activeMenuItem = "Clubs";
 		 </table>
 		 
           <br />
+		  <?php endif; ?>
           <input type="submit" class="btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
           <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
@@ -299,6 +309,7 @@ $activeMenuItem = "Clubs";
 		 ?>
 		</tbody>
 		</table>
+		<?php if ($club->get_account_type() != 3): ?>
 		<br>
 		<table class="admin_table">
 			<thead>
@@ -346,6 +357,7 @@ $activeMenuItem = "Clubs";
 		 ?>		
 			</tbody>
 		</table>
+		<?php endif ?>		
 		<?php endif ?>
 	</div>
     </div> 

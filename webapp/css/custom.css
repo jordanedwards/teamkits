@@ -94,17 +94,7 @@ h1.orange {
 .ui-dialog .ui-dialog-content {
  overflow: hidden; 
 }
-.right {
-float: right;
-margin-right: 5px;
-position: relative !important;
-}
-.left {
-float: left;
-margin-left: 5px;
-position: relative !important;
-margin-right: 10px;
-}
+
  #sortable { list-style-type: none; margin: 0; padding: 0; max-width: 450px; cursor:pointer;}
   #sortable li { margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em;}
   #sortable li span { position: absolute; margin-left: -1.3em; }

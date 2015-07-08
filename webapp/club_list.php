@@ -15,21 +15,6 @@ $activeMenuItem = "Clubs";
   <body>
 
 <?php  require(INCLUDES . "navbar.php");  ?>
-
-<div class="main">
-  <div class="container">
-  
-    <div class="row">
-        <div class="col-md-12">
-        <?php  include(INCLUDES . "system_messaging.php");  ?>
-        <h1>Club List</h1>
-		</div>
-	</div>
-		
-      <div class="row">
-        <div class="col-md-12">
-		 <p><span id="search_toggle" title="Search/Filter Results"><i class="fa fa-search"></i> Search/Filter <i class="fa fa-chevron-down"></i></span> | 
-        <i class="fa fa-plus-circle"></i> <a href="club_edit.php?id=0">Add New Club</a></p>
 <?php 
 	$dm = new DataManager();
 	
@@ -54,6 +39,22 @@ $activeMenuItem = "Clubs";
 	
 	$order = " ORDER BY " . $s_sort . " " . $s_sort_dir;				
 ?>
+
+<div class="main">
+  <div class="container">
+  
+    <div class="row">
+        <div class="col-md-12">
+        <?php  include(INCLUDES . "system_messaging.php");  ?>
+        <h1><?php if ($s_account_type ==3){echo "Lead List";} else{ ?>Club List<?php } ?></h1>
+		</div>
+	</div>
+		
+      <div class="row">
+        <div class="col-md-12">
+		 <p><span id="search_toggle" title="Search/Filter Results"><i class="fa fa-search"></i> Search/Filter <i class="fa fa-chevron-down"></i></span> | 
+        <i class="fa fa-plus-circle"></i> <a href="club_edit.php?id=0<?php if ($s_account_type ==3){echo "&account_type=3";} ?>">Add New Club</a></p>
+
         <div id="search">
           <form action="<?php  echo $_SERVER["PHP_SELF"]  ?>?reload=true" method="post" name="frmFilter" id="frmFilter">
             <table class="admin_table" style="display:block">
@@ -152,7 +153,9 @@ $activeMenuItem = "Clubs";
 						} 
 						if($s_account_type != ""){
 								$query_where .= ' AND club_account_type = "'.$s_account_type.'"';
-						} 
+						} else {
+								$query_where .= ' AND club_account_type != 3 ';
+						}
 						if($s_active != ""){
 								$query_where .= ' AND club_active = "'.$s_active.'"';
 						}		

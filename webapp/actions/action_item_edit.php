@@ -23,7 +23,7 @@ $itemName = "item";
 		$item->set_image($item_image);
 		$item->set_brand($item_brand);
 		$item->set_club_id($item_club_id);
-		$item->set_active($is_active);
+		$item->set_active("Y");
 
 if ($_GET['action'] == "delete"){	
 	if($item->delete() == true) {

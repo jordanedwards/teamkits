@@ -1,3 +1,2 @@
-<?php if($session->getAlertMessage() != "") { ?>
-<div id="alert_message" class="<?php echo $session->getAlertColor(); ?>"><?php echo $session->getAlertMessage(); ?></div>
-<?php $session->setAlertMessage(""); } ?>
+<div id="alert_message" class="<?php echo $session->getAlertColor(); ?>" style=" <?php if($session->getAlertMessage() == "") { echo " display:none; ";}?>"><?php echo $session->getAlertMessage(); ?></div>
+<?php $session->setAlertMessage("");// } ?>

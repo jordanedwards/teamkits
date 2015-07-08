@@ -1,6 +1,6 @@
 <?php
-require_once("includes/init.php"); 
-//ini_set('display_errors', 0);
+require("classes/class_project.php");
+require("classes/class_data_manager_extended.php");
 $dm = new DataManager();
 
 if (isset($_GET['delete-entry'])):

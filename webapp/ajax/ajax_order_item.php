@@ -11,13 +11,9 @@ if (isset($_GET['order_id']) || isset($_GET['order_item_id'])){
 	$action = escaped_var_from_post("action");
 	$item_id = escaped_var_from_post("item_id");
 	$item_quantity = escaped_var_from_post("item_quantity");
+	$item_size = escaped_var_from_post("item_size");
 
 	$orderitem = new Orderitem();	
-
-	include_once(CLASSES . "class_user.php");
-  	$last_updated_user = new User;
-  	$last_updated_user->get_by_id($session->get_user_id());
-	$orderitem->set_last_updated_user($last_updated_user->get_first_name().' '.$last_updated_user->get_last_name());
 
 	if ($action == "delete"):
 		$orderitem->get_by_id($item_id);
@@ -36,6 +32,7 @@ if (isset($_GET['order_id']) || isset($_GET['order_item_id'])){
 		$orderitem->set_order_id($order_id);
 		$orderitem->set_item_number($item_id);
 		$orderitem->set_quantity($item_quantity);
+		$orderitem->set_size($item_size);
 		$orderitem->get_item_details();
 		$orderitem->set_price($orderitem->get_item_price());
 		$orderitem->set_active("Y");

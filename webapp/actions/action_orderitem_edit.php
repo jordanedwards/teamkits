@@ -8,7 +8,9 @@ require(INCLUDES . "/acl_module.php");
 	$orderitem_item_number=$_POST["orderitem_item_number"];
 	$orderitem_price=$_POST["orderitem_price"];
 	$orderitem_quantity=$_POST["orderitem_quantity"];
+	$orderitem_size=$_POST["orderitem_size"];	
 	$orderitem_discount=$_POST["orderitem_discount"];
+	
 		// add the new record to the database
 	include(CLASSES . "class_orderitem.php");
 	
@@ -17,6 +19,7 @@ require(INCLUDES . "/acl_module.php");
 		$orderitem->set_item_number($orderitem_item_number);
 		$orderitem->set_price($orderitem_price);
 		$orderitem->set_quantity($orderitem_quantity);
+		$orderitem->set_size($orderitem_size);		
 		$orderitem->set_discount($orderitem_discount);
 
 if ($_POST['delete'] == "Delete"){	

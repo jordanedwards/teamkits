@@ -14,6 +14,7 @@ extract($_GET);
 foreach ($_GET as $key => $value){
 	echo "<li>$key: $value</li>";
 }
+exit();
 */
 
 if (!isset($selected_table) || !isset($environment) || !isset($project_name)){
@@ -124,13 +125,14 @@ require_once '../Savant3/Savant3.php';
   }
    
 $savant = new Savant3($config);
-
 // assign template variables
 $savant->settings = $project->get_attributes();
 $savant->field_names = $field_names;
 $savant->field_types = $field_types;
 $savant->required_field_names = $required_field_names;
 $savant->required_field_validate = $required_field_validate;
+$savant->dd_tables = $dd_tables;
+$savant->dd_table_name_field = $dd_table_name_field;
 $savant->selected_table = $selected_table;
 $savant->index_name = $index_name;
 
@@ -141,9 +143,4 @@ $savant->addFilters(array('swapTags', 'filter'));
 
 	$savant->display("edit.tpl");
 
-// NEXT STEPS:
-// - write $savant->display to list.php in tmp directory
-// - write page_template file to tmp directory
-// Zip them both and output to browser as zip file
-
-    ?>
+?>

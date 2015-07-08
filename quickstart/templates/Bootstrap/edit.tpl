@@ -1,14 +1,14 @@
 <dynamic>
 require("<?php echo $this->settings['includes_url']?>/init.php"); 
 $page_id = basename(__FILE__);
-$activeMenuItem = "<?php echo ucfirst($this->selected_table) ?>";
+$activeMenuItem = "<?php echo ucfirst($this->selected_table) ?>";				
 require(INCLUDES . "/acl_module.php");
-include(CLASSES . "/class_<?php echo $this->selected_table ?>.php");
-
+include(CLASSES . "/class_<?php echo $this->selected_table ?>.php"); 
+ 
 if(!isset($_GET["id"])) {
 	$session->setAlertMessage("Can not edit - the ID is invalid. Please try again.");
 	$session->setAlertColor("yellow");
-	header("location:" . BASE_FOLDER . "/index.php");
+	header("location:" . BASE_URL . "/index.php");
 	exit;
 }
 
@@ -22,29 +22,20 @@ if ($_GET["id"] ==0){
 } else {
 	$<?php echo $this->selected_table ?>->get_by_id($<?php echo $this->selected_table ?>_id);
 }
-				
 </dynamic>
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<dynamic> include(HEAD); </dynamic>
     <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
+
     <title><dynamic>  echo $appConfig["app_title"]; </dynamic> | <?php echo ucfirst($this->selected_table) ?> Edit</title>
-
-    <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="./css/jquery-ui.css" rel="stylesheet" type="text/css"/>
-    <link href="./css/font-awesome.css" rel="stylesheet" type="text/css">        
-    <link href="./css/styles.css" rel="stylesheet">
-
   </head>
 
   <body>
 
-<dynamic> include(INCLUDES ."nav_bar.php")</dynamic>
+<dynamic> require(INCLUDES . "navbar.php"); </dynamic>
+<div class="main">
 
     <div class="container">
       <div class="row">
@@ -66,7 +57,11 @@ foreach($field_names as $key => $val){
           </ol>
 		  <br>
         </div>
-
+		</div>
+	</div>
+	
+	<div class="row">
+	<div class="col-md-8">
 	<form id="form_<?php echo $this->selected_table ?>" action="<dynamic> echo ACTIONS_URL;</dynamic>action_<?php echo $this->selected_table ?>_edit.php" method="post">
 	<input type="hidden" name="<?php echo $this->selected_table ?>_id" value="<dynamic> echo $<?php echo $this->selected_table ?>->get_id(); </dynamic>" />
 	<input type="hidden" name="action" value="edit" />	
@@ -78,14 +73,14 @@ foreach($this->field_names as $key => $val):
 $required_text = "";
 $required = false;
 
-
 if ($this->required_field_names[$key] == 1){
-	$required_text = ' class="required" ';
+	$required_text = ' class="{validate:{required:true}}" ';
 	$required = true;
 }
 
 ?>
 				<tr>
+           			<td style="width:1px; white-space:nowrap;"><?php echo ucfirst(str_replace("_"," ",$val))?>: </td>
 <?php
 if ($this->field_types[$key] == "dropdown_dynamic" ):
 // populate dropdowns
@@ -93,17 +88,17 @@ if ($this->field_types[$key] == "dropdown_dynamic" ):
 					<td>
 					<dynamic>
 						$dd = new DropDown();
-						$dd->set_table("<?php echo $val; ?>");	
-						$dd->set_name_field("<?php echo $val; ?>_name");
-						$dd->set_class_name("form-control");
+						$dd->set_table("<?php echo $this->dd_tables[$key]; ?>");	
+						$dd->set_name_field("<?php echo $this->dd_table_name_field[$key]; ?>");
+						$dd->set_class_name("form-control inline");
 						$dd->set_order("ASC");						
-						$dd->set_preset("supplier");
 						$dd->set_name("<?php echo $key?>");						
 						$dd->set_selected_value($<?php echo $this->selected_table; ?>->get_<?php echo $val; ?>());
+<?php if($required){ echo '						$dd->set_required("true");
+';}?>
 						$dd->display();
 					</dynamic>											
-					
-					<?php if($required){ echo "<span class='red'> *</span> ";}?></td>
+					</td>
 <?php
 elseif ($this->field_types[$key] == "dropdown_static"):
 ?>
@@ -113,39 +108,45 @@ elseif ($this->field_types[$key] == "dropdown_static"):
 						$dd = new DropDown();
 						$dd->set_static(true);	
 						$dd->set_name("<?php echo $key?>");
-						$dd->set_class_name("form-control");
+						$dd->set_class_name("form-control inline");
 						$dd->set_option_list("Y,N");						
 						$dd->set_selected_value($<?php echo $this->selected_table; ?>->get_<?php echo $val; ?>());
+<?php if($required){ echo '						$dd->set_required("true");
+';} ?>	
 						$dd->display();
-					</dynamic>						
-					<?php if($required){ echo "<span class='red'> *</span> ";}?></td>
+					</dynamic>											
+					</td>
 <?php
 elseif ($this->field_types[$key] == "tel"):
 ?>
-					<td><input id="<?php echo $key?>" name="<?php echo $key?>" type="tel" value="<dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic>"  style="width:90%" <?php echo $required_text ?>/><?php if($required){ echo "<span class='red'> *</span> ";}?></td>
+					<td><input id="<?php echo $key?>" name="<?php echo $key?>" class="form-control inline" type="tel" value="<dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic>" <?php if($required){ echo " required ";}?> /></td>
 
 <?php 
 $scripts .='
 $(document).ready(function() {
-	$("#<?php echo $key?>").mask("(999) 999-9999"); 
+	$("#' . $key . '").mask("(999) 999-9999"); 
 });	
 ';
 ?>
 <?php
 elseif ($this->field_types[$key] == "currency"):
 ?>
-					<td>$<input id="<?php echo $key?>" name="<?php echo $key?>" type="number" step=".01" value="<dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic>"  style="width:90%" <?php echo $required_text ?>/><?php if($required){ echo "<span class='red'> *</span> ";}?></td>
+					<td>$<input id="<?php echo $key?>" name="<?php echo $key?>" class="form-control inline" type="number" step=".01" min="0" value="<dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic>"  <?php if($required){ echo " required ";}?> /></td>
 <?php 
 $scripts .='
 $(document).ready(function() {
-	$("#<?php echo $key?>").mask("999999999999.99"); 
+	$("#' . $key . '").mask("999999999999.99"); 
 });	
 ';
 ?>
 <?php
+elseif ($this->field_types[$key] == "textarea"):
+?>
+					<td><textarea id="<?php echo $key?>" name="<?php echo $key?>" class="form-control inline" rows="8" <?php if($required){ echo " required ";}?>><dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic></textarea></td>
+<?php
 else:
 ?>
-            		<td><input id="<?php echo $key?>" name="<?php echo $key?>" type="<?php echo $this->field_types[$key] ?>" <?php if ($this->field_types[$key] == "number"){echo 'step="any"';} ?> value="<dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic>" style="width:90%" <?php echo $required_text ?>/> <?php if($required){ echo "<span class='red'>*</span> ";}?></td>
+            		<td><input id="<?php echo $key?>" name="<?php echo $key?>" class="form-control inline" type="<?php echo $this->field_types[$key] ?>" <?php if ($this->field_types[$key] == "number"){echo 'step="any"';} ?> value="<dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic>"  <?php if($required){ echo " required ";}?>/></td>
 <?php
 endif;
 ?>				</tr>
@@ -155,7 +156,7 @@ endforeach;
   		
 		</table>
           <br />
-          <input type="submit" value="Add/Update <?php echo ucfirst($this->selected_table) ?>" />&nbsp;&nbsp;
+          <input type="submit" value="<dynamic>if ($_GET["id"] ==0){</dynamic> Add <dynamic> } else {</dynamic> Save <dynamic> }</dynamic>" />&nbsp;&nbsp;
           <input type="button" value="Cancel" onClick="window.location ='<?php print("<?php"); ?> echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
@@ -168,54 +169,15 @@ endforeach;
     </div> 
 
 </div><!-- /container -->
+</div>
 
-	<footer>
-      <div class="container">
-        <dynamic> include(INCLUDES . "footer.php"); </dynamic>
-      </div>
-    </footer>
-	
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="../bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/js/jquery.js"></script>
-	<script type="text/javascript" src="/js/jquery.metadata.js"></script>
-	<script type="text/javascript" src="/js/jquery.validate.js"></script>
-	<script type="text/javascript" src="/js/jquery-ui-custom.js"></script>
-	<script type="text/javascript" src="/js/jquery.mask.js"></script>
-	
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
-<script type="text/javascript">
-
-// Validation:
-$(document).ready(function() {
-	var rules = {
-		    	rules: {
-					<?php
-					foreach($this->required_field_validate as $key => $val){
-						echo $key . ": {
-						" . $val . "
-					},";
-					}
-					?>
-				
-				}
-		    };
-		
-	    var validationObj = $.extend (rules, Application.validationRules);
-		$('#form_<?php echo $this->selected_table ?>').validate(validationObj);
-});		
-
-  </script>
+<dynamic> include(INCLUDES . "/footer.php"); </dynamic>
+<dynamic> include(INCLUDES_LIST); </dynamic>	
 <script>
+// Include any masks here:
+		 //   $("#student_tel").mask("(999) 999-9999");
 <?php echo $scripts; ?>
 
-</script>  
+</script>
   </body>
 </html>

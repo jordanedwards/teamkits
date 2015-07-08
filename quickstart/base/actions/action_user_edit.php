@@ -2,8 +2,8 @@
 require("../includes/init.php");
 $page_id = $_REQUEST["page_id"];
 $action = ($_GET['action'] != "delete" ? "edit" : "delete");
-require(INCLUDES_FOLDER . "/acl_module.php");
-include_once(CLASS_FOLDER . "class_user.php");
+require(INCLUDES . "/acl_module.php");
+include_once(CLASSES . "class_user.php");
 
 	$user_id=$_POST["user_id"];
 	

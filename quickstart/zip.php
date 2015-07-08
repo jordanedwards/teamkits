@@ -131,7 +131,7 @@ $out = '
 //*********************************************************************************
 // Mail Configuration File
 //*********************************************************************************
-	$mailConfig["mail_server"] = "' . $json_project_settings['website_email'] . '";
+	$mailConfig["mail_server"] = "' . $json_project_settings['mail_server'] . '";
 	$mailConfig["mail_mailer"] = "smtp";
 	$mailConfig["mail_smtpauth"] = true;
 	$mailConfig["mail_port"] = "' . $json_project_settings['mail_port'] . '";
@@ -473,6 +473,28 @@ INSERT INTO `settings` (`settings_id`, `settings_name`, `settings_value`, `setti
 (4, 'mail_account_type', 'POP3', 0, '0000-00-00 00:00:00', '2015-02-26 18:46:33', '0'),
 (5, 'mail_username', 'website@myproject.ca', 0, '0000-00-00 00:00:00', '2015-02-26 18:46:33', '0'),
 (6, 'mail_password', '', 0, '0000-00-00 00:00:00', '2015-02-26 18:46:33', '0');
+(7, 'alt-logo', 'website-logo-footer.png', 0, '0000-00-00 00:00:00', '2015-02-26 18:46:33', '0');
+
+CREATE TABLE IF NOT EXISTS `userrole` (
+`userrole_id` bigint(20) unsigned NOT NULL,
+  `userrole_title` varchar(200) NOT NULL,
+  `userrole_group` varchar(200) NOT NULL,
+  `is_active` varchar(1) NOT NULL DEFAULT 'Y',
+  `userrole_date_created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `userrole_last_updated` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `userrole_last_updated_user` varchar(200) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+INSERT INTO `userrole` (`userrole_id`, `userrole_title`, `userrole_group`, `is_active`, `userrole_date_created`, `userrole_last_updated`, `userrole_last_updated_user`) VALUES
+(1, 'Superuser', 'admin', 'Y', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0'),
+(2, 'Admin', 'admin', 'Y', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0'),
+(3, 'User', 'user', 'Y', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0');
+
+ALTER TABLE `userrole`
+ ADD PRIMARY KEY (`userrole_id`);
+
+ALTER TABLE `userrole`
+MODIFY `userrole_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 
 EOD;
 

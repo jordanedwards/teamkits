@@ -18,8 +18,8 @@ function consoleLog($val){
 	}
 }
 
-function addToLog($val){
-	require_once($_SERVER['DOCUMENT_ROOT'] . '/classes/class_data_manager.php');
+function addToLog($val, $notify=false){
+	//require_once('../includes/init.php');
 	$dm = new DataManager();
 	global $session;
 	$user_id = $session->get_user_id();
@@ -39,7 +39,31 @@ function addToLog($val){
 
 	$strSQL = "INSERT INTO log (log_user, log_val) VALUES (" . $user_id . ", '" . $result . "')";				
 	$result = $dm->updateRecords($strSQL);
-
+	
+	//If notify var is true, send an email to the techical contact:
+	if ($notify && $appConfig["environment"] != "local_development"):
+		require(INCLUDES . 'config_mail.php');
+		require_once(CLASSES . 'class_phpmailer.php');
+		global $admin_email;
+		global $appConfig;
+		
+		$mail = new PHPMailer();
+		$mail->IsHTML(true);
+		$mail->From = $mailConfig["mail_from"];
+		$mail->FromName = $mailConfig["mail_fromname"];
+		$mail->Sender = $mailConfig["mail_sender"];
+		$mail->AddAddress($admin_email,"");		
+		$mail->Subject = "System error - ".$appConfig['app_title'];
+			
+		$body = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><body><p>An unexpected error occured.</p>';
+		$body .= $val;
+		$body .= "<p><br />The " . $appConfig['app_title'] ." Team</p></body></html>";
+		$mail->Body = $body;
+		
+		$mail->Send();
+		$mail = null;
+	endif;
+	
 }
 
 function escaped_var_from_post($varname){

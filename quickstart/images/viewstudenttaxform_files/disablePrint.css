@@ -1,0 +1,22 @@
+div#printer {
+position: absolute;
+top: 0;
+right: 0;
+width: 0;
+height: 0;
+font-size: 12px;
+color:#0045a9;
+text-align: center;
+display: none;
+font-weight: bold;
+}
+
+@media print {
+    .noPrint {
+        display: none;
+    }
+
+    .onlyPrint {
+        display: none;
+    }
+}

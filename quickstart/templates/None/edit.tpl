@@ -5,7 +5,7 @@
 	if(!isset($_GET["id"])) {
 		$session->setAlertMessage("Can not edit - the ID is invalid. Please try again.");
 		$session->setAlertColor("yellow");
-		header("location:" . $base_href . "/index.php");
+		header("location:" . BASE_URL . "/index.php");
 		exit;
 	}
 

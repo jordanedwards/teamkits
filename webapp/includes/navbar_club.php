@@ -7,7 +7,7 @@
       <span class="sr-only">Toggle navigation</span>
       <i class="fa fa-cog"></i>
     </button>
-    <a class="navbar-brand" href="./index.html"><img src="/images/<?php echo LOGO ?>" style="height:80px"></a>
+    <a class="navbar-brand" href="/index.php"><img src="/images/<?php echo LOGO ?>" style="height:80px"></a>
   </div>
 
 <?php if($session->get_user_id() != ""): ?>
@@ -75,19 +75,27 @@
 					</li>			
 
 					<li <?php if ($activeMenuItem == "Orders") { echo 'class="active"'; } ?>>
-						<a href="./orders_list.php">
+						<a href="./orders_list_club.php">
 							<i class="fa fa-archive"></i>
 							<span>Orders</span>
 						</a>	    				
-					</li>						
-
-					<li <?php if ($activeMenuItem == "Payments") { echo 'class="active"'; } ?>>
-						<a href="./payment_list.php">
-							<i class="fa fa-money"></i>
-							<span>Payments</span>
+					</li>	
+										
+					<li <?php if ($activeMenuItem == "Order_edit") { echo 'class="active"'; } ?>>
+						<a href="./orders_edit.php?id=0">
+							<i class="fa fa-plus-circle"></i>
+							<span>New Order</span>
+						</a>	    				
+					</li>	
+					
+					<li <?php if ($activeMenuItem == "Catalogue") { echo 'class="active"'; } ?>>
+						<a href="./catalogue.php">
+							<i class="fa fa-book"></i>
+							<span>Catalogue</span>
 						</a>	    				
 					</li>							
-																									
+
+																														
 				<!--	<li class="dropdown <?php if ($activeMenuItem == "Manage") { echo ' active '; } ?>" >					
 						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
 							<i class="fa fa-th"></i>

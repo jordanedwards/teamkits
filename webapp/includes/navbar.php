@@ -7,13 +7,13 @@
       <span class="sr-only">Toggle navigation</span>
       <i class="fa fa-cog"></i>
     </button>
-    <a class="navbar-brand" href="./index.html"><img src="/images/<?php echo LOGO ?>" style="height:80px"></a>
+    <a class="navbar-brand" href="/index.php"><img src="/images/<?php echo LOGO ?>" style="height:80px"></a>
   </div>
 
 <?php if($session->get_user_id() != ""): ?>
   <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav navbar-right">
-    <li class="dropdown"><a href="./settings.php" style="text-shadow:none;"><i class="fa fa-cog"></i>&nbsp;Settings</a></li>
+    <li class="dropdown"><a href="/webapp/settings.php" style="text-shadow:none;"><i class="fa fa-cog"></i>&nbsp;Settings</a></li>
 						
 
 		<li class="dropdown">
@@ -29,7 +29,7 @@
 			</a>
 			
 			<ul class="dropdown-menu">
-				<li><a href="./actions/action_logout.php">Logout</a></li>
+				<li><a href="/webapp/actions/action_logout.php">Logout</a></li>
 			</ul>
 			
 		</li>
@@ -62,28 +62,35 @@
 				<ul class="mainnav">
 				<?php if ($activeMenuItem == NULL){ $activeMenuItem == "Home";} ?>
 					<li <?php if ($activeMenuItem == "Home") { echo 'class="active"'; } ?>>
-						<a href="./dashboard.php">
+						<a href="/webapp/dashboard.php">
 							<i class="fa fa-home"></i>
 							<span>Home</span>
 						</a>	    				
 					</li>
-
+					
 					<li <?php if ($activeMenuItem == "Clubs") { echo 'class="active"'; } ?>>
-						<a href="./club_list.php">
+						<a href="/webapp/club_list.php">
 							<i class="fa fa-users"></i>
 							<span>Clubs</span>
+						</a>	    				
+					</li>	
+					
+					<li <?php if ($activeMenuItem == "Leads") { echo 'class="active"'; } ?>>
+						<a href="/webapp/lead_list.php">
+							<i class="fa fa-bolt"></i>
+							<span>Leads</span>
 						</a>	    				
 					</li>			
 
 					<li <?php if ($activeMenuItem == "Orders") { echo 'class="active"'; } ?>>
-						<a href="./orders_list.php">
+						<a href="/webapp/orders_list.php">
 							<i class="fa fa-archive"></i>
 							<span>Orders</span>
 						</a>	    				
 					</li>	
 							
 					<li <?php if ($activeMenuItem == "Website") { echo 'class="active"'; } ?>>
-						<a href="./website.php">
+						<a href="/webapp/website.php">
 							<i class="fa fa-laptop"></i>
 							<span>Website</span>
 						</a>	    				
@@ -91,7 +98,7 @@
 					
 
 					<li <?php if ($activeMenuItem == "Payments") { echo 'class="active"'; } ?>>
-						<a href="./payment_list.php">
+						<a href="/webapp/payment_list.php">
 							<i class="fa fa-money"></i>
 							<span>Payments</span>
 						</a>	    				
@@ -105,10 +112,10 @@
 						</a>	    
 					
 						<ul class="dropdown-menu">
-							<li><a href="./brand_list.php?reload=true">Brands</a></li>						
-							<li><a href="./item_list.php?reload=true">Items</a></li>						
-							<li><a href="./promo_list.php"><span>Promos</span></a></li>										
-							<li><a href="./user_list.php?reload=true">Users</a></li>
+							<li><a href="/webapp/brand_list.php?reload=true">Brands</a></li>						
+							<li><a href="/webapp/item_list.php?reload=true">Items</a></li>						
+							<li><a href="/webapp/promo_list.php"><span>Promos</span></a></li>										
+							<li><a href="/webapp/user_list.php?reload=true">Users</a></li>
 						</ul> 				
 					</li> 
 

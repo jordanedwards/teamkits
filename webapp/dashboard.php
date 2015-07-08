@@ -45,7 +45,7 @@ $activeMenuItem = "Home";
 							<tbody>
 							<?php 
 			$dm = new DataManager();
-			$query="SELECT club_name, order_date_created, order_price, order_id FROM orders
+			$query="SELECT club_name, order_date_created, order_total, order_id FROM orders
 			LEFT JOIN club ON orders.order_club_id = club.club_id
 			WHERE orders.is_active = 'Y'
 			ORDER BY `order_date_created` DESC LIMIT 5";
@@ -57,8 +57,8 @@ $activeMenuItem = "Home";
 					<tr>
 						<td><a href="orders_edit.php?id=' . $row['order_id'] . '"><i class="fa fa-edit"></i></a></td>
 						<td>' . $row['club_name'] . '</td>
-						<td>' . $row['order_price'] . '</td>
-						<td>' . $row['order_date_created'] . '</td>						
+						<td>$' . number_format($row['order_total'],2) . '</td>
+						<td>' . substr($row['order_date_created'],0,10) . '</td>						
 					</tr>
 					';
 				}
@@ -77,7 +77,7 @@ $activeMenuItem = "Home";
 						
 					<div class="widget-header">
 						<i class="fa fa-th-list"></i>
-						<h3>Most recent logins</h3>
+						<h3>Most recent club logins</h3>
 					</div> <!-- /widget-header -->
 					
 					<div class="widget-content">

@@ -60,15 +60,15 @@ $club->get_by_user_id($currentUser->get_id());
 							<tbody>
 							<?php 
 			$dm = new DataManager();
-			$query="SELECT item_name, item_price, promo_title, promo_description, promo_price, promo_expiry, promo_id, promo_description, promo_image FROM promo
+			$query="SELECT * FROM promo
 			LEFT JOIN item ON promo.promo_item_id = item.item_id
 			WHERE promo.is_active = 'Y' AND promo_expiry > now() AND promo_view_type = 'All' AND promo_sport = " . $club->get_sport() . "
 			UNION
-			SELECT item_name, item_price, promo_title, promo_description, promo_price, promo_expiry, promo_id, promo_description, promo_image FROM promo
+			SELECT * FROM promo
 			LEFT JOIN item ON promo.promo_item_id = item.item_id
 			WHERE promo.is_active = 'Y' AND promo_expiry > now() AND promo_view_type = 'Brand' AND item_brand = (SELECT club_brand FROM club WHERE club_id =" . $club->get_id() . ") AND promo_sport = " . $club->get_sport() . "
 			UNION
-			SELECT item_name, item_price, promo_title, promo_description, promo_price, promo_expiry, promo_id, promo_description, promo_image FROM promo
+			SELECT * FROM promo
 			LEFT JOIN item ON promo.promo_item_id = item.item_id
 			WHERE promo.is_active = 'Y' AND promo_expiry > now() AND promo_view_type = 'Club Exclusive' AND promo_club_id = " . $club->get_id() . "
 			ORDER BY `promo_expiry` ASC			
@@ -93,10 +93,27 @@ $club->get_by_user_id($currentUser->get_id());
 						Promotion ends: ' . $row['promo_expiry'] . '</span></p>						
 											
 						</td>
-						<td class="promo" colspan="2" style="background: #fff; text-align:center; border: 2px solid #222;" ><a href="item_view.php?id=' .$row['promo_id'] . '">' . $promo_graphic. '</a></td>
+						<td class="promo" colspan="2" style="background: #fff; text-align:center; border: 2px solid #222;" ><a href="item_view.php?id=' .$row['promo_item_id'] . '">' . $promo_graphic. '</a></td>
 					</tr>
 					<tr style="border: 2px solid #222;">
-						<td class="promo" style="text-align:center; border: 2px solid #222;"><a href="order_edit.php?id=0&promo_id=' . $row['promo_id'] . '"><img src="../../images/cta_sale.png" style="height: 50px"></i></a></td>										
+						<td class="promo" style="text-align:center; border: 2px solid #222;">
+						<span><input id="promoQuantity_' . $row['promo_id']. '" placeholder="Quantity" class="form-control inline auto-width">
+						';
+	
+	$dd = New DropDown();
+	$dd->set_table("itemSize");
+	$dd->set_name("promoSize_".$row['promo_id']);		
+	$dd->set_name_field("itemSize_name");
+	$dd->set_class_name("form-control inline auto-width");
+	$dd->set_index_name("itemSize_name");
+	$dd->set_where("itemSize_item_id = ".$row['promo_item_id']);		
+	$dd->set_order("ASC");						
+	$dd->set_active_only(true);
+	$dd->set_placeholder("Size");		
+	$dd->display();
+						
+						echo '</span>
+						<a href="javascript;;" class="add-promo-item" data-item-id="' . $row['promo_item_id'] . '" data-promo-id="' . $row['promo_id'] . '"><img src="../../images/cta_sale.png" style="height: 50px"></i></a></td>										
 					</tr>
 					';
 				}
@@ -120,7 +137,7 @@ $club->get_by_user_id($currentUser->get_id());
 						<table class="table table-bordered">
 							<thead>
 								<tr>
-									<th>Id #</th>
+									<th>Order#</th>
 									<th>Value</th>
 									<th>Date</th>									
 									<th>Status</th>
@@ -129,7 +146,7 @@ $club->get_by_user_id($currentUser->get_id());
 							<tbody>
 <?php 
 	$dm = new DataManager();
-	$query="SELECT club_name, order_date_created, order_price, order_id, orderstatus_title FROM orders
+	$query="SELECT club_name, order_date_created, order_total, order_id, orderstatus_title FROM orders
 	LEFT JOIN club ON orders.order_club_id = club.club_id
 	LEFT JOIN orderstatus ON orders.order_status = orderstatus.orderstatus_id
 	WHERE orders.is_active = 'Y' AND orders.order_club_id = " . $club->get_id() . "
@@ -141,14 +158,34 @@ $club->get_by_user_id($currentUser->get_id());
 			echo '
 			<tr>
 				<td><a href="orders_edit.php?id=' . $row['order_id'] . '">' . $row['order_id'] . '</a></td>
-				<td>$' . number_format($row['order_price'],2) . '</td>
-				<td>' . $row['order_date_created'] . '</td>						
+				<td>$' . number_format($row['order_total'],2) . '</td>
+				<td>' . substr($row['order_date_created'],0,10) . '</td>						
 				<td>' . $row['orderstatus_title'] . '</td>				
 			</tr>
 			';
 		}
 	}
 ?>
+								</tbody>
+							</table>
+						
+					</div>		
+				</div>
+				
+				<div class="widget widget-table action-table">
+						
+					<div class="widget-header promo-header">
+						<h2>Custom Builds</h2>
+					</div> <!-- /widget-header -->
+					 <div class="widget-content">
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>Title</th>								
+									<th>View</th>
+								</tr>
+							</thead>
+							<tbody>
 								</tbody>
 							</table>
 						
@@ -162,6 +199,32 @@ $club->get_by_user_id($currentUser->get_id());
     
 <?php require(INCLUDES . "footer.php"); ?>
 <?php require(INCLUDES_LIST);?>
+<script>
+$(function() {
+	// promom item clicked:
+	$(".add-promo-item").on("click", function (e) {
+		e.preventDefault();
+		var itemId = $(this).data("item-id");
+		var promoId = $(this).data("promo-id");
+		var itemQuantity = $('#promoQuantity_'+promoId).val();
+		var itemSize = $('#promoSize_'+promoId).val();
+	//	console.log("item: "+itemId+" quantity: "+itemQuantity+" size: "+itemSize);
+		$.ajax({
+		  	type: "POST",
+		  	url: "ajax_order_item.php",
+			dataType: "json",
+		  	data: { item_id: itemId, action:'add', item_quantity:itemQuantity, item_size:itemSize},
+		  	success: function (data) {
+				$('#alert_message').html(data.alertMessage);
+				$('#alert_message').removeClass();				
+				$('#alert_message').addClass(data.alertColor);				
+				$('#alert_message').show();
+			}
+		});
+	});
+	
+});
+</script>
 
 </body>
 </html>

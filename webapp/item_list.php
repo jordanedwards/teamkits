@@ -58,16 +58,36 @@ $dm = new DataManager();
           <form action="<?php  echo $_SERVER["PHP_SELF"]  ?>?reload=true" method="post" name="frmFilter" id="frmFilter">
             <table class="admin_table" style="display:block">
               <tr>
-			  <td>Item Id</td><td>Item Name</td><td>Item Price</td><td>Item Brand</td><td>Item Club_id</td>				<td><input type="button" class="clear" value="Clear" /></td>
+			  <td>Item Id</td><td>Name</td><td>Brand</td><td>Club</td>
+			  <td><input type="button" class="clear" value="Clear" /></td>
               </tr>
 			  
               <tr>
 			  <td><input type="text" name="s_id"  value="<?php  echo $s_id  ?>"/></td>
 				<td><input type="text" name="s_name"  value="<?php  echo $s_name  ?>"/></td>
-				<td><input type="text" name="s_price"  value="<?php  echo $s_price  ?>"/></td>
-				<td><input type="text" name="s_brand"  value="<?php  echo $s_brand  ?>"/></td>
-				<td><input type="text" name="s_club_id"  value="<?php  echo $s_club_id  ?>"/></td>
-								<input type="hidden" id="sort" name="sort" value="<?php echo $sort?>" />
+				<td>
+				<?php
+					$dd = New DropDown();
+					$dd->set_table("brand");
+					$dd->set_name_field("brand_name");
+					$dd->set_name("s_brand");
+					$dd->set_selected_value($s_brand);
+					$dd->set_order("ASC");	
+					$dd->display();
+				?>
+				</td>
+				<td>
+				<?php
+					$dd->clear();
+					$dd->set_table("club");
+					$dd->set_name_field("club_name");
+					$dd->set_name("s_club_id");
+					$dd->set_selected_value($s_club_id);
+					$dd->set_order("ASC");	
+					$dd->display();
+				?>
+				</td>
+				<input type="hidden" id="sort" name="sort" value="<?php echo $sort?>" />
 				<input type="hidden" id="sort_dir" name="sort_dir" value="<?php echo $sort_dir?>" />
 								
                 <td valign="top"><input type="submit" class="submit" value="Search" /></td>
@@ -88,7 +108,7 @@ $dm = new DataManager();
 								$query_where .= ' AND item_id = "'.$s_id.'"';
 						} 
 						if($s_name != ""){
-								$query_where .= ' AND item_name = "'.$s_name.'"';
+								$query_where .= ' AND item_name LIKE "%'.$s_name.'%"';
 						} 
 						if($s_price != ""){
 								$query_where .= ' AND item_price = "'.$s_price.'"';

@@ -202,7 +202,6 @@ public function save() {
 		try{
 			$dm = new DataManager();
 			$strSQL = "UPDATE user SET is_active='N' WHERE user_id=" . $this->id;
-			addToLog($strSQL);
 			$result = $dm->updateRecords($strSQL);
 			return $result;
 		}

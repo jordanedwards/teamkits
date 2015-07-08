@@ -16,6 +16,7 @@
 // ->name: Name you want for the select element.
 // ->id: Id you want for the select element.
 // ->name_field_2: Second field to show up as drop down value. Concatented to the end of name_field. Useful particularly for first name / last name sets
+// ->index_name: This function will automatically find the primary key, and return that index from the user's selection. If you want to return a different field, name it with this method
 // ->selected_value: Sets the selected value;
 // ->active_only: True/false argument for whether you want to show ALL records, or just those flagged as active. See note below
 // ->required: True/false argument for whether you would like the field to be a required input.
@@ -35,6 +36,7 @@
 	$dd->set_name_field("student_first_name");
 	$dd->set_name_field_2("student_last_name");
 	$dd->set_name("student_select");
+	$dd->set_index_name("student_id");
 	$dd->set_id("student_select");	
 	$dd->set_selected_value($student_value);
 	$dd->set_class_name("form-control");

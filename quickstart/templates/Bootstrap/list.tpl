@@ -1,5 +1,5 @@
 <dynamic>
-require($_SERVER['DOCUMENT_ROOT'] . "/<?php echo ($this->settings['base_url'] != '' ? $this->settings['base_url'] . "/" : "")?><?php echo $this->settings['includes_url']?>/init.php"); 
+require("<?php echo $this->settings['includes_url']?>/init.php"); 
 $page_id = basename(__FILE__);
 require(INCLUDES . "/acl_module.php");
 include_once(CLASSES . "/class_user.php"); 
@@ -10,41 +10,25 @@ $activeMenuItem = "<?php echo ucfirst($this->selected_table) ?>";
 <!DOCTYPE html>
 <html lang="en">
   <head>
-  	<dynamic> include(HEAD); </dynamic>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<dynamic> include(HEAD); </dynamic>
     <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="favicon.ico">
-	<base href="http://<dynamic> echo $_SERVER['HTTP_HOST'];</dynamic>/<?php echo $this->settings['base_url'];?>/"/>
-	
     <title><dynamic> echo $appConfig["app_title"]; </dynamic> | <?php echo ucfirst($this->selected_table) ?> List</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/styles.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
   </head>
 
   <body>
 
-<dynamic> require(INCLUDES . "nav_bar.php"); </dynamic>
+<dynamic> require(INCLUDES . "navbar.php"); </dynamic>
 
+<div class="main">
   <div class="container">
   
-  <div class="row">
+    <div class="row">
         <div class="col-md-12">
         <dynamic> include(INCLUDES . "system_messaging.php"); </dynamic>
         <h1><?php echo ucfirst($this->selected_table) ?> List</h1>
 		</div>
 	</div>
-  
+		
       <div class="row">
         <div class="col-md-12">
 		 <p><span id="search_toggle" title="Search/Filter Results"><i class="fa fa-search"></i> Search/Filter <i class="fa fa-chevron-down"></i></span> | 
@@ -98,7 +82,7 @@ foreach($this->field_names as $key => $val){
             </table>
           </form>
         </div>
-			<br>	
+			<br>
 <dynamic>
 					
 					$query = $session->getQuery($_SERVER["PHP_SELF"]);
@@ -131,25 +115,19 @@ foreach($this->field_names as $key => $val){
 					
 					require_once(CLASSES ."/class_record_pager.php");
 					$pager=new Pager($query,'paginglinks',20,0,1,'page_templates/<?php echo $this->selected_table ?>_list_template.htm');
-					echo $pager->displayRecords(mysqli_escape_string($dm->connection, $page));
+					echo $pager->displayRecords(mysqli_escape_string($dm->connection,$page));
+					
 					//echo $query;
 			</dynamic>
         </div>
 
     </div> 
-</div><!-- /container -->
+  </div><!-- /container -->
+</div>
 
-	<footer>
-      <div class="container">
-		<dynamic> include(INCLUDES. "footer.php"); </dynamic>
-      </div>
-    </footer>
 
+<dynamic> include(INCLUDES. "footer.php"); </dynamic>
 <dynamic> include(INCLUDES_LIST); </dynamic>
-	
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-<script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
-<script src="bootstrap/js/bootstrap.min.js"></script>')
     
 <dynamic> if ($session->getSort($_SERVER["PHP_SELF"]) != ""){
   // If there is a sort saved in session, print a jquery function to add class to the selected column
@@ -185,8 +163,7 @@ $(document).ready(function() {
 	});
 	<dynamic> if ($query_where != ""){
 	echo "$('#search').toggle();";
-	}</dynamic>
-	
+	}</dynamic>	
 });
 
 $(".clear").bind("click", function() {

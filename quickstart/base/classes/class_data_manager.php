@@ -59,7 +59,7 @@ class DataManager {
 		catch(Exception $e) {
 		echo $e->getMessage();
 			//throw new Exception('Class: DataManager - Method: queryRecords - File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Reason: '. $e->getMessage());
-			include_once(CLASS_URL . 'class_error_handler.php');
+			include_once(CLASSES . 'class_error_handler.php');
 			$errorVar = new ErrorHandler();
 			$errorVar->notifyAdminException($e);
 			exit;					
@@ -79,7 +79,7 @@ class DataManager {
 		catch(Exception $e) {
 			//throw new Exception('Class: DataManager - Method: updateRecords - File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Reason: '. $e->getMessage());
 			// CATCH EXCEPTION HERE -- DISPLAY ERROR MESSAGE & EMAIL ADMINISTRATOR
-			include_once(CLASS_URL . 'class_error_handler.php');
+			include_once(CLASSES . 'class_error_handler.php');
 			$errorVar = new ErrorHandler();
 			$errorVar->notifyAdminException($e);
 			exit;			

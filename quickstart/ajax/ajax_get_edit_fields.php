@@ -13,6 +13,15 @@ $project->get_by_name($_GET['project']);
 $project->set_selected_environment($_GET['environment']);
 $project->setConnection();
 
+//Build drop down list of all tables for Dynamic Drop down selects		
+	
+	$sql = "Show tables from " . $project->get_dbname();
+	$result=mysql_query($sql);
+	
+	while ($row = mysql_fetch_row($result)) {
+		 $tables_dd .= '<option value="'. $row[0] . '">' . $row[0] . '</option>';
+	}
+	
 function getOption($type, $name){
 $retval = "text";
 
@@ -33,7 +42,11 @@ switch ($type) {
 
 	case "date":
 		$retval = "date";
-	break;		
+	break;
+
+	case "text":
+		$retval = "textarea";
+	break;			
 }
 
 //Do some guesses based on the name of the field
@@ -43,6 +56,12 @@ if (strpos($name,"color") || strpos($name,"colour")){ $retval = "color";}
 if (strpos($name,"email")){ $retval = "email";}
 if (strpos($name,"date")){ $retval = "date";}
 if (strpos($name,"pass")){ $retval = "password";}
+if (strpos($name,"price")){ $retval = "currency";}
+if (strpos($name,"cost")){ $retval = "currency";}
+if (strpos($name,"_id")){ $retval = "dropdown_dynamic";}
+
+if ($name == "is_active"){ $retval = "dropdown_static";}
+
 
 return $retval;
 }
@@ -71,7 +90,7 @@ return $retval;
 			$len   = mysql_field_len($result, $i);
 			$flags = mysql_field_flags($result, $i);
 			//echo  $name . " / " . $type .  " / " . $flags . "<br>";
-			echo "<tr>";
+
 			
 			// Don't check the fields that are automatically set in the class. Probably no need to edit these:
 			if (strpos($name,"date_created",0) || strpos($name,"last_updated")){
@@ -84,8 +103,12 @@ return $retval;
 			if (strpos($flags," primary_key ",0) || strpos($flags," unique_key ")){
 				$checked = "";			
 			}
-
-			$option_type = getOption($type, $name);			
+			
+			// Don't show if this field is the primary key:
+			if ((strpos($flags," primary_key ",0))==0){
+			
+			$option_type = getOption($type, $name);	
+			echo "<tr>";		
 			echo "<td><input type='checkbox' id='" . $name . "' value='" . $option_type . "' name='fields[" . $name . "]' class='formCheckbox' " . $checked . "/>&nbsp; $name</td>";
 
 			?><td>
@@ -100,14 +123,30 @@ return $retval;
 						<option value="textarea" <?php if ($option_type == "textarea"){echo "selected='selected'";}?>>Text area</option>
 						<option value="checkbox" <?php if ($option_type == "checkbox"){echo "selected='selected'";}?>>Checkbox</option>
 						<option value="color" <?php if ($option_type == "color"){echo "selected='selected'";}?>>Color</option>
-						<option value="dropdown_static" <?php if ($option_type == "dropdown_plain"){echo "selected='selected'";}?>>Drop down select (static)</option>
-						<option value="dropdown_dynamic" <?php if ($option_type == "dropdown_foreign"){echo "selected='selected'";}?>>Drop down select (dynamic)</option>
-					</select>									
+						<option value="dropdown_static" <?php if ($option_type == "dropdown_static"){echo "selected='selected'";}?>>Drop down select (static)</option>
+						<option value="dropdown_dynamic" <?php if ($option_type == "dropdown_dynamic"){echo "selected='selected'";}?>>Drop down select (dynamic)</option>
+					</select>		
+				
+				<div <?php if ($option_type != "dropdown_dynamic"){echo "style='display:none'";} ?> id="<?php echo $name ?>_dd_dynamic_div" >
+				<!-- This select box to be shown when dynamic dropdown is selected -->
+				<select name="dd_tables[<?php echo $name ?>]" onchange="update_field_name_list($(this).val(),'<?php echo $name ?>')">
+					<option disabled selected="selected" value="">Please select table</option>
+					<?php echo $tables_dd; ?>
+				</select>
+				
+				<div id="<?php echo $name ?>_dd_dynamic_div_field_name">
+					<!-- This table field name select box to be populated by ajax and shown when the table name changes -->
+				</div>	
+				
+				</div>
+				
+			
 			</td>
 			<td style="text-align:center"><input type="checkbox" name="required[<?php echo $name ?>]" value="1" /></td>
 
 			<?php
 			echo "</tr>";
+		}
 		}
 		?>
 		<tr><td>
@@ -117,10 +156,10 @@ return $retval;
 					
 		<?php
 
-// Use this in future to find when a dynamic drop down should be used:
+// Use this in future to find when a dynamic drop down should be used by looking up foreign keys
 
 	//	echo "<br>Indexes:<br>";
-		
+	/*	
 		$sql = "SELECT *
 		FROM
 			information_schema.key_column_usage
@@ -138,7 +177,7 @@ return $retval;
 			//	echo $row['REFERENCED_TABLE_NAME'] . " - " . $row['REFERENCED_COLUMN_NAME'] . "<br>";
 			}
 		} 
-
+*/
 ?>
 <button type="submit" value="Submit">Submit</button>
 </form>
@@ -155,5 +194,22 @@ $("#checkall").on("click", function (e) {
 function updateCheckbox(checkbox_id,value){
 //alert(checkbox_id+" "+value);
 	$('#'+checkbox_id).val(value);
+	if (value=="dropdown_dynamic"){
+		$('#'+checkbox_id+'_dd_dynamic_div').show()
+	} else {
+		$('#'+checkbox_id+'_dd_dynamic_div').hide()
+	}
+}
+
+function update_field_name_list(selectedValue,fieldName){
+	//alert(var1+" "+var2);
+	$.ajax({
+		type: "POST",
+		url: "ajax/ajax_show_table_fields.php",
+		data: { project: "<?php echo $_GET['project'] ?>", table_name:selectedValue, environment:"<?php echo $_GET['environment'] ?>", field_name:fieldName},
+		success: function (html) {	
+			$('#'+fieldName+"_dd_dynamic_div_field_name").html(html);
+		},
+	});
 }
 </script>

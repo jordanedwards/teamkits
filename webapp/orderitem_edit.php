@@ -73,10 +73,10 @@ $activeMenuItem = "Orderitem";
 						$dd->set_order("ASC");						
 						$dd->set_name("orderitem_item_number");						
 						$dd->set_selected_value($orderitem->get_item_number());
+						$dd->set_required(true);
 						$dd->display();
-					 ?>											
-					
-					<span class='red'> *</span> </td>
+					 ?>	
+					 </td>
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Price: </td>
@@ -86,6 +86,24 @@ $activeMenuItem = "Orderitem";
            			<td style="width:1px; white-space:nowrap;">Quantity: </td>
             		<td><input id="orderitem_quantity" name="orderitem_quantity" type="number" step="1" value="<?php  echo $orderitem->get_quantity();  ?>" style="width:90%" /> </td>
 				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Size: </td>
+					<td>
+					<?php 
+						$dd = new DropDown();
+						$dd->set_table("itemSize");	
+						$dd->set_name_field("itemSize_name");
+						$dd->set_class_name("form-control inline");
+						$dd->set_index_name("itemSize_name");
+						$dd->set_order("ASC");						
+						$dd->set_name("orderitem_size");						
+						$dd->set_selected_value($orderitem->get_size());
+						$dd->set_required(true);
+						$dd->set_active_only(false);
+						$dd->display();
+					 ?>	
+					 </td>
+				</tr>				
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Discount: </td>
             		<td><input id="orderitem_discount" name="orderitem_discount" type="number" step=".01" max="1" min="0" value="<?php  echo $orderitem->get_discount();  ?>" style="width:90%" /> </td>

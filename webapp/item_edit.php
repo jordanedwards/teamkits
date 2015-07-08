@@ -67,7 +67,7 @@ $activeMenuItem = "Manage";
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Price: </td>
-					<td>$<input id="item_price" name="item_price" type="number" step=".01" value="<?php  echo $item->get_price();  ?>"  style="width:90%" /></td>
+					<td>$<input id="item_price" name="item_price" type="text" value="<?php  echo number_format($item->get_price(),2);  ?>"  style="width:90%" /></td>
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Brand: </td>
@@ -140,6 +140,28 @@ $activeMenuItem = "Manage";
 		 ?>		
 			</tbody>
 		</table>
+		<br>
+		<table class="admin_table">
+			<thead>
+			<tr><th colspan="5">Sizes:<i class="fa fa-plus-circle fa-lg add-icon add-size"></i></th></tr>
+			<tr><th></th><th>Size</th><th>Stock</th><th>Delete</th></tr>	
+			</thead>
+			
+			<tbody id="sizes_table">
+		 <?php 
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from itemSize 
+			WHERE itemSize_item_id =" . $item->get_id() . " AND is_active ='Y'";						
+
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result)):
+					echo '<tr><td><a href="itemSize_edit.php?id=' . $row['itemSize_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['itemSize_name'] . '</td><td>' . $row['itemSize_stock'] . '</td><td style="white-space:normal"><a href="actions/action_itemSize_edit.php?action=delete&page_id=item_edit.php&itemSize_item_id=' . $row['itemSize_item_id']. '&itemSize_id=' . $row['itemSize_id'] .'" onclick="return confirm(\'You are about to delete a size. Do you want to continue?\');"><i class="fa fa-times-circle fa-lg"></i></a></td></tr>';
+				endwhile;									
+			endif;
+		 ?>		
+			</tbody>
+		</table>
 		<?php endif ?>
 	</div> 
     </div> 
@@ -149,13 +171,7 @@ $activeMenuItem = "Manage";
 
 <?php  include(INCLUDES . "/footer.php");  ?>
 <?php  include(INCLUDES_LIST);  ?>	
-<script>
 
-/*$(document).ready(function() {
-	$("#<?php echo $key?>").mask("999999999999.99"); 
-});	*/
-
-</script>
 <script type="text/javascript">
 		$(document).ready(function() {
 			var container = $("div.errorContainer");
@@ -176,6 +192,8 @@ $activeMenuItem = "Manage";
 		 //   $("#student_tel").mask("(999) 999-9999");
 		
   </script>	
-<?php include(SCRIPTS . "item_image_add_dialog.php"); ?>    	
+<?php include(SCRIPTS . "item_image_add_dialog.php"); ?>  
+<?php include(SCRIPTS . "item_size_add_dialog.php"); ?>    	
+ 	
   </body>
 </html>

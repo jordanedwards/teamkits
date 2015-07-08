@@ -82,9 +82,9 @@ if ($key == $index_name) {
 		';
 } elseif($val == "last_updated_user"){
 	echo 'public function get_last_updated_user() { return $this->last_updated_user;}
-	';
-	echo 'public function set_last_updated_user($value) {$this->last_updated_user=$this->get_user_id();}
-	';
+';
+	echo 'public function set_last_updated_user() {$this->last_updated_user=$this->get_user_id();}
+';
 }
 else {
 	echo 'public function get_'. $val . '() { return $this->' . $val .';}
@@ -286,9 +286,7 @@ public function save() {
 			$strSQL = "SELECT * FROM <?php echo $selected_table ?> WHERE <?php echo $index_name ?>=" . $id;
       
 			$result = $dm->queryRecords($strSQL);
-			$num_rows = mysqli_num_rows($result);
-
-			if ($num_rows != 0){
+			if ($result){
 				$row = mysqli_fetch_assoc($result);
         		$this->load($row);
 				$status = true;
@@ -306,6 +304,7 @@ public function save() {
 	}
 
   	public function load_from_post($array){
+		// Pass $_POST to this function, and if the post vars match the object methods (they should, using this program), then it will populate the object
   		foreach ($array as $key => $val){
 			if(property_exists('<?php echo $selected_table ?>',$key)):
 				$method_name = "set_".$key;
@@ -313,7 +312,18 @@ public function save() {
 			endif;
 		}
 	} 
-	  
+
+	public function get_json_data(){
+		// Used in an ajax function to return the object properties:
+ 		$var = get_object_vars($this);
+        foreach($var as &$value){
+           if(is_object($value) && method_exists($value,'get_json_data')){
+              $value = $value->get_json_data();
+           }
+        }
+        return json_encode($var);
+	}
+		  
 	// loads the object data from a mysql assoc array
   	private function load($row){
 		<?php 

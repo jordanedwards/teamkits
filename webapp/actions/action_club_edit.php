@@ -3,6 +3,7 @@ require("../includes/init.php");
 $page_id = $_REQUEST["page_id"];
 $action = ($_GET['action'] != "delete" ? "edit" : "delete");
 require(INCLUDES . "/acl_module.php");
+include_once(CLASSES . "class_user.php");
 
 	$club_id=$_POST["club_id"];
 	$club_name=$_POST["club_name"];
@@ -47,9 +48,8 @@ require(INCLUDES . "/acl_module.php");
 	$club->set_tax_id($club_tax_id);
 	$club->set_active($is_active);
 	
-
 	// Populate user object:
-	include_once(CLASSES . "class_user.php");
+	if ($club_account_type != 3){
 	
   	$club_user = new User;
 	if($club->get_user_id() >0){
@@ -66,7 +66,8 @@ require(INCLUDES . "/acl_module.php");
 	$club_user->save();
 	
 	$club->set_user_id($club_user->get_id());
-
+	}
+	
   	$last_updated_user = new User;	
   	$last_updated_user->get_by_id($session->get_user_id());
 	$club->set_last_updated_user($last_updated_user->get_first_name().' '.$last_updated_user->get_last_name());
@@ -94,12 +95,20 @@ if ($_GET['action'] == "delete"){
 		if($club_id > 0){
 			$session->setAlertMessage("The Club has been updated successfully.");
 			$session->setAlertColor("green");
-			header("location:". BASE_URL."/" . "club_list.php?page=".$session->getPage());
+			if ($club_account_type == 3){
+				header("location:". BASE_URL."/" . "lead_list.php?page=".$session->getPage());
+			} else {
+				header("location:". BASE_URL."/" . "club_list.php?page=".$session->getPage());
+			}
 			exit;		
 		}else{
 			$session->setAlertMessage("The Club has been added successfully.");
 			$session->setAlertColor("green");
-			header("location:". BASE_URL."/" . "club_edit.php?id=".$club->get_id());
+			if ($club_account_type == 3){
+				header("location:". BASE_URL."/" . "lead_list.php?page=".$session->getPage());
+			} else {
+				header("location:". BASE_URL."/" . "club_list.php?page=".$session->getPage());
+			}
 			exit;
 		}
 	}
