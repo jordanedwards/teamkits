@@ -309,7 +309,30 @@ include(CLASSES . "/class_club.php");
 		 ?>
 		</tbody>
 		</table>
+		<br>
 		<?php if ($club->get_account_type() != 3): ?>
+		<table class="admin_table">
+			<thead>
+			<tr><th colspan="5">Club Colours:<i class="fa fa-plus-circle fa-lg add-icon add-colour"></i></th></tr>
+			<tr><th></th><th>Title:</th><th>Colour Code</th><th>Colour</th></tr>	
+			</thead>
+			
+			<tbody id="colour_table">
+		 <?php 
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from clubColours 
+			WHERE clubColours_club_id=" . $club_id . "
+			AND is_active = 'Y'";						
+
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result)):
+					echo '<tr><td><a href="clubColours_edit.php?id=' . $row['clubColours_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['clubColours_title'] . '</td><td>' . $row['clubColours_code'] . '</td><td style="background:' . $row['clubColours_hex_code'].'"></td></tr>';
+				endwhile;									
+			endif;
+		 ?>		
+			</tbody>
+		</table>
 		<br>
 		<table class="admin_table">
 			<thead>
@@ -396,5 +419,7 @@ $(function() {
   </script>
   <?php include(SCRIPTS . "note_add_dialog.php"); ?>  
   <?php include(SCRIPTS . "contact_add_dialog.php"); ?>  
+  <?php include(SCRIPTS . "colour_add_dialog.php"); ?>  
+
   </body>
 </html>

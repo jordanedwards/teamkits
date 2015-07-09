@@ -18,7 +18,7 @@ url(../img/bg3.jpg) no-repeat center top fixed;
 }
 a#arrow_down {
   padding: 20px 20px 0px 20px;
-  bottom: 30%;
+  bottom: 10%;
   background-color: rgba(0,0,0,0.6);
   border: 3px solid #B90005;
 } 
