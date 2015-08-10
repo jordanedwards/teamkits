@@ -25,7 +25,7 @@ $activeMenuItem = "Account info";
   </head>
   <body>
 
-<?php  require(INCLUDES . "navbar_club.php");  ?>
+<?php  require(INCLUDES . "navbar.php");  ?>
 <div class="main">
 
     <div class="container">
@@ -240,8 +240,8 @@ $activeMenuItem = "Account info";
 		 </table>
 		 
           <br />
-          <input type="submit" class="btn-success" value="Save" />&nbsp;
-          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="Save" />&nbsp;
+          <input type="button" class="btn btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 			

@@ -42,6 +42,10 @@ define("BASE_URL", "/teamkits");
 	
 	$admin_email = "jordan@orchardcity.ca";
 // ****************************************** USER NOT LOGGED IN **********************************	
+	if (!isset($public)){
+		$public = false;
+	}
+	
 if($session->get_user_id() == "" && $public != true):
 
 // ************************************** LIST OF PUBLIC ACCESS PAGES *****************************

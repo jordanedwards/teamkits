@@ -17,8 +17,8 @@ color: #222;
 
 /* SORTABLE TABLE CSS */
 
-table.admin_table { border:	1px solid #602618; border-collapse:collapse; -moz-border-radius:5px; border-radius:5px; box-shadow:0 1px 3px rgba(0, 0, 0, 0.35); width: 100%; background:#ccc;}
-table.admin_table th { padding: 8px; background: #DDAB30; border:1px solid #602618;}
+table.admin_table { border:	1px solid #333; border-collapse:collapse; -moz-border-radius:5px; border-radius:5px; box-shadow:0 1px 3px rgba(0, 0, 0, 0.35); width: 100%; background:#ccc;}
+table.admin_table th { padding: 8px; background: #DDAB30; border:1px solid #333;}
 table.admin_table td { padding: 8px; border:1px solid; /*white-space: nowrap;*/}
 table.admin_table.no-border td { padding: 8px; border:none; /*white-space: nowrap;*/}
 table.admin_table tr {
@@ -124,9 +124,9 @@ font-style: italic;
 #alert_message.yellow { background:#FFCC66; border:1px solid #F7931D; }
 #alert_message.green { background:#CFF28B; border:1px solid #2D913A; }
 #alert_message.red { background:#EFA4A4; border:1px solid #C0272D; }
+#alert_message.white { background:#fff; border:1px solid #666; }
+
 .red {color:#F00;}
-
-
 
 h1 {
 	font-weight: bold;
@@ -161,8 +161,11 @@ color:#fff;
 	background: lightgrey;
 }
 button, html input[type="button"], input[type="reset"], input[type="submit"] {
-	padding: 5px 15px;
+	/*padding: 5px 15px;*/
 	margin-right: 10px;
+}
+.btn {
+    margin-right: 10px;
 }
 #back-to-top {
 /* padding-top:10px;*/
@@ -367,6 +370,11 @@ width: 40px;
 height: 40px; 
 padding: 5px;
 
+}
+.item_view_link {
+cursor:pointer;
+background:#0066FF;
+color:#ccc;
 }
 @media (max-width: 767px){
 footer {

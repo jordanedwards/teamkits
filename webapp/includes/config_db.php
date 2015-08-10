@@ -16,7 +16,7 @@
 	}else{
 		// Production		
 		$dbConfig['dbhost'] = "localhost";		
-		$dbConfig['dbuser'] = "wmore_teamkits";
-		$dbConfig['dbpass'] = "Giht5!44";		
-		$dbConfig['dbname'] = "wmorel1_2_teamkits";
+		$dbConfig['dbuser'] = "teamkits_webapp";
+		$dbConfig['dbpass'] = "1675Thayer";		
+		$dbConfig['dbname'] = "teamkits_webapp";
 	}

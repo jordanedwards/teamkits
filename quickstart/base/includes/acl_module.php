@@ -112,7 +112,7 @@ if ($num_rows == 0){
 	}
 		// No record for this user role, for this page, for this access type. Deny access
 		if (!$access){
-			echo "You do not have access to this resource.<br><a href='/index.php'>&raquo; Homepage</a>";
+			echo "You do not have access to this resource.<br><a href='" . BASE_URL . "'>&raquo; Homepage</a>";
 			exit;
 		} 
 	}

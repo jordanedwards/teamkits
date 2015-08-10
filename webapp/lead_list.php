@@ -32,8 +32,8 @@ $activeMenuItem = "Leads";
 	
 	if ($s_sort == ""){
 		// if no sort is set, pick a default
-		$s_sort = "club_id";
-		$s_sort_dir = "desc";	
+		$s_sort = "club_name";
+		$s_sort_dir = "asc";	
 	}
 	
 	$order = " ORDER BY " . $s_sort . " " . $s_sort_dir;				
@@ -88,7 +88,7 @@ $activeMenuItem = "Leads";
 					$dd->set_table("province");
 					$dd->set_name_field("province_name");
 					$dd->set_name("s_province");
-					$dd->set_selected_value($s_brand);
+					$dd->set_selected_value($s_province);
 					$dd->set_order("ASC");	
 					$dd->display();
 				?></td>			
@@ -120,7 +120,7 @@ $activeMenuItem = "Leads";
 								$query_where .= ' AND club_id = "'.$s_id.'"';
 						} 
 						if($s_name != ""){
-								$query_where .= ' AND club_name = "'.$s_name.'"';
+								$query_where .= ' AND club_name LIKE "%'.$s_name.'%"';
 						} 
 						if($s_sport != ""){
 								$query_where .= ' AND club_sport = "'.$s_sport.'"';
@@ -132,7 +132,7 @@ $activeMenuItem = "Leads";
 								$query_where .= ' AND club_tel = "'.$s_tel.'"';
 						} 
 						if($s_city != ""){
-								$query_where .= ' AND club_city = "'.$s_city.'"';
+								$query_where .= ' AND club_city LIKE "%'.$s_city.'%"';
 						} 
 						if($s_province != ""){
 								$query_where .= ' AND club_province = "'.$s_province.'"';

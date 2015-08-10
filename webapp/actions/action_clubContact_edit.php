@@ -1,7 +1,8 @@
 <?php // include necessary libraries
 require("../includes/init.php");
 $page_id = $_REQUEST["page_id"];
-$action = ($_GET['action'] != "delete" ? "edit" : "delete");
+$action = ($_REQUEST['action'] != "delete" ? "edit" : "delete");
+if ($_REQUEST['delete'] == "Delete") { $action = "delete"; }
 require(INCLUDES . "/acl_module.php");
 
 $item_name = "Contact";
@@ -23,7 +24,7 @@ $item_name = "Contact";
 		$clubContact->set_email($clubContact_email);
 		$clubContact->set_active($is_active);
 
-if ($_GET['action'] == "delete"){	
+if ($action == "delete"){	
 	if($clubContact->delete() == true) {
 		$session->setAlertMessage("The $item_name has been removed successfully.");
 		$session->setAlertColor("green");

@@ -100,6 +100,7 @@ public function save() {
 			
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
+				$this->set_active("Y");
 			
 				$strSQL = "INSERT INTO orderitem (orderitem_id, orderitem_order_id, orderitem_item_number, orderitem_price, orderitem_quantity, orderitem_size, orderitem_discount, is_active, orderitem_date_created, orderitem_last_updated, orderitem_last_updated_user) 
         VALUES (

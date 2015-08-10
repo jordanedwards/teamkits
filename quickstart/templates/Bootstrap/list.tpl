@@ -37,22 +37,22 @@ $activeMenuItem = "<?php echo ucfirst($this->selected_table) ?>";
 
 $dm = new DataManager();
 
-			<?php
+	<?php
 foreach($this->field_names as $key => $val){
 echo '$s_' . $val . ' = escaped_var_from_post("s_' . $val. '");
-			';
+	';
 }	
 ?>
 $s_sort = escaped_var_from_post('sort');
-			$s_sort_dir = escaped_var_from_post('sort_dir');
-		
-			if ($s_sort == ""){
-				// if no sort is set, pick a default
-				$s_sort = "<?php echo $this->index_name ?>";
-				$s_sort_dir = "desc";	
-			}
+	$s_sort_dir = escaped_var_from_post('sort_dir');
 
-			$order = " ORDER BY " . $s_sort . " " . $s_sort_dir;		
+	if ($s_sort == ""){
+		// if no sort is set, pick a default
+		$s_sort = "<?php echo $this->selected_table . "." . $this->index_name ?>";
+		$s_sort_dir = "desc";	
+	}
+
+	$order = " ORDER BY " . $s_sort . " " . $s_sort_dir;		
 					
 </dynamic>
         <div id="search">
@@ -61,7 +61,7 @@ $s_sort = escaped_var_from_post('sort');
               <tr>
 			  <?php
 foreach($this->field_names as $key => $val){
-				echo "<td>" . ucfirst($this->selected_table) . " " . ucfirst($val) . "</td>";
+				echo "<td>" . str_replace("_"," ",ucfirst($val)) . "</td>";
 }
 ?>
 				<td><input type="button" class="clear" value="Clear" /></td>
@@ -84,40 +84,44 @@ foreach($this->field_names as $key => $val){
         </div>
 			<br>
 <dynamic>
-					
-					$query = $session->getQuery($_SERVER["PHP_SELF"]);
-					$reload = (isset($_GET['reload']) && $_GET['reload'] == "true" && isset($_GET['page']) == false ? $_GET['reload'] : "");
-					
-					if ($query == "" || $reload == "true") {
-					// Page set to reload (new query)		
-							<?php
+		$query = $session->getQuery($_SERVER["PHP_SELF"]);
+		$reload = (isset($_GET['reload']) && $_GET['reload'] == "true" && isset($_GET['page']) == false ? $_GET['reload'] : "");
+		$query_where = "";
+		
+		if ($query == "" || $reload == "true") {
+		// Page set to reload (new query)		
+				<?php
 foreach($this->field_names as $key => $val){
-				echo ' 
-						if($s_' . $val . ' != ""){
-								$query_where .= \' AND ' . $this->selected_table . '_' . $val . ' = "\'.$s_' . $val . ".'\"';
-						}";
+	echo ' 
+			if($s_' . $val . ' != ""){
+				$query_where .= \' AND ' . $val . ' = "\'.$s_' . $val . ".'\"';
+			}";
 }
 ?>		
 
-						$query = "SELECT * from <?php echo $this->selected_table ?> WHERE 1=1" . $query_where .$order;
-						
-						//Handle the sorting of the records
-						$session->setQuery($_SERVER["PHP_SELF"],$query);
-						$session->setSort($_SERVER["PHP_SELF"],$s_sort);
-						$session->setSortDir($_SERVER["PHP_SELF"],$s_sort_dir);
-					}else{
-						//The page is not reloaded so use the query from the session
-						$query = $session->getQuery($_SERVER["PHP_SELF"]);
-					}
+			$query = "SELECT *, <?php echo $this->selected_table ?>.id AS <?php echo $this->selected_table ?>Id
+			FROM <?php echo $this->selected_table ?>			
+			WHERE 1=1 AND <?php echo $this->selected_table ?>.is_active='Y' " . $query_where .$order;
+			
+			//Handle the sorting of the records
+			$session->setQuery($_SERVER["PHP_SELF"],$query);
+			$session->setSort($_SERVER["PHP_SELF"],$s_sort);
+			$session->setSortDir($_SERVER["PHP_SELF"],$s_sort_dir);
+		}else{
+			//The page is not reloaded so use the query from the session
+			$query = $session->getQuery($_SERVER["PHP_SELF"]);
+		}
 
-					if(isset($_GET['page'])){$page = $_GET['page'];}else{$page = 1;}
-					$session->setPage($page);
-					
-					require_once(CLASSES ."/class_record_pager.php");
-					$pager=new Pager($query,'paginglinks',20,0,1,'page_templates/<?php echo $this->selected_table ?>_list_template.htm');
-					echo $pager->displayRecords(mysqli_escape_string($dm->connection,$page));
-					
-					//echo $query;
+		if(isset($_GET['page'])){$page = $_GET['page'];}else{$page = 1;}
+		$session->setPage($page);
+		
+		require_once(CLASSES ."/class_record_pager.php");
+		$pager=new Pager($query,'paginglinks',20,0,1,'page_templates/<?php echo $this->selected_table ?>_list_template.htm');
+		echo $pager->displayRecords(mysqli_escape_string($dm->connection,$page));
+		
+		if ($appConfig["environment"] == "development"){
+			consoleLog($query);
+		}
 			</dynamic>
         </div>
 

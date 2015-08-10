@@ -95,7 +95,7 @@ public function __toString(){
 
 		try{
 			$dm = new DataManager();
-			$strSQL = "SELECT user_id, user_role FROM user WHERE user_email='" . $this->get_email() . "' AND user_password='" . $this->get_password() . "'";
+			$strSQL = "SELECT user_id, user_role FROM user WHERE user_email='" . $this->get_email() . "' AND user_password='" . $this->get_password() . "'  AND user_email != '' AND user_password != ''";
 			$result = $dm->queryRecords($strSQL);
 			$num_rows = mysqli_num_rows($result);
 

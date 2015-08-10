@@ -2,22 +2,18 @@
 require("../includes/init.php");
 $page_id = $_REQUEST["page_id"];
 $action = ($_GET['action'] != "delete" ? "edit" : "delete");
-require(INCLUDES . "/acl_module.php");
+if ($_REQUEST['delete'] == "Delete") { $action = "delete"; }
 
+require(INCLUDES . "/acl_module.php");
+include(CLASSES . "class_clubNotes.php");
+$id = escaped_var_from_post("id");
 $item_name = "clubNotes";
 
-		$clubNotes_id=$_POST["clubNotes_id"];
-		//$clubNotes_club_id=$_POST["clubNotes_club_id"];
-		$clubNotes_content=$_POST["clubNotes_content"];
-			// add the new record to the database
-	include(CLASSES . "class_clubNotes.php");
-	
-		$clubNotes = new ClubNotes();
-		$clubNotes->get_by_id($clubNotes_id);
-	//	$clubNotes->set_club_id($clubNotes_club_id);
-		$clubNotes->set_content($clubNotes_content);
+	$clubNotes = new ClubNotes();
+	$clubNotes->get_by_id($id);
+	$clubNotes->load_from_post($_POST);
 
-if ($_GET['action'] == "delete"){	
+if ($action == "delete"){	
 	if($clubNotes->delete() == true) {
 		$session->setAlertMessage("The $item_name has been removed successfully.");
 		$session->setAlertColor("green");

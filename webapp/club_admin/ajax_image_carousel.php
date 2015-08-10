@@ -34,7 +34,7 @@ echo '<li data-target="#myCarousel" data-slide-to="' . $x . '" class=""></li>
 	 
 	 foreach ($images as $key => $val){
 		$str .='<div class="item '. $active . '">
-          <img src="../images/itemimages/' . $key . '" alt="' . $val .'">
+          <img src="/webapp/images/itemimages/' . $key . '" alt="' . $val .'">
           <div class="container">
             <div class="carousel-caption">
               <p>' . $val .'</p>
@@ -46,30 +46,6 @@ echo '<li data-target="#myCarousel" data-slide-to="' . $x . '" class=""></li>
 		
 	echo $str;
 	?>
-     <!--   <div class="item active">
-          <img class="first-slide" src="../images/itemimages/jersey-macron.jpg" alt="First slide">
-          <div class="container">
-            <div class="carousel-caption">
-              <p>Barcelona sample jerseys</p>
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <img src="../images/itemimages/Soccer-Ball.jpg" alt="Second slide">
-          <div class="container">
-            <div class="carousel-caption">
-              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            </div>
-          </div>
-        </div>
-        <div class="item">
-          <img class="third-slide" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Third slide">
-          <div class="container">
-            <div class="carousel-caption">
-              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            </div>
-          </div>
-        </div> -->
       </div>
       <a class="left carousel-control" href="http://getbootstrap.com/examples/carousel/#myCarousel" role="button" data-slide="prev">
         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>

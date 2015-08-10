@@ -15,14 +15,14 @@ ini_set('error_log','error_log.txt');
 <meta charset=utf-8 />
 <title>Quickstart</title>
 
-<link rel="stylesheet" href="http://necolas.github.io/normalize.css/2.1.3/normalize.css">
+<link rel="stylesheet" href="https://necolas.github.io/normalize.css/2.1.3/normalize.css">
 <link rel="stylesheet" href="css/jquery.idealforms.css">
 <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 <link href="css/custom.css" rel="stylesheet">
 <link href="css/select2.css" rel="stylesheet"/>  
 
-  <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+  <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
   <script src="js/out/jquery.idealforms.js"></script>
   <script src="bootstrap/js/bootstrap.min.js"></script>
@@ -129,9 +129,11 @@ if (password==pass1)
 					 
 			 $("#baseZip").attr("onclick","triggerZip()");
 			 
+			 <?php if (isset($_GET['environment'])){ ?>
+			updateEnvironment("<?php echo $_GET['environment'] ?>");
+			<?php } ?>
 		});
       };
-	  
 	  
    </script>
 <script>
@@ -251,7 +253,7 @@ function add_another_input()
 	var i = $(".line_item").length+1;
     var table_name = document.getElementById('table_name').value;
 
-  var newElement = "<tr><td><span class='table_prefix'>"+table_name+"_</span><input name='field_"+i+"' type='text' class='line_item'></td><td><select class='column_type' name='type_"+i+"' style='display:block; width:auto'><option>INT</option><option value='varchar(200)' selected='selected'>VARCHAR</option><option value='text'>TEXT</option><option value='date'>DATE</option><optgroup label='NUMERIC'><option value='tinyint(2)'>TINYINT</option><option value='smallint(5)'>SMALLINT</option><option value='mediumint(7)'>MEDIUMINT</option><option value='int(10)'>INT</option><option value='bigint(20)'>BIGINT</option><option value='decimal(5,2)'>DECIMAL</option><option value='float(5,2)'>FLOAT</option><option value='double(5,2)'>DOUBLE</option><option value='real'>REAL</option><option value='bit'>BIT</option><option value='boolean'>BOOLEAN</option><option value='serial'>SERIAL</option></optgroup><optgroup label='DATE and TIME'><option value='date'>DATE</option><option value='datetime'>DATETIME</option><option value='timestamp'>TIMESTAMP</option><option value='time'>TIME</option><option value='year(4)'>YEAR</option></optgroup><optgroup label='STRING'><option value='char(4)'>CHAR</option><option value='varchar(200)'>VARCHAR</option><option value='tinytext'>TINYTEXT</option><option value='text'>TEXT</option><option value='mediumtext'>MEDIUMTEXT</option><option value='longtext'>LONGTEXT</option><option value='tinyblob'>TINYBLOB</option><option value='mediumblob'>MEDIUMBLOB</option><option value='blob'>BLOB</option><option value='longblob'>LONGBLOB</option><option value='enum'>ENUM</option><option value='set'>SET</option></optgroup></select></td></tr>";
+  var newElement = "<tr><td><input name='field_"+i+"' type='text' class='line_item'></td><td><select class='column_type' name='type_"+i+"' style='display:block; width:auto'><option>INT</option><option value='varchar(200)' selected='selected'>VARCHAR</option><option value='text'>TEXT</option><option value='date'>DATE</option><optgroup label='NUMERIC'><option value='tinyint(2)'>TINYINT</option><option value='smallint(5)'>SMALLINT</option><option value='mediumint(7)'>MEDIUMINT</option><option value='int(10)'>INT</option><option value='bigint(20)'>BIGINT</option><option value='decimal(5,2)'>DECIMAL</option><option value='float(5,2)'>FLOAT</option><option value='double(5,2)'>DOUBLE</option><option value='real'>REAL</option><option value='bit'>BIT</option><option value='boolean'>BOOLEAN</option><option value='serial'>SERIAL</option></optgroup><optgroup label='DATE and TIME'><option value='date'>DATE</option><option value='datetime'>DATETIME</option><option value='timestamp'>TIMESTAMP</option><option value='time'>TIME</option><option value='year(4)'>YEAR</option></optgroup><optgroup label='STRING'><option value='char(4)'>CHAR</option><option value='varchar(200)'>VARCHAR</option><option value='tinytext'>TINYTEXT</option><option value='text'>TEXT</option><option value='mediumtext'>MEDIUMTEXT</option><option value='longtext'>LONGTEXT</option><option value='tinyblob'>TINYBLOB</option><option value='mediumblob'>MEDIUMBLOB</option><option value='blob'>BLOB</option><option value='longblob'>LONGBLOB</option><option value='enum'>ENUM</option><option value='set'>SET</option></optgroup></select></td></tr>";
   
 	$("#field_list").append(newElement);
 
@@ -293,7 +295,7 @@ function update_table_name(){
 	}
 	
 	$('#table_name').val(new_table_name);
-	$('.table_prefix').html(new_table_name+"_");
+	/*$('.table_prefix').html(new_table_name+"_");*/
 	
 }
 
@@ -313,8 +315,8 @@ function sqlInsert(){
 	if ($('#selected_environment').val() == ""){
 		alert("Please select an environment first");
 	} else {
-		var dbDetails = fetchDBdetails();
-		$('#mainForm').attr('action', 'actions/action_sql_creator.php?sqlInsert=true&'+dbDetails+"&projectName="+$('#project_file_name').html());
+		//var dbDetails = fetchDBdetails();
+		$('#mainForm').attr('action', 'actions/action_sql_creator.php?sqlInsert=true&projectName='+$('#project_file_name').html()+"&environment="+$('#selected_environment').val());
 		$('#mainForm').submit();		
 	}
 }
@@ -326,8 +328,9 @@ function sqlInsert(){
 		modal: true,
 		open: function(event, ui)
 			{
+			var dbDetails = fetchDBdetails();
 				$.ajax({
-					url: "ajax/ajax_test_db.php?project_name="+$('#project_file_name').html()+"&environment="+$(this).data('environment'),	
+					url: "ajax/ajax_test_db.php?project_name="+$('#project_file_name').html()+"&environment="+$(this).data('environment')+"&"+dbDetails,	
 					success: function (html) {	
 						$('#dbTestContent').html(html);
 					}		
@@ -964,5 +967,6 @@ function populateTable(tableName) {
 	});
 }
  </script>
+
 </body>
 </html>

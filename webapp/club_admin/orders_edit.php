@@ -2,10 +2,14 @@
 require("../includes/init.php"); 
 $page_id = "club_admin/" . basename(__FILE__);
 require(INCLUDES . "/acl_module.php");
+include_once(CLASSES . "/class_club.php"); 
+$club = new Club();	 
+$club->get_by_user_id($currentUser->get_id()); 
+
 include(CLASSES . "/class_orders.php"); 
 $activeMenuItem = "Orders";
  
-	if(!isset($_GET["id"]) && !isset($_GET["club_id"])) {
+	if( !isset($_GET["id"]) || $club->get_id()==0 ) {
 		$session->setAlertMessage("Can not edit - the ID is invalid. Please try again.");
 		$session->setAlertColor("yellow");
 		header("location:" . BASE_URL . "/index.php");
@@ -13,16 +17,31 @@ $activeMenuItem = "Orders";
 	}
 
 	// load the orders		
-	$orders_id = $_GET["id"];
 	$orders = new Orders();
 	
 	if ($_GET["id"] ==0){
 		// Change this to pass a parent value if creating a new record:
-		$orders->set_club_id($_GET['club_id']);
+		$orders->set_club_id($club->get_id());
+		$orders->set_status(1);		
 	} else {
-		$orders->get_by_id($orders_id);
+		$orders->get_by_id($_GET["id"]);
 	}
-				
+
+	if ($orders->get_status() !=1){
+	// If timesheet is submitted or archived and viewer is foreman, do not allow editing:
+		$block_editing = true;
+	}
+	
+	if (isset($_GET['kit']) && $_GET['kit'] > 0){
+		// Add a kit to an order
+		// Must make sure that the order is saved first, or the orderitems will get attached to nothing:
+		if ($orders->get_id() == 0){
+			// Save
+			$orders->save();
+		}
+		$kit = $_GET['kit'];
+		$orders->add_kit($kit);
+	}			
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +72,7 @@ cursor:pointer;
 
   </head>
   <body>
-<?php  require(INCLUDES . "navbar_club.php");  ?>
+<?php  require(INCLUDES . "navbar.php");  ?>
 <div class="main">
 
     <div class="container">
@@ -99,8 +118,9 @@ cursor:pointer;
 		</td>
 	</tr>
 		<tr>
-		<td style="width:1px; white-space:nowrap;">Notes: </td>
-		<td><?php  echo $orders->get_notes();  ?></td>
+		<td style="width:1px; white-space:nowrap;">Description: </td>
+		<td>
+		<p class="static"><?php  echo $orders->get_notes();  ?></p></td>
 	</tr>  		
 </table>
 <br>
@@ -122,7 +142,8 @@ cursor:pointer;
 			if ($result):
 				while($row = mysqli_fetch_assoc($result)):
 					echo '<tr><td><a href="orderitem_edit.php?id=' . $row['orderitem_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td><a class="imagePreview" data-item-id="' . $row['orderitem_item_number'] . '">' . $row['item_name'] . '</a></td><td>' . $row['orderitem_quantity'] . '</td><td>' . $row['orderitem_size'] . '</td><td style="white-space:normal; text-align:right;">$'.sprintf("%.2f",$row['orderitem_price']) .'</td><td style="white-space:normal; text-align:right ">$'.number_format(($row['orderitem_price']*$row['orderitem_quantity']),2) .'</td></tr>';
-				endwhile;									
+					$order_items = $order_items +$row['orderitem_quantity'];
+				endwhile;						
 			endif;
 		 ?>		
 			</tbody>
@@ -137,7 +158,7 @@ cursor:pointer;
           <br />
 		  <table class="admin_table">
 			<thead>
-			<tr><th colspan="5">Payments:<i class="fa fa-credit-card fa-lg add-icon add-payment"></i></th></tr>
+			<tr><th colspan="5">Payments:</th></tr>
 			<tr><th>Amount</th><th>Method</th><th>Txn Id</th><th>Date</th></tr>	
 			</thead>
 			
@@ -165,10 +186,23 @@ cursor:pointer;
 		</table>
 		<br>
 		<?php if($orders->get_status() == 1){ ?>
-		  <input type="submit" class="btn-success" value="Save" />&nbsp;&nbsp;		
-		  <input type="submit" class="btn-success" value="Submit Order" />&nbsp;&nbsp;
+		<form action="" method="POST" style="display: inline-block;">
+			  <script
+				src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+				data-key="pk_test_W35SjiDSgEmsbm4bh9xWhIrN"
+				data-amount="<?php echo $orders->get_total()*100 ?>"
+				data-name="Order #<?php echo $orders->get_id() ?>"
+				data-description="<?php echo $order_items ?> items - ($<?php echo $orders->get_total() ?>)"
+				data-image="/images/128x128.png"
+				data-email="jordan@orchardcity.ca"
+				data-customer="16">
+			  </script>
+			</form>
+		 <!-- <input type="submit" class="btn btn-success" value="Submit Order" />-->
+		   <a href="<?php  echo ACTIONS_URL  ?>action_orders_edit.php?action=delete&page_id=<?php  echo $page_id  ?>&id=<?php  echo $orders->get_id()  ?>" onClick="return confirm('Cancel this order?');" class="btn btn-warning" role="button">Cancel Order</a>		  
 		  <?php } ?>
-          <input type="button" class="btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+		  
 		<br>			
 	
       </div>
@@ -209,7 +243,7 @@ cursor:pointer;
 
 <?php  include(INCLUDES . "/footer.php");  ?> 
 <?php require(INCLUDES_LIST);?>			
-<?php include(SCRIPTS . "order_item_add_dialog.php"); ?>  
+<?php include("order_item_add_dialog.php"); ?>  
 <script>
 
 $(function() {
@@ -283,45 +317,23 @@ $(function() {
 
 
 <div id="payment_add_dialog" title="Add Payment Record" style="display:none">
-<form id="newPaymentForm" method="post">
-<h4>Please select:</h4>
- <p>
- <?php
-	$dd = New DropDown();
-	$dd->set_table("paymentmethod");
-	$dd->set_name_field("paymentmethod_title");
-	$dd->set_name("payment_method");
-	$dd->set_selected_value($student_value);
-	$dd->set_class_name("form-control inline");
-	$dd->set_active_only(true);
-	$dd->set_required(true);	
-	$dd->set_placeholder("Payment method");
-	$dd->display();	
-	?>	  	  
-  </p>
- <p>
-<input type="number" placeholder="Amount" style="width: 90%;" step="0.01" min="0" class="form-control inline" name="payment_amount"/>
-</p>
-<p>
-<input type="text" name="payment_transaction_number" class="form-control"  placeholder="Transaction #" required/>
-</p>
- <p>
- <?php
- 	$dd = New DropDown();
-	$dd->set_static(true);	
-	$dd->set_name("payment_status");	
-	$dd->set_required(true);
-	$dd->set_class_name("form-control");
-		$option_list = "Pending,Completed,Cancelled";
-	$dd->set_option_list($option_list);	
-	$dd->set_placeholder("Select status");		
-	$dd->display();	
-	?>	  	  
-  </p>
-<input type="hidden" name="order_id" value="<?php echo  $orders_id ?>"/>
-<input type="hidden" name="action" value="add"/> 
+<form action="" method="POST">
+  <script
+    src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    data-key="pk_test_W35SjiDSgEmsbm4bh9xWhIrN"
+    data-amount="2000"
+    data-name="Demo Site"
+    data-description="2 widgets ($20.00)"
+    data-image="/128x128.png">
+  </script>
 </form>
 </div>	
 
   </body>
+<script>
+	<?php if ($block_editing){ ?>
+	$('.editing').hide();
+	$('.static').show();
+	<?php } ?>
+</script>
 </html>

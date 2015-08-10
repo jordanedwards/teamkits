@@ -8,7 +8,7 @@ error_reporting(E_ERROR | E_WARNING | E_PARSE);
 ini_set('display_errors',1);
 ini_set('log_errors',1);
 ini_set('log_errors_max_len',0);
-ini_set('error_log','/teamkits/error_log.txt');
+ini_set('error_log','/error_log.txt');
 
 // Discover which environment we are in:
 	

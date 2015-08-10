@@ -4,6 +4,7 @@
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta charset="utf-8">
+	<meta http-equiv="Cache-control" content="public" max-age=3600>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>Teamkits</title>
 	<meta name="description" content="">
@@ -14,14 +15,10 @@
 	<link rel="apple-touch-icon" href="gfi/apple-touch-icon-57x57-precomposed.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="gfi/apple-touch-icon-72x72-precomposed.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="gfi/apple-touch-icon-114x114-precomposed.png">
-	<link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic'>
-	<link href='http://fonts.googleapis.com/css?family=Rock+Salt' rel='stylesheet' type='text/css'>
-	
-	<link rel="stylesheet" href="css/bootstrap.css">
-	<link rel="stylesheet" href="css/timeline.css">
-	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="css/fonts.css" type="text/css">
-	<link rel='stylesheet' href='font-awesome/css/font-awesome.min.css'>	
+	<link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Rock+Salt' rel='stylesheet' type='text/css'>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 	
 	<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 	<script type="text/javascript">
@@ -36,9 +33,14 @@
 			})();
 		</script> 
 	<script src='https://www.google.com/recaptcha/api.js'></script>
+	
+	<!--<link rel="stylesheet" href="css/timeline.css">
+	<link rel="stylesheet" href="css/main.css">-->
+<!--	<link rel="stylesheet" href="css/responsive.css">-->
+	
+	<link rel="stylesheet" href="css/combined.css">	 <!-- replaces the above stylesheets -->
 		
 	<link rel="stylesheet" href="css/styles.css">	
-	<link rel="stylesheet" href="css/responsive.css">
 
     </head>
     <body data-spy="scroll" data-target=".navbar">
@@ -56,7 +58,7 @@
                         <li class="login"><a href="login.php">Login</a></li>							
 						
                     </ul>
-                    <h1><img src="gfi/img/teamkits_logo_white.png" id="logo" ></h1>
+                    <h1><img src="/images/teamkits_logo_white.png" id="logo" ></h1>
 					</div>  
                 </div>
                 <a href="#works" id="arrow_down">What we do<br><span class="glyphicon glyphicon-chevron-down"></span></a>
@@ -70,10 +72,10 @@
 	
 				<div class="navbar-inner">
 					<div class="container">
-						<a class="navbar-brand" href="#"><img src="gfi/img/teamkits.png"></a>
+						<a class="navbar-brand" href="#"><img src="/images/teamkits.png"></a>
 						<div class="pull-right">
 							<ul class="nav">
-								<li class="active" id="homelink"><a href="gfi/l#home" class="scrollto menu-item">Home</a></li>
+								<li class="active" id="homelink"><a href="#" class="scrollto menu-item">Home</a></li>
 								<li class=""><a href="#works" class="scrollto menu-item">Brands</a></li>
 								<li class=""><a href="#about" class="scrollto menu-item">About</a></li>
 								<li class=""><a href="#timeline" class="scrollto menu-item">Order INFO</a></li>							
@@ -90,7 +92,7 @@
         <section id="works">
             <div class="container">
                 <h2 class="text-center">BRANDS<i class="fa fa-tags fa-2x icon-works"></i></h2>
-                <p class="text-center lead">We are proud to work with the world's leading names in sportswear. Click to view details about these fine companies.</p>
+                <p class="text-center lead">We are proud to work with the world's leading names in sportswear. Click to view details about these fine companies:</p>
             </div> <!-- end: container -->
             <div id="works_items">
                 <ul id="og-grid" class="og-grid">
@@ -171,7 +173,7 @@
 		
         <section id="about">
             <div class="container">
-                <h2 class="text-center">About<i class="icon-about"><img src="gfi/img/icon-about.png"></i></h2>
+                <h2 class="text-center">About<i class="icon-about"><img src="images/icon-about.png"></i></h2>
 
 				<div class="col-md-12" style="padding:10px">
 <!--
@@ -212,7 +214,7 @@
         <section id="timeline">
             <div class="container">
 			<div class="col-md-12">
-			      <h2 class="text-center">The ordering process<i class="icon-time"><img src="gfi/img/icon-time.png"></i></h2>
+			      <h2 class="text-center">The ordering process<i class="icon-time"><img src="images/icon-time.png"></i></h2>
 			</div>
 			<div class="col-md-5" style="padding: 0 10px 0 0;">
                <!-- <p class="text-center lead">.</p> -->
@@ -297,7 +299,7 @@
 <div class="col-md-12">       
         <section id="contact">
             <div class="container">
-                <h2 class="text-center">Contact<i class="icon-contact"><img src="gfi/img/icon-contact.png"></i></h2>
+                <h2 class="text-center">Contact<i class="icon-contact"><img src="/images/icon-contact.png"></i></h2>
                 <p class="text-center lead">Let`s get together and create something beautiful for you and your team.</p> 
                 
                 <div class="row"> 
@@ -349,16 +351,16 @@
 
 <div class="col-md-12">        
         <footer>
-            <a href="#home" class="scrollto"><img src="gfi/img/teamkits_logo_white.png" style="height:80px"></a>
+            <a href="#home" class="scrollto"><img src="/images/teamkits_logo_white.png" style="height:80px"></a>
 		</footer>
 		<div class="col-md-12" style="  background: #222;  text-align: right;  padding: 10px;  border-top: 1px solid #000;">
 			<div class="container">
-			<a href="https://orchardcity.ca"><img src="http://orchardcity.ca/images/orchardcity_logo_small_nb_white_letters.png" alt="Website by Orchard City Web Development" style="max-height:50px;"></a>		</div>
+			<a href="https://orchardcity.ca"><img src="https://orchardcity.ca/images/orchardcity_logo_small_nb_white_letters.png" alt="Website by Orchard City Web Development" style="max-height:50px;"></a>		</div>
 		</div>	
 </div>			
 
-        <script src="js/jquery.js"></script>  
-		<script src='js/bootstrap.js'></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>  
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<script src="js/waypoints.min.js" type="text/javascript"></script>
 		<script src="js/waypoints-sticky.js" type="text/javascript"></script>
 
@@ -367,7 +369,7 @@
 
 		<script src="js/jquery.scrollto.js"></script>
 		<script src="js/grid.js"></script>
-		<script src="gfi/js/masonry.pkgd.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.1/masonry.pkgd.min.js"></script>
 		<script src="js/jquery.validate.min.js"></script>	
 		<script src="js/scripts.js"></script>
 		<script>

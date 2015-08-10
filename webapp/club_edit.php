@@ -19,6 +19,7 @@ include(CLASSES . "/class_club.php");
 	if ($_GET["id"] ==0){
 		// Change this to pass a parent value if creating a new record:
 		$club->set_active("Y");
+		$club->set_sport(1);
 	} else {
 		$club->get_by_id($club_id);
 	}
@@ -290,8 +291,8 @@ include(CLASSES . "/class_club.php");
 		<br>
 		<table class="admin_table">
 			<thead>
-			<tr><th colspan="3">Notes:<i class="fa fa-plus-circle fa-lg add-icon add-note"></i></th></tr>
-			<tr><th></th><th>Date</th><th>Note</th></tr>
+			<tr><th colspan="5">Notes:<i class="fa fa-plus-circle fa-lg add-icon add-note"></i></th></tr>
+			<tr><th></th><th>Note</th><th>Date</th><th>Followup date</th><th>Complete?</th></tr>
 			</thead>
 			
 			<tbody id="note_table">
@@ -303,7 +304,7 @@ include(CLASSES . "/class_club.php");
 			$result = $dm->queryRecords($strSQL);	
 			if ($result):
 				while($row = mysqli_fetch_assoc($result)):
-					echo '<tr><td><a href="clubNotes_edit.php?id=' . $row['clubNotes_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['clubNotes_date_created'] . '</a></td><td>' . $row['clubNotes_content'] . '</td></tr>';
+					echo '<tr><td><a href="clubNotes_edit.php?id=' . $row['clubNotes_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['clubNotes_content'] . '</td><td>' . substr($row['clubNotes_date_created'],0,10) . '</a></td><td>' . $row['clubNotes_followup_date'] . '</a></td><td>' . $row['clubNotes_followup_complete'] . '</a></td></tr>';
 				endwhile;									
 			endif;
 		 ?>
@@ -333,6 +334,28 @@ include(CLASSES . "/class_club.php");
 		 ?>		
 			</tbody>
 		</table>
+		<br>
+		<table class="admin_table">
+			<thead>
+			<tr><th colspan="3">Kits:<a href="kit_edit.php?club_id=<?php echo $club_id ?>"><i class="fa fa-plus-circle fa-lg add-icon"></i></a></th></tr>
+			<tr><th></th><th>Title:</th><th>Active</th></tr>	
+			</thead>
+			
+			<tbody>
+		 <?php 
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from kit 
+			WHERE club_id=" . $club_id;
+			
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result)):
+					echo '<tr><td><a href="kit_edit.php?id=' . $row['id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['title'] . '</a></td><td>' . $row['is_active'] . '</td></tr>';
+				endwhile;									
+			endif;
+		 ?>		
+			</tbody>
+		</table>		
 		<br>
 		<table class="admin_table">
 			<thead>

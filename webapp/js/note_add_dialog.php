@@ -47,6 +47,12 @@ $(function() {
 		$('#note_add_dialog').dialog('open');
 	});
 	
+	$( "#followup_date" ).datepicker({
+		dateFormat: "yy-mm-dd",
+		changeMonth: true,
+		changeYear: true
+});
+	
 });
 </script>
 
@@ -55,6 +61,9 @@ $(function() {
 <form id="newNoteForm" method="post">
 <p>
 <textarea rows="8" class="form-control" name="clubNote" style="width:100%"></textarea>
+<br />
+Follow up date:
+<input name="followup_date" id="followup_date" type="text" />
 <input type="hidden" name="club_id" value="<?php echo  $club_id ?>"/>
 <input type="hidden" name="action" value="add"/>
   </p>  

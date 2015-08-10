@@ -10,8 +10,8 @@ if($session->get_user_id() != "") {
 		case 3:
 			header("location: /webapp/club_admin/dashboard_club.php");
 		break;
-		case 4:
-			header("location: /webapp/dashboard_club_member.php");
+		case 2:
+			header("location: /webapp/dashboard.php");
 		break;
 	endswitch;
 	exit;

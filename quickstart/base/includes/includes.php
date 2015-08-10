@@ -2,9 +2,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
-<script src="./js/Application.js"></script>
-<script src="./js/jquery.metadata.js"></script>
-<script src="./js/jquery.validate.js"></script>
+<script src="./scripts/Application.js"></script>
+<script src="./scripts/jquery.metadata.js"></script>
 
 <script>
 	$(".form-control:required").after("<span class='red'>&nbsp;*</span");

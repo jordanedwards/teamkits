@@ -40,7 +40,8 @@ if (isset($_GET['order_id']) || isset($_GET['order_item_id'])){
 		if($orderitem->save() == true) {
 			// Success;
 			$subtotal = $item_quantity * $orderitem->get_price();
-			echo '<tr><td><a href="orderitem_edit.php?id=' . $orderitem->get_id() .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' .$orderitem->get_item_name(). '</td><td>' . $item_quantity .'</td><td>' . $orderitem->get_price().'</td><td>' . $subtotal . '</td></tr>';
+			echo '<tr><td><a href="orderitem_edit.php?id=' . $orderitem->get_id() .'"><i class="fa fa-edit fa-lg"></i></a></td><td><a class="imagePreview" data-item-id="' . $orderitem->get_item_number() . '">' . $orderitem->get_item_name() . '</a></td><td>' . $orderitem->get_quantity() . '</td><td>' . $orderitem->get_size() . '</td><td style="white-space:normal; text-align:right;">$'.sprintf("%.2f",$orderitem->get_price()) .'</td><td style="white-space:normal; text-align:right ">$'.number_format(($orderitem->get_price()*$orderitem->get_quantity()),2) .'</td></tr>';
+
 		}
 		else {
 			exit("unable to save");

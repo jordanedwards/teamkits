@@ -1,59 +1,23 @@
 <?php 
-// import necessary classes here
-
-
 //*****************************************************************************************************
 //  Class: SessionUtils
 //	Description: This class handles all session interaction and makes this application more manageable.
 //*****************************************************************************************************
 class SessionManager {
 
-	//*******************************
-	// class variables
-	//*******************************
-	public $alertMessage;
-	public $alertColor;
-	public $success;
-	//*******************************
-	// constructor
-	//*******************************
 	function __construct() {
-		/*******************************************************************************************************
-		********************************************************************************************************/
              
 	}
-
 
 	//****************************************************************************************
 	// Getter and Setter Methods
 	//****************************************************************************************		
-//	public function getAlertMessage() { return isset($_SESSION["alert_msg"])?$_SESSION["alert_msg"]:""; }
-//	public function setAlertMessage($value) { $_SESSION["alert_msg"] = $value; }
+	public function getAlertMessage() { return isset($_SESSION["alert_msg"])?$_SESSION["alert_msg"]:""; }
+	public function setAlertMessage($value) { $_SESSION["alert_msg"] = $value; }
 	
-	public function getAlertMessage() { return isset($_SESSION["alert_msg"])?$_SESSION["alert_msg"]:"";}
-	public function setAlertMessage($value) {
-		$this->alertMessage=$value;
-		$_SESSION["alert_msg"] = $value;
-	}	
-			
 	public function getAlertColor() { return isset($_SESSION["alert_color"])?$_SESSION["alert_color"]:""; }
-	public function setAlertColor($value) { 
-		$this->alertColor=$value;
-		$_SESSION["alert_color"] = $value; 
-	}
-	
-	public function get_success() { return $this->success;}
-	public function set_success($value) {
-		$this->success=$value;
-		if ($value){
-			// successful:
-			$this->setAlertColor("green");
-		} else {
-			// Unsuccessful:
-			$this->setAlertColor("red");		
-		}
-	}	
-		
+	public function setAlertColor($value) { $_SESSION["alert_color"] = $value; }
+
 	public function get_user_id() { return isset($_SESSION["user_id"])?$_SESSION["user_id"]:""; }
 	public function set_user_id($value) { $_SESSION["user_id"] = $value; }
 
@@ -71,18 +35,25 @@ class SessionManager {
 	
 	public function getPage() { return isset($_SESSION['page']) ? $_SESSION['page'] : null; }
 	public function setPage($value) { $_SESSION['page'] = $value; }
-	
-	public function alertClear(){
-		$_SESSION["alert_msg"] = "";
-		$_SESSION["alert_color"] = "";
-		$this->alertMessage = "";
-		$this->alertColor="";
-		$this->success="";		
-	}
-	
+
 	public function logout() {
 		session_unset();
 		session_destroy();
 	}
+	
+	public function __toString(){
+	// Debugging tool
+		$str = "";
+		foreach ($_SESSION as $key => $val){
+			if (is_array($key)){
+				foreach ($key as $sub_key => $sub_val){
+					$str.= $sub_key . ' - ' . $sub_val.'<br>';
+				}
+			} else {
+				$str.= $key . ' - ' . $val.'<br>';
+			}
+		}
+		return $str;
+	}		
 }
 ?>

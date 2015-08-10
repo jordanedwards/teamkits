@@ -7,7 +7,7 @@
       <span class="sr-only">Toggle navigation</span>
       <i class="fa fa-cog"></i>
     </button>
-    <a class="navbar-brand" href="./index.php"><img src="/images/<?php echo LOGO ?>" style="height:80px"></a>
+    <a class="navbar-brand" href="./index.php"><img src="<?php echo BASE_URL ?>/images/<?php echo LOGO ?>" style="height:80px"></a>
   </div>
 
 <?php if($session->get_user_id() != ""): ?>

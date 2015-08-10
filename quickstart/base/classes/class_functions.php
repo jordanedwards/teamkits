@@ -5,6 +5,7 @@
 function consoleLog($val){
 	// Don't show anything if IE - Stupid IE breaks
 	if (strpos($_SERVER['HTTP_USER_AGENT'],"MSIE",0) == 0){
+	$dm = new DataManager();
     $numargs = func_num_args();
     
 	if ($numargs >= 2) {
@@ -14,14 +15,15 @@ function consoleLog($val){
         	$val .= $arg_list[$i] . " / ";
     	}
 	}
-		print "<script>console.log('" . mysql_real_escape_string($val) . "')</script>";
+		print "<script>console.log('" . mysqli_real_escape_string($dm->connection, $val) . "')</script>";
 	}
 }
 
 function addToLog($val, $notify=false){
-	//require_once('../includes/init.php');
+	//require_once('../includes/config_app.php');
 	$dm = new DataManager();
 	global $session;
+	global $appConfig;
 	$user_id = $session->get_user_id();
 	
 	// What kind of $val is this? string, array, or object:
@@ -29,7 +31,7 @@ function addToLog($val, $notify=false){
 	if (is_object($val)){
 		$val = var_dump($val);
 	} elseif(is_array($val)){
-		$val = var_dump($val);			
+		print_r($val);		
 	} else {
 		// Just a string
 		echo mysqli_real_escape_string($dm->connection, $val);
@@ -131,5 +133,3 @@ function backup_tables($tables = '*')
 	fwrite($handle,$return);
 	fclose($handle);
 }
-?>
-

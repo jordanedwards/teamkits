@@ -178,7 +178,7 @@ $out .= <<<'EOD'
 		$dbConfig['dbpass'] = 
 EOD;
 
-$out .= '"' . $json_project_settings['dev_dbpass'] . '";';
+$out .= "'" . $json_project_settings['dev_dbpass'] . "';";
 
 $out .= <<<'EOD'
 		
@@ -204,7 +204,7 @@ $out .= <<<'EOD'
 		$dbConfig['dbpass'] = 
 EOD;
 
-$out .= '"' . $json_project_settings['local_dbpass'] . '";';
+$out .= "'" . $json_project_settings['local_dbpass'] . "';";
 
 $out .= <<<'EOD'
 		
@@ -231,7 +231,7 @@ $out .= <<<'EOD'
 		$dbConfig['dbpass'] = 
 EOD;
 
-$out .= '"' . $json_project_settings['pro_dbpass'] . '";';
+$out .= "'" . $json_project_settings['pro_dbpass'] . "';";
 
 $out .= <<<'EOD'
 		
@@ -361,6 +361,10 @@ EOD;
 $out .= '"' . $json_project_settings['settings_email'] . '";';
 $out .= '
 // ****************************************** USER NOT LOGGED IN **********************************	
+	if (!isset($public)){
+		$public = false;
+	}
+	
 if($session->get_user_id() == "" && $public != true):
 
 // ************************************** LIST OF PUBLIC ACCESS PAGES *****************************
@@ -472,7 +476,7 @@ INSERT INTO `settings` (`settings_id`, `settings_name`, `settings_value`, `setti
 (3, 'mail_server', 'chocobo.asmallorange.com', 0, '0000-00-00 00:00:00', '2015-02-26 18:46:33', '0'),
 (4, 'mail_account_type', 'POP3', 0, '0000-00-00 00:00:00', '2015-02-26 18:46:33', '0'),
 (5, 'mail_username', 'website@myproject.ca', 0, '0000-00-00 00:00:00', '2015-02-26 18:46:33', '0'),
-(6, 'mail_password', '', 0, '0000-00-00 00:00:00', '2015-02-26 18:46:33', '0');
+(6, 'mail_password', '', 0, '0000-00-00 00:00:00', '2015-02-26 18:46:33', '0'),
 (7, 'alt-logo', 'website-logo-footer.png', 0, '0000-00-00 00:00:00', '2015-02-26 18:46:33', '0');
 
 CREATE TABLE IF NOT EXISTS `userrole` (
@@ -524,15 +528,17 @@ $files_to_zip = array(
 	'base/classes/class_record_pager.php',
 	'base/classes/class_session_manager.php',
 	'base/classes/class_user.php',
-	'base/css/font-awesome.css',	
-	'base/css/styles.css',
+	'base/css/base-admin-3.css',	
+	'base/css/dashboard.css',		
+	'base/css/signin.css',
 	'base/css/print.css',
 	'base/css/styles.css',	
-	'base/fonts/FontAwesome.otf',
-	'base/fonts/fontawesome-webfont.eot',
-	'base/fonts/fontawesome-webfont.svg',
-	'base/fonts/fontawesome-webfont.ttf',
-	'base/fonts/fontawesome-webfont.woff',
+	'base/images/asc.gif',	
+	'base/images/carets.gif',
+	'base/images/check.png',
+	'base/images/darken.gif',	
+	'base/images/desc.gif',	
+	'base/images/lighten.png',		
 	'base/includes/acl_module.php',									
 	'base/includes/config_app.php',
 	'base/includes/config_db.php',
@@ -544,20 +550,20 @@ $files_to_zip = array(
 	'base/includes/head.php',
 	'base/includes/includes.php',
 	'base/includes/footer.php',		
-	'base/images/asc.gif',	
-	'base/images/carets.gif',	
-	'base/images/darken.gif',	
-	'base/images/desc.gif',	
-	'base/images/document.png',	
-	'base/images/lighten.png',	
-	'base/images/view.png',	
 	'base/page_templates/index.html',
+	'base/scripts/Application.js',
+	'base/scripts/jquery.mask.js',
+	'base/scripts/jquery.metadata.js',	
+	'base/scripts/signin.js',
+	'base/scripts/password_strength.js',	
 	'base/setup.sql',
 	'base/error.php',		
 	'base/index.php',
 	'base/dashboard.php',
 	'base/debug_log.php',		
-	'base/forgot_password.php'	
+	'base/forgot_password.php',
+	'base/htaccess.txt'	
+	
 );
 //if true, good; if false, zip creation failed
 $result = create_zip($files_to_zip,'quickstart_base.zip');

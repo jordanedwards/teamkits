@@ -13,8 +13,8 @@
 	$password = $_REQUEST["password"];
 	
 	// If the user arrived at a login-only page, redirect them to this page after login.
-	$redirect = $_POST["redirect"];
-	$redirect = str_replace("*","?",$_POST["redirect"]);
+	$redirect = escaped_var_from_post("redirect");
+	$redirect = str_replace("*","?",$redirect);
 	$redirect = str_replace("~","&",$redirect);
 	
 	if ($redirect == ""){
@@ -27,7 +27,6 @@
 	$user->set_password($password);
 	$user->set_email($email);
 	$user_id = $user->login();
-	
 	
 	if($user_id != "") {
 		$user->update_last_login($user_id);

@@ -303,7 +303,7 @@ public function display(){
 				$onchangeText = ($this->onchange != "" ? ' onchange="' . $this->onchange . '" ' : "");	
 				$requiredText = ($this->required ? ' required ' : " ");					
 				$disabledText = ($this->disabled ? ' disabled ' : " ");
-				
+				//echo $strSQL;
 				$result = $dm->queryRecords($strSQL);	
 				if ($result){
 				

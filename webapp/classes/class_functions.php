@@ -67,6 +67,7 @@ function addToLog($val, $notify=false){
 }
 
 function escaped_var_from_post($varname){
+	// Return a single cleaned post or get variable/value pair
 	$dm = new DataManager();
 	if (isset($_REQUEST[$varname])){
 		$$varname = mysqli_real_escape_string($dm->connection, $_REQUEST[$varname]);
@@ -76,6 +77,16 @@ function escaped_var_from_post($varname){
 		return $$varname;
 }
 
+function extract_and_escape($array){
+//$array should be $_POST or $_GET
+// Use to get and clean all POST or GET vars:
+	$dm = new DataManager();
+	
+	foreach ($array as $key => $val){
+		global $$key;
+		$$key = mysqli_real_escape_string($dm->connection, $val);
+	}
+}
 
 /* backup the db OR just a table */
 function backup_tables($tables = '*')

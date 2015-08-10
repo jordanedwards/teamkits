@@ -13,8 +13,7 @@
 <?php if($session->get_user_id() != ""): ?>
   <div class="collapse navbar-collapse navbar-ex1-collapse">
     <ul class="nav navbar-nav navbar-right">
-    <li class="dropdown"><a href="/webapp/settings.php" style="text-shadow:none;"><i class="fa fa-cog"></i>&nbsp;Settings</a></li>
-						
+   <!-- <li class="dropdown"><a href="/webapp/settings.php" style="text-shadow:none;"><i class="fa fa-cog"></i>&nbsp;Settings</a></li>-->					
 
 		<li class="dropdown">
 						
@@ -45,7 +44,9 @@
 </div> <!-- /.container -->
 </nav>
 
-<?php if($session->get_user_id() != ""): ?>
+<?php if($session->get_user_id() != "" && $session->get_user_role() == 1 || $session->get_user_id() != "" && $session->get_user_role() == 2): 
+// Admins and superusers
+?>
 <div class="subnavbar">
 
 	<div class="subnavbar-inner">
@@ -128,4 +129,84 @@
 	</div> <!-- /subnavbar-inner -->
 
 </div>
-  <?php endif; ?>
+<?php endif; ?>
+
+<?php if($session->get_user_id() != "" && $session->get_user_role() == 3): 
+// Customers
+?>
+<div class="subnavbar">
+
+	<div class="subnavbar-inner">
+	
+		<div class="container">
+			
+			<a href="javascript:;" class="subnav-toggle" data-toggle="collapse" data-target=".subnav-collapse">
+		      <span class="sr-only">Toggle navigation</span>
+		      <i class="fa fa-reorder"></i>
+		      
+		    </a>
+
+			<div class="collapse subnav-collapse">
+				<ul class="mainnav">
+				<?php if ($activeMenuItem == NULL){ $activeMenuItem == "Home";} ?>
+					<li <?php if ($activeMenuItem == "Home") { echo 'class="active"'; } ?>>
+						<a href="./dashboard_club.php">
+							<i class="fa fa-home"></i>
+							<span>Home</span>
+						</a>	    				
+					</li>
+
+					<li <?php if ($activeMenuItem == "Account info") { echo 'class="active"'; } ?>>
+						<a href="/webapp/club_admin/club_view.php">
+							<i class="fa fa-user"></i>
+							<span>Account info</span>
+						</a>	    				
+					</li>			
+
+					<li <?php if ($activeMenuItem == "Orders") { echo 'class="active"'; } ?>>
+						<a href="./orders_list_club.php">
+							<i class="fa fa-archive"></i>
+							<span>Orders</span>
+						</a>	    				
+					</li>	
+										
+					<li <?php if ($activeMenuItem == "Order_edit") { echo 'class="active"'; } ?>>
+						<a href="./orders_edit.php?id=0">
+							<i class="fa fa-plus-circle"></i>
+							<span>New Order</span>
+						</a>	    				
+					</li>	
+					
+					<li <?php if ($activeMenuItem == "Catalogue") { echo 'class="active"'; } ?>>
+						<a href="./catalogue.php">
+							<i class="fa fa-book"></i>
+							<span>Catalogue</span>
+						</a>	    				
+					</li>							
+
+																														
+				<!--	<li class="dropdown <?php if ($activeMenuItem == "Manage") { echo ' active '; } ?>" >					
+						<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">
+							<i class="fa fa-th"></i>
+							<span>Manage</span>
+							<b class="caret"></b>
+						</a>	    
+					
+						<ul class="dropdown-menu">
+							<li><a href="./brand_list.php?reload=true">Brands</a></li>						
+							<li><a href="./item_list.php?reload=true">Items</a></li>						
+							<li><a href="./promo_list.php"><span>Promos</span></a></li>										
+							<li><a href="./user_list.php?reload=true">Users</a></li>
+						</ul> 				
+					</li> -->
+
+					
+				</ul>
+			</div> <!-- /.subnav-collapse -->
+
+		</div> <!-- /container -->
+	
+	</div> <!-- /subnavbar-inner -->
+
+</div>
+<?php endif; ?>

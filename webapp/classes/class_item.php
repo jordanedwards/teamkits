@@ -166,20 +166,24 @@ public function save() {
 	// function to fetch the record and populate the object
 	public function get_by_id($id) {
 		try{
-			$status = false;
-			$dm = new DataManager();
-			$strSQL = "SELECT * FROM item WHERE item_id=" . $id;
-      
-			$result = $dm->queryRecords($strSQL);
-			$num_rows = mysqli_num_rows($result);
-
-			if ($num_rows != 0){
-				$row = mysqli_fetch_assoc($result);
-        		$this->load($row);
-				$status = true;
+			if ($id > 0){
+				$status = false;
+				$dm = new DataManager();
+				$strSQL = "SELECT * FROM item WHERE item_id=" . $id;
+		  
+				$result = $dm->queryRecords($strSQL);
+				$num_rows = mysqli_num_rows($result);
+	
+				if ($num_rows != 0){
+					$row = mysqli_fetch_assoc($result);
+					$this->load($row);
+					$status = true;
+				}
+	
+				return $status;
+			} else {
+			exit("id not set");
 			}
-
-			return $status;
 		}
 		catch(Exception $e) {
 			// CATCH EXCEPTION HERE -- DISPLAY ERROR MESSAGE & EMAIL ADMINISTRATOR

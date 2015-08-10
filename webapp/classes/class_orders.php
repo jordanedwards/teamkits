@@ -1,6 +1,7 @@
 <?php 
  class Orders extends SessionManager{
  
+ 		private $tablename;
 		private $id;
 		private $club_id;
  		private $subtotal;
@@ -17,7 +18,7 @@
 	
  		
 	function __construct() {
-	
+		$this->tablename = "orders";
 	}
 		public function get_id() { return $this->id;}
 		public function set_id($value) {$this->id=$value;}
@@ -106,7 +107,7 @@ public function save() {
 
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
-			
+				$this->set_active("Y");
 				$strSQL = "INSERT INTO orders (order_club_id, order_subtotal, order_tax, order_discount, order_total, order_status, order_notes, is_active, order_date_created, order_last_updated, order_last_updated_user) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',
@@ -140,7 +141,7 @@ public function save() {
 			$result = $dm->updateRecords($strSQL);
 
 			// if this is a new record get the record id from the database
-			if(!$this->get_id() >= "0") {
+			if(!$this->get_id() > "0") {
 				$this->set_id(mysqli_insert_id($dm->connection));
 			}
 			
@@ -180,7 +181,30 @@ public function save() {
 			exit;
 		}
 	}
-
+	
+	public function delete($type = "") {
+		try{
+			$dm = new DataManager();
+			if ($type == "full"){
+				$strSQL = "DELETE FROM " . $this->tablename . " WHERE id=" . $this->id;
+			} else {
+				// just inactivate or hide
+				$strSQL = "UPDATE " . $this->tablename . " SET is_active='N' WHERE order_id=" . $this->id;
+			}
+			//echo $strSQL;
+			//exit();
+			$result = $dm->updateRecords($strSQL);
+			return $result;
+		}
+		catch(Exception $e) {
+			// CATCH EXCEPTION HERE -- DISPLAY ERROR MESSAGE & EMAIL ADMINISTRATOR
+			include_once(CLASSES . 'class_error_handler.php');
+			$errorVar = new ErrorHandler();
+			$errorVar->notifyAdminException($e);
+			exit;
+		}
+	}	
+	
 	// function to fetch the record and populate the object
 	public function get_by_id($id) {
 		try{
@@ -314,7 +338,49 @@ WHERE orderitem_order_id = " . $this->id;
 			return "Object is missing order id";
 		}
 	}
+	
+	public function add_kit($kit_id){
+		if ($kit_id > 0){
+			require_once(CLASSES."class_orderitem.php");
+			$strSQL = "SELECT * FROM kitItem WHERE build_id = " . $kit_id;
+			$dm = new DataManager();
+			$result = $dm->queryRecords($strSQL);		
+			if ($result):
+				while ($line = mysqli_fetch_assoc($result)):
+					$new_order_item = new Orderitem();
+					$new_order_item->set_order_id($this->id);
+					$new_order_item->set_item_number($line['item_id']);
+					$new_order_item->set_quantity(1);
+					$new_order_item->get_item_details();
+					$new_order_item->set_price($new_order_item->get_item_price());	
+					$new_order_item->set_active("Y");
+					$new_order_item->save();				
+				endwhile;	
+			endif;	
+			
+			require_once(CLASSES."class_kit.php");
+			$kit = new Kit();
+			$kit->get_by_id($kit_id);
+					
+			$this->recalculate();
+			$this->set_notes($kit->get_title());
+			$this->save();
+		} else {
+			exit("kit id not set");
+		}
 		
+	}
+
+  	public function load_from_post($array){
+		// Pass $_POST to this function, and if the post vars match the object methods (they should, using this program), then it will populate the object
+  		foreach ($array as $key => $val){
+			if(property_exists($this->tablename,$key)):
+				$method_name = "set_".$key;
+				$this->$method_name($val);
+			endif;
+		}
+	} 
+			
 	// loads the object data from a mysql assoc array
   	private function load($row){
 		$this->set_id($row["order_id"]);

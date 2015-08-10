@@ -30,10 +30,10 @@ $project->setConnection();
 
 //echo $project;
 
-	function trim_from_marker($str, $marker) {
+/*	function trim_from_marker($str, $marker) {
 		$marker_location = strpos($str,$marker,0);
 		return substr($str,$marker_location+1, strlen($str));
-	}
+	}*/
 	
 /*
 	$sql = "Show columns from " . $selected_table;
@@ -48,7 +48,7 @@ $project->setConnection();
 
 foreach($_GET['fields'] as $key => $value){
 
-$field_names[$key]= trim_from_marker($key,"_");
+$field_names[$key]= $key; //trim_from_marker($key,"_");
 $field_types[$key] = $value;
 }
 

@@ -44,7 +44,7 @@ class DataManager {
 		}
 		catch(Exception $e) {
 			// CATCH EXCEPTION HERE -- DISPLAY ERROR MESSAGE & EMAIL ADMINISTRATOR
-			require__once('class_error_handler.php');
+			require__once('/classes/class_error_handler.php');
 			$errorVar = new ErrorHandler();
 			$errorVar->notifyAdminException($e);
 			exit;		
