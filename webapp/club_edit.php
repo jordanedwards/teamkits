@@ -80,8 +80,11 @@ include(CLASSES . "/class_club.php");
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Tel: </td>
 					<td><input id="club_tel" name="club_tel" type="tel" value="<?php  echo $club->get_tel();  ?>"  class="form-control inline" /></td>
-
 				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Website: </td>
+            		<td><input id="club_website" name="club_website" type="url"  value="<?php  echo $club->get_website();  ?>" class="form-control inline" /> </td>
+				</tr>				
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Address: </td>
             		<td><input id="club_address" name="club_address" type="text"  value="<?php  echo $club->get_address();  ?>" class="form-control inline" /> </td>
@@ -255,8 +258,8 @@ include(CLASSES . "/class_club.php");
 		 
           <br />
 		  <?php endif; ?>
-          <input type="submit" class="btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
-          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		

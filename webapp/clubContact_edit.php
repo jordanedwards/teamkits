@@ -96,9 +96,9 @@ $activeMenuItem = "ClubContact";
   		
 		</table>
           <br />
-          <input type="submit" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
-        <?php if ($_GET["id"] !=0){ ?>  <input type="submit" name="delete" value="Delete" />&nbsp;&nbsp;<?php } ?>		  
-          <input type="button" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
+        <?php if ($_GET["id"] !=0){ ?>  <input type="submit" class="btn btn-warning" name="delete" value="Delete" />&nbsp;&nbsp;<?php } ?>		  
+          <input type="button" value="Back" class="btn btn-default" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		

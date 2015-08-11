@@ -11,7 +11,6 @@ $item_name = payment;
 		$payment_amount=$_POST["payment_amount"];
 		$payment_method=$_POST["payment_method"];
 		$payment_status=$_POST["payment_status"];
-		$is_active=$_POST["is_active"];
 			// add the new record to the database
 	include(CLASSES . "class_payment.php");
 	
@@ -22,7 +21,6 @@ $item_name = payment;
 		$payment->set_amount($payment_amount);
 		$payment->set_method($payment_method);
 		$payment->set_status($payment_status);
-		$payment->set_active($is_active);
 
 if ($_POST['delete'] == "Delete" || $_GET['action'] == "delete"){	
 	if($payment->delete() == true) {

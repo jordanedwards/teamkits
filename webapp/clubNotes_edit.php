@@ -86,10 +86,10 @@ $activeMenuItem = "ClubNotes";
   		
 		</table>
           <br />
-          <input type="submit" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
-	      <?php if ($_GET["id"] !=0){ ?>  <input type="submit" name="delete" value="Delete" />&nbsp;&nbsp;<?php } ?>		  
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
+	      <?php if ($_GET["id"] !=0){ ?>  <input type="submit" name="delete" class="btn btn-warning" value="Delete" />&nbsp;&nbsp;<?php } ?>		  
 		  
-          <input type="button" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		

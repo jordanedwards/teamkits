@@ -54,7 +54,7 @@ $activeMenuItem = "Manage";
 	</div>
 	
 	<div class="row">
-	<div class="col-md-8">
+	<div class="col-md-6">
 	<form id="form_user" action="<?php  echo ACTIONS_URL; ?>action_user_edit.php" method="post">
 	<input type="hidden" name="user_id" value="<?php  echo $user->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
@@ -105,8 +105,8 @@ $activeMenuItem = "Manage";
   		
 		</table>
           <br />
-          <input type="submit" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
-          <input type="button" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		

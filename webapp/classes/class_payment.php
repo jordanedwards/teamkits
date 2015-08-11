@@ -43,7 +43,7 @@
 		public function set_last_updated($value) {$this->last_updated=$value;}
 		
 		public function get_last_updated_user() { return $this->last_updated_user;}
-	public function set_last_updated_user($value) {$this->last_updated_user=$this->get_user_id();}
+		public function set_last_updated_user() {$this->last_updated_user=$this->get_user_id();}
 	
 public function __toString(){
 		// Debugging tool
@@ -120,7 +120,7 @@ public function save() {
 			}		
 				
 			$result = $dm->updateRecords($strSQL);
-
+addtolog($strSQL);
 			// if this is a new record get the record id from the database
 			if(!$this->get_id() >= "0") {
 				$this->set_id(mysqli_insert_id($dm->connection));

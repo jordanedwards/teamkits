@@ -13,14 +13,14 @@ $activeMenuItem = "Orders";
 	}
 
 	// load the orders		
-	$orders_id = $_GET["id"];
-	$orders = new Orders();
+	$order_id = $_GET["id"];
+	$order = new Orders();
 	
 	if ($_GET["id"] ==0){
 		// Change this to pass a parent value if creating a new record:
-		$orders->set_club_id($_GET['club_id']);
+		$order->set_club_id($_GET['club_id']);
 	} else {
-		$orders->get_by_id($orders_id);
+		$order->get_by_id($order_id);
 	}
 				
  ?>
@@ -57,7 +57,7 @@ $activeMenuItem = "Orders";
 	<div class="row">
 	<div class="col-md-6">
 	<form id="form_orders" action="<?php  echo ACTIONS_URL; ?>action_orders_edit.php" method="post">
-	<input type="hidden" name="order_id" value="<?php  echo $orders->get_id();  ?>" />
+	<input type="hidden" name="order_id" value="<?php  echo $order->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
 	<input type="hidden" name="page_id" value="<?php  echo $page_id  ?>" />	
 	
@@ -75,7 +75,7 @@ $activeMenuItem = "Orders";
 						$dd->set_order("ASC");						
 					//	$dd->set_preset("supplier");
 						$dd->set_name("order_club_id");						
-						$dd->set_selected_value($orders->get_club_id());
+						$dd->set_selected_value($order->get_club_id());
 						$dd->display();
 					 ?>											
 					
@@ -94,7 +94,7 @@ $activeMenuItem = "Orders";
 						$dd->set_order_by("orderstatus_order");							
 						$dd->set_order("ASC");						
 						$dd->set_name("order_status");	
-						$dd->set_selected_value($orders->get_status());
+						$dd->set_selected_value($order->get_status());
 						$dd->display();
 					 ?>											
 					
@@ -102,7 +102,7 @@ $activeMenuItem = "Orders";
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Notes: </td>
-            		<td><textarea id="order_notes" name="order_notes" style="width:90%" rows="4"><?php  echo $orders->get_notes();  ?></textarea></td>
+            		<td><textarea id="order_notes" name="order_notes" style="width:90%" rows="4"><?php  echo $order->get_notes();  ?></textarea></td>
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Active: </td>
@@ -114,7 +114,7 @@ $activeMenuItem = "Orders";
 						$dd->set_name("is_active");
 						$dd->set_class_name("form-control");
 						$dd->set_option_list("Y,N");						
-						$dd->set_selected_value($orders->get_active());
+						$dd->set_selected_value($order->get_active());
 						$dd->display();
 					 ?>						
 					</td>
@@ -122,18 +122,18 @@ $activeMenuItem = "Orders";
   		
 		</table>
           <br />
-          <input type="submit" class="btn-success" value="Add/Update Orders" />&nbsp;&nbsp;
-          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="Add/Update Orders" />&nbsp;&nbsp;
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		
-        <?php  if($orders->get_id() > 0){  ?>
-          <p><em>Last updated: <?php  echo $orders->get_last_updated();  ?> by <?php  echo $orders->get_last_updated_user();  ?></em></p>
+        <?php  if($order->get_id() > 0){  ?>
+          <p><em>Last updated: <?php  echo $order->get_last_updated();  ?> by <?php  echo $order->get_last_updated_user();  ?></em></p>
         <?php  }  ?>			
 	
       </div>
 	<div class="col-md-6">
-		<?php if ($orders_id > 0): ?>
+		<?php if ($order->get_id() > 0): ?>
 			<table class="admin_table">
 			<thead>
 			<tr><th colspan="6">Order Items:<i class="fa fa-plus-circle fa-lg add-icon add-item"></i></th></tr>
@@ -145,7 +145,7 @@ $activeMenuItem = "Orders";
 		 	$dm = new DataManager(); 
 			$strSQL = "SELECT * from orderitem 
 			LEFT JOIN item ON orderitem.orderitem_item_number = item.item_id 
-			WHERE orderitem.orderitem_order_id=" . $orders->get_id() . "
+			WHERE orderitem.orderitem_order_id=" . $order->get_id() . "
 			AND orderitem.is_active = 'Y'";						
 
 			$result = $dm->queryRecords($strSQL);	
@@ -159,9 +159,13 @@ $activeMenuItem = "Orders";
 			</tbody>
 			
 			<tfoot>	 	 
-			<tr><td colspan="5">Subtotal:</td><td>$<?php echo number_format($subtotal,2);?></td></tr>
+			<tr><td colspan="5" style="text-align: right;">Subtotal:</td><td style="text-align:right">$<?php echo number_format($order->get_subtotal(),2);?></td></tr>
+			<tr><td colspan="5" style="text-align: right;">Discount:</td><td style="text-align:right">-$<?php echo number_format($order->get_discount(),2);?></td></tr>			
+			<tr><td colspan="5" style="text-align: right;">Tax:</td><td style="text-align:right">$<?php echo number_format($order->get_tax(),2);?></td></tr>
+			<tr><td colspan="5" style="text-align: right;"><strong>Total:</strong></td><td style="text-align:right"><strong>$<?php echo number_format($order->get_total(),2);?></strong></td></tr>			
 			</tfoot>
 		</table>
+		<br>
 			<table class="admin_table">
 			<thead>
 			<tr><th colspan="4">Payments:<i class="fa fa-plus-circle fa-lg add-icon add-payment"></i></th></tr>
@@ -173,7 +177,7 @@ $activeMenuItem = "Orders";
 		 	$dm = new DataManager(); 
 			$strSQL = "SELECT * from payment 
 			LEFT JOIN paymentmethod ON payment.payment_method = paymentmethod.paymentmethod_id
-			WHERE payment.payment_order_id=" . $orders->get_id() . "
+			WHERE payment.payment_order_id=" . $order->get_id() . "
 			AND payment.is_active = 'Y'";						
 
 			$result = $dm->queryRecords($strSQL);	
@@ -185,7 +189,7 @@ $activeMenuItem = "Orders";
 			endif;
 		 ?>		
 			</tbody>
-			<?php $total = $subtotal - $payment_total; ?>
+			<?php $total = $order->get_total() - $payment_total; ?>
 			<tfoot>	 	 
 			<tr><td colspan="3">Balance:</td><td id="total" style="text-align:right">$<?php echo number_format($total,2);?></td></tr>
 			</tfoot>			
@@ -201,7 +205,7 @@ $activeMenuItem = "Orders";
 		 <?php 
 		 	$dm = new DataManager(); 
 			$strSQL = "SELECT * from shippingrecord 
-			WHERE shippingrecord.shippingrecord_order_id=" . $orders->get_id() . "
+			WHERE shippingrecord.shippingrecord_order_id=" . $order->get_id() . "
 			AND shippingrecord.is_active = 'Y'";						
 
 			$result = $dm->queryRecords($strSQL);	
@@ -245,9 +249,9 @@ $activeMenuItem = "Orders";
 		 //   $("#student_tel").mask("(999) 999-9999");
 		
   </script>		
-<?php include(SCRIPTS . "order_item_add_dialog.php"); ?>  
-<?php include(SCRIPTS . "shipping_add_dialog.php"); ?>  
-<?php include(SCRIPTS . "payment_add_dialog.php"); ?>  
+<?php require(SCRIPTS . "order_item_add_dialog.php"); ?>  
+<?php require(SCRIPTS . "shipping_add_dialog.php"); ?>  
+<?php require(SCRIPTS . "payment_add_dialog.php"); ?>  
 
   </body>
 </html>

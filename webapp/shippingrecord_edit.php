@@ -54,7 +54,7 @@ $activeMenuItem = "Shippingrecord";
 	</div>
 	
 	<div class="row">
-	<div class="col-md-8">
+	<div class="col-md-6">
 	<form id="form_shippingrecord" action="<?php  echo ACTIONS_URL; ?>action_shippingrecord_edit.php" method="post">
 	<input type="hidden" name="shippingrecord_id" value="<?php  echo $shippingrecord->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
@@ -84,9 +84,9 @@ $activeMenuItem = "Shippingrecord";
   		
 		</table>
           <br />
-          <input type="submit" class="btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
-          <input type="submit" class="btn-warning"  value="Delete" name="delete"/>&nbsp;	  
-          <input type="button" class="btn-default"  value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
+          <input type="submit" class="btn btn-warning"  value="Delete" name="delete"/>&nbsp;	  
+          <input type="button" class="btn btn-default"  value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		

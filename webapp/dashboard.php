@@ -86,7 +86,7 @@ $activeMenuItem = "Home";
 								<tr>
 									<th>Club</th>
 									<th>Note</th>
-									<th>Follow up date</th>
+									<th style="white-space: nowrap;">Follow up date</th>
 								</tr>
 							</thead>
 							<tbody>

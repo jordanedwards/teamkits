@@ -54,7 +54,7 @@ $activeMenuItem = "ItemSize";
 	</div>
 	
 	<div class="row">
-	<div class="col-md-8">
+	<div class="col-md-6">
 	<form id="form_itemSize" action="<?php  echo ACTIONS_URL; ?>action_itemSize_edit.php" method="post">
 	<input type="hidden" name="itemSize_id" value="<?php  echo $itemSize->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
@@ -81,7 +81,20 @@ $activeMenuItem = "ItemSize";
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Name: </td>
-            		<td><input id="itemSize_name" name="itemSize_name" type="text"  value="<?php  echo $itemSize->get_name();  ?>" style="width:90%"  class="{validate:{required:true}}" /> <span class='red'>*</span> </td>
+            		<td>
+					<?php 
+						$dd = new DropDown();
+						$dd->set_table("sizes");	
+						$dd->set_name_field("sizes_name");
+						$dd->set_class_name("form-control inline");
+						$dd->set_order("ASC");						
+						$dd->set_name("itemSize_name");						
+						$dd->set_selected_value($itemSize->get_name());
+						$dd->set_index_name("sizes_name");
+						$dd->set_required(true);						
+						$dd->display();
+					 ?>						
+					</td>
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Stock: </td>
@@ -106,8 +119,8 @@ $activeMenuItem = "ItemSize";
   		
 		</table>
           <br />
-          <input type="submit" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
-          <input type="button" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
+          <input type="button"  class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		

@@ -59,7 +59,7 @@
 		public function set_last_updated($value) {$this->last_updated=$value;}
 		
 		public function get_last_updated_user() { return $this->last_updated_user;}
-	public function set_last_updated_user($value) {$this->last_updated_user=$this->get_user_id();}
+		public function set_last_updated_user() {$this->last_updated_user=$this->get_user_id();}
 	
 public function __toString(){
 		// Debugging tool

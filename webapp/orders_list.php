@@ -104,7 +104,7 @@ $dm = new DataManager();
 						$query = "SELECT * from orders 
 						LEFT JOIN club ON orders.order_club_id = club.club_id
 						LEFT JOIN orderstatus ON orders.order_status = orderstatus.orderstatus_id
-						WHERE 1=1" . $query_where .$order;
+						WHERE orders.is_active ='Y' " . $query_where .$order;
 						
 						//Handle the sorting of the records
 						$session->setQuery($_SERVER["PHP_SELF"],$query);

@@ -34,7 +34,7 @@ $club->get_by_user_id($currentUser->get_id());
 		
       <div class="row">
         <div class="col-md-12">
-		 <p><i class="fa fa-plus-circle"></i> <a href="../orders_edit.php?id=0">Create New Order</a></p>
+		 <p><i class="fa fa-plus-circle"></i> <a href="orders_edit.php?id=0">Create New Order</a></p>
 <?php 
 
 $dm = new DataManager();

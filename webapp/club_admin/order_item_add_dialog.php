@@ -20,9 +20,10 @@ $(function() {
 				click: function() {
 					var newItem = $('#newComponentForm').serialize();
 						$.ajax({
-						url: "../ajax/ajax_order_item.php?"+newItem,	
+						url: "ajax_order_item.php?"+newItem,	
 						success: function (html) {	
-							$('#order_items_table').append(html);
+							//$('#order_items_table').append(html);
+							location.assign("orders_edit.php?id="+$('#order_id').val());
 						}	
 					});
                		$(this).dialog('close');
@@ -85,7 +86,7 @@ $(function() {
 <p style="display:none" id="size_div">
 
 </p>
-<input type="hidden" name="order_id" value="<?php echo  $orders->get_id() ?>"/>
+<input type="hidden" name="order_id" id="order_id"  value="<?php echo  $order->get_id() ?>"/>
 <input type="hidden" name="action" value="add"/>
   </p>  
 </form>

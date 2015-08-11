@@ -36,7 +36,16 @@
 			define($const_name,$row['settings_value']);
 		endwhile;
 	endif;
-		
+	
+	if (STRIPE_ENVIRONMENT == "live"){
+		define("STRIPE_API_KEY",STRIPE_API_KEY_LIVE);
+		define("STRIPE_API_KEY_PUBLIC",STRIPE_API_KEY_LIVE_PUBLIC);		
+	} else {
+		// testing
+		define("STRIPE_API_KEY",STRIPE_API_KEY_TEST);
+		define("STRIPE_API_KEY_PUBLIC",STRIPE_API_KEY_TEST_PUBLIC);		
+	}
+	
 	$session = new SessionManager();
 		
 	$alert_msg = $session->getAlertMessage();

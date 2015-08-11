@@ -1,5 +1,5 @@
 <?php 
-require("includes/init.php"); 
+require("../includes/init.php"); 
 $page_id = basename(__FILE__);
 require(INCLUDES . "/acl_module.php");
 include(CLASSES . "/class_orderitem.php"); 
@@ -55,8 +55,8 @@ $activeMenuItem = "Orderitem";
 	
 	<div class="row">
 	<div class="col-md-6">
-	<form id="form_orderitem" action="<?php  echo ACTIONS_URL; ?>action_orderitem_edit.php" method="post">
-	<input type="hidden" name="orderitem_id" value="<?php  echo $orderitem->get_id();  ?>" />
+	<form id="form_orderitem" action="actions/action_orderitem_edit.php" method="post">
+	<input type="hidden" name="id" value="<?php  echo $orderitem->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
 	<input type="hidden" name="page_id" value="<?php  echo $page_id  ?>" />	
 	
@@ -103,12 +103,7 @@ $activeMenuItem = "Orderitem";
 						$dd->display();
 					 ?>	
 					 </td>
-				</tr>				
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">Discount: </td>
-            		<td><input id="orderitem_discount" name="orderitem_discount" type="number" step=".01" max="1" min="0" value="<?php  echo $orderitem->get_discount();  ?>" style="width:90%" /> </td>
-				</tr>
-  		
+				</tr>				  		
 		</table>
           <br />
           <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;

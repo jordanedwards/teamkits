@@ -54,7 +54,7 @@ $activeMenuItem = "Payment";
 	</div>
 	
 	<div class="row">
-	<div class="col-md-8">
+	<div class="col-md-6">
 	<form id="form_payment" action="<?php  echo ACTIONS_URL; ?>action_payment_edit.php" method="post">
 	<input type="hidden" name="payment_id" value="<?php  echo $payment->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
@@ -71,27 +71,44 @@ $activeMenuItem = "Payment";
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Amount: </td>
-					<td><input id="payment_amount" name="payment_amount" type="number" step=".01" value="<?php  echo $payment->get_amount();  ?>"  style="width:90%" /></td>
+					<td>$<input id="payment_amount" name="payment_amount" type="number" step=".01" value="<?php  echo $payment->get_amount();  ?>"  style="width:90%" /></td>
 
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Method: </td>
-            		<td><input id="payment_method" name="payment_method" type="number" step="any" value="<?php  echo $payment->get_method();  ?>" style="width:90%" /> </td>
+            		<td>
+					<?php 
+						$dd = new DropDown();
+						$dd->set_table("paymentmethod");	
+						$dd->set_name_field("paymentmethod_title");
+						$dd->set_class_name("form-control inline");
+						$dd->set_order("ASC");						
+						$dd->set_name("payment_method");						
+						$dd->set_selected_value($payment->get_method());
+						$dd->display();
+					 ?>	
+					 </td>
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Status: </td>
-            		<td><input id="payment_status" name="payment_status" type="text"  value="<?php  echo $payment->get_status();  ?>" style="width:90%" /> </td>
-				</tr>
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">Active: </td>
-            		<td><input id="is_active" name="is_active" type="text"  value="<?php  echo $payment->get_active();  ?>" style="width:90%" /> </td>
+            		<td>
+					<?php 					
+						$dd = new DropDown();
+						$dd->set_static(true);	
+						$dd->set_name("payment_status");
+						$dd->set_class_name("form-control inline");
+						$dd->set_option_list("Pending,Completed,Reversed");						
+						$dd->set_selected_value($payment->get_status());
+						$dd->display();
+					 ?>	
+					</td>
 				</tr>
   		
 		</table>
           <br />
-          <input type="submit" class="btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
-          <input type="submit" class="btn-warning"  value="Delete" name="delete"/>&nbsp;	  		  
-          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />		  
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
+          <input type="submit" class="btn btn-warning"  value="Delete" name="delete"/>&nbsp;	  		  
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />		  
         </form>
 		<br>
 		

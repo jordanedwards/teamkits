@@ -31,7 +31,7 @@ if ($action == "delete"){
 
 	if($clubNotes->save() == true) {
 		//Check if new record
-		if($clubNotes_id > 0){
+		if($id > 0){
 			$session->setAlertMessage("The $item_name has been updated successfully.");
 			$session->setAlertColor("green");
 			header("location:". BASE_URL."/club_edit.php?id=".$clubNotes->get_club_id());

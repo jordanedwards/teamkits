@@ -84,8 +84,7 @@ $(function() {
 <p style="display:none" id="size_div">
 
 </p>
-<input type="hidden" name="order_id" value="<?php echo  $orders_id ?>"/>
 <input type="hidden" name="action" value="add"/>
-  </p>  
+<input type="hidden" name="order_id" value="<?php echo $order->get_id() ?>"/>
 </form>
 </div>	

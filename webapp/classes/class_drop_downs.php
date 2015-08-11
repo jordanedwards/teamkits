@@ -227,8 +227,10 @@ public function display(){
 		}
 		$dataArray = $this->data;
 		$dataStr = "";
-		foreach ($dataArray as $dataItem => $dataValue) {
-			$dataStr.= " data-" . $dataItem . "='" . $dataValue . "' ";
+		if (sizeof($dataArray)>0){
+			foreach ($dataArray as $dataItem => $dataValue) {
+				$dataStr.= " data-" . $dataItem . "='" . $dataValue . "' ";
+			}
 		}
 		
 		if ($this->get_static()):

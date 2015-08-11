@@ -1,8 +1,20 @@
 <?php 
-require("includes/init.php"); 
+require("../includes/init.php"); 
 $page_id = basename(__FILE__);
 require(INCLUDES . "/acl_module.php");
 include(CLASSES . "/class_clubContact.php"); 
+include(CLASSES . "/class_club.php"); 
+$club = new Club();
+	 
+// Look up which club is associated with this user, then create club object
+$club->get_by_user_id($currentUser->get_id()); 
+ 
+	if(!$club->get_id() > 0) {
+		$session->setAlertMessage("Can not view - no club is assigned to this user. Please try again.");
+		$session->setAlertColor("yellow");
+		header("location:" . BASE_URL . "/index.php");
+		exit;
+	}
  
 	if(!isset($_GET["id"])) {
 		$session->setAlertMessage("Can not edit - the ID is invalid. Please try again.");
@@ -21,6 +33,16 @@ include(CLASSES . "/class_clubContact.php");
 	} else {
 		$clubContact->get_by_id($clubContact_id);
 	}
+	
+	if( $club->get_id() !=  $clubContact->get_club_id()) {
+	// Block user from viewing other user's contacts:
+		$session->setAlertMessage("Access denied: This contact belongs to a different club");
+		$session->setAlertColor("red");
+		header("location:" . BASE_URL . "/index.php");
+		exit;
+	}
+	
+
 $activeMenuItem = "ClubContact";				
  ?>
 <!DOCTYPE html>
@@ -54,8 +76,8 @@ $activeMenuItem = "ClubContact";
 	</div>
 	
 	<div class="row">
-	<div class="col-md-8">
-	<form id="form_clubContact" action="<?php  echo ACTIONS_URL; ?>action_clubContact_edit.php" method="post">
+	<div class="col-md-6">
+	<form id="form_clubContact" action="actions/action_clubContact_edit.php" method="post">
 	<input type="hidden" name="clubContact_id" value="<?php  echo $clubContact->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
 	<input type="hidden" name="page_id" value="<?php  echo $page_id  ?>" />	
@@ -96,8 +118,8 @@ $activeMenuItem = "ClubContact";
   		
 		</table>
           <br />
-          <input type="submit" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
-          <input type="button" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		

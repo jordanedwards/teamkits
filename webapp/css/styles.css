@@ -115,6 +115,10 @@ select {
 	padding: .4em;
 	cursor: pointer;
 }
+textarea {
+    padding: 5px;
+    border-radius: 4px;
+}
 .small_text {
 font-size: small;
 font-weight: normal;
@@ -243,13 +247,13 @@ background-color: #ccc;
   color: red;
 }
 footer {
-	position: absolute;
+	position: fixed;
 	bottom: 0px;
 	padding: 10px;
 	width: 100%;
 	background: black;
 	color: #fff;
-text-align: center;	
+	text-align: center;	
 }
 .pagination>li>a, .pagination>li>span {
 	border: 1px solid #666;

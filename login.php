@@ -76,7 +76,7 @@ if($session->get_user_id() != "") {
 				<h1>CLUB MEMBERS:</h1>						
 				<form id="form1" action="webapp/actions/action_login_user.php" method="post" class="admin_table">
 					<table class="admin_table">
-				  <tr><td>Club ID:</td><td><input id="club_code" name="club_code" type="text" size="50" /></td></tr>
+				  <tr><td>Club Code:</td><td><input id="club_code" name="club_code" type="text" size="50" /></td></tr>
 				  <input type="hidden" name="login_type" value="club_member">				  
 				  <tr><td></td><td><input type="submit" value="Login" /></td></tr>
 				  </table>

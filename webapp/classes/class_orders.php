@@ -13,6 +13,7 @@
  		private $notes;
  		private $active;
  		private $date_created;
+ 		private $date_submitted;		
  		private $last_updated;
  		private $last_updated_user;
 	
@@ -53,6 +54,9 @@
 		public function get_date_created() { return $this->date_created;}
 		public function set_date_created($value) {$this->date_created=$value;}
 		
+		public function get_date_submitted() { return $this->date_submitted;}
+		public function set_date_submitted($value) {$this->date_submitted=$value;}
+				
 		public function get_last_updated() { return $this->last_updated;}
 		public function set_last_updated($value) {$this->last_updated=$value;}
 		
@@ -108,7 +112,7 @@ public function save() {
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
 				$this->set_active("Y");
-				$strSQL = "INSERT INTO orders (order_club_id, order_subtotal, order_tax, order_discount, order_total, order_status, order_notes, is_active, order_date_created, order_last_updated, order_last_updated_user) 
+				$strSQL = "INSERT INTO orders (order_club_id, order_subtotal, order_tax, order_discount, order_total, order_status, order_notes, is_active, order_date_created, order_date_submitted, order_last_updated, order_last_updated_user) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_subtotal())."',
@@ -119,6 +123,7 @@ public function save() {
 				'".mysqli_real_escape_string($dm->connection, $this->get_notes())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_active())."',
 				NOW(),
+				'',
 				NOW(),
 				'".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."')";	
 						}
@@ -131,7 +136,8 @@ public function save() {
 						 		order_total='".mysqli_real_escape_string($dm->connection, $this->get_total())."',											 
 						 		order_status='".mysqli_real_escape_string($dm->connection, $this->get_status())."',						 
 						 		order_notes='".mysqli_real_escape_string($dm->connection, $this->get_notes())."',						 
-						 		is_active='".mysqli_real_escape_string($dm->connection, $this->get_active())."',						 
+						 		is_active='".mysqli_real_escape_string($dm->connection, $this->get_active())."',
+						 		order_date_submitted='".mysqli_real_escape_string($dm->connection, $this->get_date_submitted())."',													 
 						 		order_last_updated=NOW(),						
 						 		order_last_updated_user='".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."'
 							
@@ -371,6 +377,41 @@ WHERE orderitem_order_id = " . $this->id;
 		
 	}
 
+	public function submit(){
+		// Submit an order
+		// Rules:
+		// 1) Must have an order id
+		// 2) Full payment must be made if customer is on prepaid basis
+		// 3) All order items must still be available
+		// 4) If status was "Open", then change to "Submitted"
+		// - Add submitted date
+		// - Email admin
+		
+		if($this->status == 1){
+			$this->set_status(2);
+			$this->set_date_submitted(date("Y-m-d",time()));		
+		}
+		$this->save();
+		
+		//Initiate the emailer
+		require_once(INCLUDES . 'config_mail.php');
+		require_once(CLASSES . 'class_phpmailer.php');
+			
+		$mail = new PHPMailer();
+		$mail->IsHTML(true);
+		$mail->From = $mailConfig["mail_from"];
+		$mail->FromName = $mailConfig["mail_fromname"];
+		$mail->Sender = $mailConfig["mail_sender"];
+		$mail->AddAddress("info@teamkits.net", "");
+		$mail->WordWrap = 50; // set word wrap to 50 characters
+		$mail->Subject = "Order submitted";
+			$body = "<a href='https://teamkits.net/webapp/orders_edit.php?id=". $this->get_id() . "'>Order #". $this->get_id() . "</a> has been submitted.";
+		$mail->Body = $body;
+		
+		$mail->Send();
+	}
+	
+	
   	public function load_from_post($array){
 		// Pass $_POST to this function, and if the post vars match the object methods (they should, using this program), then it will populate the object
   		foreach ($array as $key => $val){
@@ -394,6 +435,7 @@ WHERE orderitem_order_id = " . $this->id;
 		$this->set_notes($row["order_notes"]);
 		$this->set_active($row["is_active"]);
 		$this->set_date_created($row["order_date_created"]);
+		$this->set_date_submitted($row["order_date_submitted"]);
 		$this->set_last_updated($row["order_last_updated"]);
 		$this->set_last_updated_user($row["order_last_updated_user"]);
 		

@@ -75,9 +75,12 @@ $(function() {
  <p>
 <input type="text" placeholder="Tracking Number" style="width: 90%;" class="form-control inline" name="shippingrecord_tracking"/>
 </p>
+ <p>
+<input type="checkbox" class="form-control inline" name="shippingrecord_notify"/>Notify customer?
+</p>
 <p>
 <input type="text" name="shippingrecord_date" id="shippingrecord_date" class="form-control"  placeholder="Shipping date" required/>
-<input type="hidden" name="order_id" value="<?php echo  $orders_id ?>"/>
+<input type="hidden" name="order_id" value="<?php echo $order->get_id() ?>"/>
 <input type="hidden" name="action" value="add"/>
   </p>  
 </form>

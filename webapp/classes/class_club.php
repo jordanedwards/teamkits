@@ -7,6 +7,7 @@
  		private $brand;
  		private $tel;
  		private $address;
+		private $website;
  		private $city;
  		private $province;
  		private $country;
@@ -44,6 +45,9 @@
 		public function get_address() { return $this->address;}
 		public function set_address($value) {$this->address=$value;}
 		
+		public function get_website() { return $this->website;}
+		public function set_website($value) {$this->website=$value;}
+				
 		public function get_city() { return $this->city;}
 		public function set_city($value) {$this->city=$value;}
 		
@@ -78,7 +82,7 @@
 		public function set_last_updated($value) {$this->last_updated=$value;}
 		
 		public function get_last_updated_user() { return $this->last_updated_user;}
-		public function set_last_updated_user($value) {$this->last_updated_user=$value;}
+		public function set_last_updated_user() {$this->last_updated_user=$value;}
 		
 		public function get_user_active() { return $this->user_active;}
 		public function set_user_active($value) {$this->user_active=$value;}
@@ -135,7 +139,7 @@ public function save() {
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
 			
-				$strSQL = "INSERT INTO club (club_id, club_name, club_sport, club_brand, club_tel, club_address, club_city, club_province, club_country, club_postal_code, club_email, club_code, club_account_type, club_tax_id, is_active, club_date_created, club_last_updated, club_last_updated_user, club_user_id) 
+				$strSQL = "INSERT INTO club (club_id, club_name, club_sport, club_brand, club_tel, club_address, club_website, club_city, club_province, club_country, club_postal_code, club_email, club_code, club_account_type, club_tax_id, is_active, club_date_created, club_last_updated, club_last_updated_user, club_user_id) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_name())."',
@@ -143,6 +147,7 @@ public function save() {
 				'".mysqli_real_escape_string($dm->connection, $this->get_brand())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_tel())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_address())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_website())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_city())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_province())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_country())."',
@@ -164,6 +169,7 @@ public function save() {
 					club_brand='".mysqli_real_escape_string($dm->connection, $this->get_brand())."',						 
 					club_tel='".mysqli_real_escape_string($dm->connection, $this->get_tel())."',						 
 					club_address='".mysqli_real_escape_string($dm->connection, $this->get_address())."',						 
+					club_website='".mysqli_real_escape_string($dm->connection, $this->get_website())."',						 
 					club_city='".mysqli_real_escape_string($dm->connection, $this->get_city())."',						 
 					club_province='".mysqli_real_escape_string($dm->connection, $this->get_province())."',						 
 					club_country='".mysqli_real_escape_string($dm->connection, $this->get_country())."',						 
@@ -304,6 +310,7 @@ public function save() {
 		$this->set_brand($row["club_brand"]);
 		$this->set_tel($row["club_tel"]);
 		$this->set_address($row["club_address"]);
+		$this->set_website($row["club_website"]);		
 		$this->set_city($row["club_city"]);
 		$this->set_province($row["club_province"]);
 		$this->set_country($row["club_country"]);

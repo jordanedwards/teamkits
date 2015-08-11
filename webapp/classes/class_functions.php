@@ -22,8 +22,9 @@ function addToLog($val, $notify=false){
 	//require_once('../includes/init.php');
 	$dm = new DataManager();
 	global $session;
+//	if (isset(
 	$user_id = $session->get_user_id();
-	
+	//$user_id =1;
 	// What kind of $val is this? string, array, or object:
 	ob_start();
 	if (is_object($val)){
@@ -37,7 +38,7 @@ function addToLog($val, $notify=false){
 	$result = ob_get_contents();
 	ob_end_clean();
 
-	$strSQL = "INSERT INTO log (log_user, log_val) VALUES (" . $user_id . ", '" . $result . "')";				
+	$strSQL = "INSERT INTO log (log_user, log_val) VALUES ('" . $user_id . "', '" . $result . "')";				
 	$result = $dm->updateRecords($strSQL);
 	
 	//If notify var is true, send an email to the techical contact:

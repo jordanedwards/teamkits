@@ -38,12 +38,12 @@ if ($action == "delete"){
 		if($id > 0){
 			$session->setAlertMessage("The $item_name has been updated successfully.");
 			$session->setAlertColor("green");
-			header("location:". BASE_URL."/" . strtolower($item_name) . "_list.php?page=".$session->getPage());
+			header("location:". BASE_URL."/orders_list.php?page=".$session->getPage());
 			exit;		
 		}else{
 			$session->setAlertMessage("The $item_name has been added successfully.");
 			$session->setAlertColor("green");
-			header("location:". BASE_URL."/" . strtolower($item_name) . "_edit.php?id=".$component->get_id());
+			header("location:". BASE_URL."/orders_edit.php?id=".$component->get_id());
 			exit;
 		}
 	}
