@@ -380,6 +380,9 @@ cursor:pointer;
 background:#0066FF;
 color:#ccc;
 }
+form {
+    display: inline-block;
+}
 @media (max-width: 767px){
 footer {
   position: relative;

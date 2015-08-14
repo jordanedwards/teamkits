@@ -94,6 +94,9 @@ if (isset($_POST['stripeToken'])){
 		$session->setAlertColor("red");
 	}	
 }
+if(isset($_POST['submit'])){
+	$order->submit();
+}
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -162,13 +165,14 @@ cursor:pointer;
 		<td style="width:1px; white-space:nowrap;">Status: </td>
 		<td>
 		<ol>
-			<li <?php if ($order->get_status() >= 1 && $order->get_status() != 6){ echo " class='highlight' ";}?> style="padding: 2px;">Open</li>
-			<li <?php if ($order->get_status() >= 2 && $order->get_status() != 6){ echo " class='highlight' ";}?> style="padding: 2px;">Submitted</li>			
-			<li <?php if ($order->get_status() >= 3 && $order->get_status() != 6){ echo " class='highlight' ";}?> style="padding: 2px;">Sent to Manufacturer</li>
-			<li <?php if ($order->get_status() >= 4 && $order->get_status() != 6){ echo " class='highlight' ";}?> style="padding: 2px;">Shipped</li>
-			<li <?php if ($order->get_status() >= 5 && $order->get_status() != 6){ echo " class='highlight' ";}?> style="padding: 2px;">Delivered</li>
+			<li <?php if ($order->get_status() >= 1 && $order->get_status() != 7){ echo " class='highlight' ";}?> style="padding: 2px;">Open</li>
+			<li <?php if ($order->get_status() >= 2 && $order->get_status() != 7){ echo " class='highlight' ";}?> style="padding: 2px;">Waiting for shipping quote</li>			
+			<li <?php if ($order->get_status() >= 3 && $order->get_status() != 7){ echo " class='highlight' ";}?> style="padding: 2px;">Waiting for payment</li>
+			<li <?php if ($order->get_status() >= 4 && $order->get_status() != 7){ echo " class='highlight' ";}?> style="padding: 2px;">Submitted</li>			
+			<li <?php if ($order->get_status() >= 5 && $order->get_status() != 7){ echo " class='highlight' ";}?> style="padding: 2px;">Shipped</li>
+			<li <?php if ($order->get_status() >= 6 && $order->get_status() != 7){ echo " class='highlight' ";}?> style="padding: 2px;">Delivered</li>
 		</ol>
-			<?php if ($order->get_status() >= 6){ echo " <p class='highlight'>Cancelled</p>";}?>			
+			<?php if ($order->get_status() >= 7){ echo " <p class='highlight'>Cancelled</p>";}?>			
 		</td>
 	</tr>
 		<tr>
@@ -239,7 +243,8 @@ cursor:pointer;
 			</tfoot>			
 		</table>
 		<br>
-		<?php if($order->get_status() == 1){ ?>
+		
+		<?php if($order->get_status() == 3){ ?>
 		
 		<?php if($total > 0){ ?>
 		<form action="" method="POST" style="display: inline-block;">
@@ -254,11 +259,17 @@ cursor:pointer;
 			  </script>
 			</form>
 		<?php } ?>
-		 <!-- <input type="submit" class="btn btn-success" value="Submit Order" />-->
-		   <a href="<?php  echo ACTIONS_URL  ?>action_orders_edit.php?action=delete&page_id=<?php  echo $page_id  ?>&id=<?php  echo $order->get_id()  ?>" onClick="return confirm('Cancel this order?');" class="btn btn-warning" role="button">Cancel Order</a>		  
+		<?php } ?>
+	
+	<form method="post">	
+		<?php if($order->get_status() == 1){ ?>
+		
+		 <input type="submit" class="btn btn-success" name="submit" value="Submit Order" />
+		   <a href="<?php  echo ACTIONS_URL  ?>action_orders_edit.php?action=delete&page_id=<?php  echo $page_id  ?>&id=<?php  echo $order->get_id()  ?>" onClick="return confirm('Cancel this order?');" class="btn btn-warning" role="button">Cancel Order</a>		
+		   
 		  <?php } ?>
           <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
-		  
+		   </form>
 		<br>			
 	
       </div>

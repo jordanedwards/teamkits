@@ -18,6 +18,7 @@ include(CLASSES . "/class_item.php");
 	if ($_GET["id"] ==0){
 		// Change this to pass a parent value if creating a new record:
 		//	$item->set_customer_id($_GET['customer_id']);
+		$item->set_id(0);
 	} else {
 		$item->get_by_id($item_id);
 	}

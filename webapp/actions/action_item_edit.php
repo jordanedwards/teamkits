@@ -17,7 +17,10 @@ $itemName = "item";
 	include(CLASSES . "class_item.php");
 	
 		$item = new Item();
-		$item->get_by_id($item_id);
+		
+		if ($item_id > 0){
+			$item->get_by_id($item_id);
+		}
 		$item->set_name($item_name);
 		$item->set_price($item_price);
 		$item->set_image($item_image);
