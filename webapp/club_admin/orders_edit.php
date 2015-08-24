@@ -24,6 +24,20 @@ $activeMenuItem = "Orders";
 		$order->set_club_id($club->get_id());
 		$order->set_status(1);
 		$order->save();	
+		
+		if (isset($_GET['additem'])){
+			include(CLASSES . "/class_orderitem.php"); 
+			foreach ($_GET['additem'] as $value) {
+				$new_order_item = new Orderitem();
+				$new_order_item->set_order_id($order->get_id());
+				$new_order_item->set_item_number($value);
+				$new_order_item->set_quantity(1);
+				$new_order_item->get_item_details();
+				$new_order_item->set_price($new_order_item->get_item_price());	
+				$new_order_item->set_active("Y");
+				$new_order_item->save();
+			}
+		}
 	} else {
 		$order->get_by_id($_GET["id"]);
 	}
@@ -109,6 +123,7 @@ if (isset($_POST['member_payment'])){
 	$session->setAlertMessage("Club members will be able to pay for their own items on this order individually. Once the order deadline arrives, we'll automatically submit the order. If any items do not have a payment, they will not be included in the order. If complete payment is made before the deadline, we'll submit the order right away for you. <br>Please choose and expiry date below:");
 	$session->setAlertColor("yellow");
 }
+
  ?>
 <!DOCTYPE html>
 <html lang="en">

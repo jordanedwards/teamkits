@@ -137,7 +137,7 @@ $activeMenuItem = "Orderitem";
 			$result = $dm->queryRecords($strSQL);	
 			if ($result):
 				while($row = mysqli_fetch_assoc($result)):
-					echo '<tr><td><a href="jerseyrecord_edit.php?id=' . $row['id'] .'"><i class="fa fa-edit fa-lg"></i></a>&nbsp;&nbsp;<a href="actions/action_jerseyrecord_edit.php?action=delete&page_id=jerseyrecord_edit.php&id=' . $row['id'] . '" onclick="return confirm(\'Delete?\');" class="editing"><i class="fa fa-times-circle fa-lg"></i></a></td><td>' . $row['name'] . '</td><td>' . $row['number'] . '</td><td>' . $row['status'] . '</td></tr>';
+					echo '<tr><td><a href="jerseyRecord_edit.php?id=' . $row['id'] .'"><i class="fa fa-edit fa-lg"></i></a>&nbsp;&nbsp;<a href="../actions/action_jerseyRecord_edit.php?action=delete&page_id=jerseyrecord_edit.php&id=' . $row['id'] . '" onclick="return confirm(\'Delete?\');" class="editing"><i class="fa fa-times-circle fa-lg"></i></a></td><td>' . $row['name'] . '</td><td>' . $row['number'] . '</td><td>' . $row['status'] . '</td></tr>';
 					if ($row['status']=="paid"){
 						$paid ++;
 					} else {

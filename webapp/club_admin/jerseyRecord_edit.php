@@ -1,7 +1,7 @@
 <?php 
-require("includes/init.php"); 
+require("../includes/init.php"); 
 $page_id = basename(__FILE__);
-$activeMenuItem = "JerseyRecord";				
+$activeMenuItem = "Orders";				
 require(INCLUDES . "/acl_module.php");
 require_once(CLASSES . "/class_jerseyRecord.php"); 
  
