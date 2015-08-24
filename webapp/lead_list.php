@@ -147,6 +147,7 @@ $activeMenuItem = "Leads";
 
 						$query = "SELECT * FROM club 
 						LEFT JOIN province ON club.club_province = province.province_id
+						LEFT JOIN country ON club.club_country = country.country_id						
 						LEFT JOIN brand ON club.club_brand = brand.brand_id
 						LEFT JOIN sport ON club.club_sport = sport.sport_id
 						LEFT JOIN accounttype ON club.club_account_type = accounttype.accounttype_id

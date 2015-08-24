@@ -29,7 +29,7 @@ $activeMenuItem = "Orderitem";
 	<?php  include(HEAD);  ?>
     <meta name="description" content="">
 
-    <title><?php   echo $appConfig["app_title"];  ?> | Order Item Edit</title>
+    <title><?php   echo $appConfig["app_title"];  ?> | Order Items Edit</title>
   </head>
 
   <body>
@@ -42,7 +42,7 @@ $activeMenuItem = "Orderitem";
         <div class="col-md-12">
         <?php  include(INCLUDES . "system_messaging.php");  ?>
 
-        <h1><?php if ($_GET["id"] ==0){ ?> Add Order Item<?php  } else { ?> Edit Order Item<?php  } ?></h1>
+        <h1><?php if ($_GET["id"] ==0){ ?> Add Order Items<?php  } else { ?> Edit Order Items<?php  } ?></h1>
         <p><span class="red">*</span> The red asterisk indicates all mandatory fields.</p>
         <div class="errorContainer">
           <p><strong>There are errors in your form submission. Please read below for details.</strong></p>
@@ -61,6 +61,7 @@ $activeMenuItem = "Orderitem";
 	<input type="hidden" name="page_id" value="<?php  echo $page_id  ?>" />	
 	
          <table class="admin_table">
+			<tr><th colspan="2">Items:</th></tr>		 
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Item: </td>
 				
@@ -117,6 +118,43 @@ $activeMenuItem = "Orderitem";
         <?php  }  ?>			
 	
       </div>
+	  
+	<?php if ($orderitem->get_id()>0): ?>
+	<div class="col-md-6">
+		<table class="admin_table">
+			<thead>
+			<tr><th colspan="4">Jersey numbers/names:<i class="fa fa-plus-circle fa-lg add-icon add-item no_print"></i></th></tr>
+			<tr><th>Edit/Delete</th><th>Name</th><th>#</th><th>Paid?</th></tr>		
+			</thead>
+			
+			<tbody id="jerseyrecord_table">
+		 <?php 
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from jerseyRecord 
+			WHERE orderitem_id=" . $orderitem->get_id() . "
+			AND is_active = 'Y'";						
+
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result)):
+					echo '<tr><td><a href="jerseyrecord_edit.php?id=' . $row['id'] .'"><i class="fa fa-edit fa-lg"></i></a>&nbsp;&nbsp;<a href="actions/action_jerseyrecord_edit.php?action=delete&page_id=jerseyrecord_edit.php&id=' . $row['id'] . '" onclick="return confirm(\'Delete?\');" class="editing"><i class="fa fa-times-circle fa-lg"></i></a></td><td>' . $row['name'] . '</td><td>' . $row['number'] . '</td><td>' . $row['status'] . '</td></tr>';
+					if ($row['status']=="paid"){
+						$paid ++;
+					} else {
+						$unpaid ++;
+					}
+				endwhile;						
+			endif;
+		 ?>		
+			</tbody>
+			
+			<tfoot>	 	 
+			<tr><td colspan="3" style="text-align: right;"># Paid:</td><td style="text-align:right"><?php echo $paid ?></td></tr>
+			<tr><td colspan="3" style="text-align: right;"># Unpaid:</td><td style="text-align:right"><?php echo $unpaid ?></td></tr>					
+			</tfoot>
+		</table>
+	</div>
+	<?php endif; ?>
     </div> 
 
 </div><!-- /container -->
@@ -124,9 +162,9 @@ $activeMenuItem = "Orderitem";
 
 <?php  include(INCLUDES . "/footer.php");  ?>
 <?php  include(INCLUDES_LIST);  ?>	
-<script>
 
-</script>
+<?php include("jerseyrecord_add_dialog.php"); ?>  
+
 <script type="text/javascript">
 		$(document).ready(function() {
 			var container = $("div.errorContainer");

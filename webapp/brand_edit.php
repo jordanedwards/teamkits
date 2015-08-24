@@ -66,6 +66,21 @@ $activeMenuItem = "Manage";
             		<td><input id="brand_name" name="brand_name" type="text"  value="<?php  echo $brand->get_name();  ?>" style="width:90%" /> </td>
 				</tr>
 				<tr>
+           			<td style="width:1px; white-space:nowrap;">Currency:</td>
+					<td>
+					<?php 
+						$dd = new DropDown();
+						$dd->set_name("brand_currency");						
+						$dd->set_table("currency");	
+						$dd->set_name_field("name");
+						$dd->set_class_name("form-control inline");
+						$dd->set_order("ASC");						
+						$dd->set_selected_value($brand->get_currency());
+						$dd->display();
+					 ?>											
+					</td>
+				</tr>				
+				<tr>
            			<td style="width:1px; white-space:nowrap;">Catalogue: </td>
             		<td><input id="brand_catalogue" name="brand_catalogue" type="text"  value="<?php  echo $brand->get_catalogue();  ?>" style="width:90%" /> </td>
 				</tr>

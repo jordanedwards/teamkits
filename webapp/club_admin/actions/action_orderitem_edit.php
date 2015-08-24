@@ -58,7 +58,7 @@ if ($action == "delete"){
 		}else{
 			$session->setAlertMessage("The Order item has been added successfully.");
 			$session->setAlertColor("green");
-			header("location:". BASE_URL."/club_admin/" . "orders_edit.php?id=".$orderitem->get_order_id());
+			header("location:". BASE_URL."/club_admin/" . "orderitem_edit.php?id=".$orderitem->get_id());
 			exit;
 		}
 	}

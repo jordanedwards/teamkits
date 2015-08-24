@@ -18,15 +18,19 @@ $(function() {
 		buttons: {	
 			'Add': {
 				click: function() {
-					var newItem = $('#newComponentForm').serialize();
-						$.ajax({
-						url: "ajax_order_item.php?"+newItem,	
-						success: function (html) {	
-							//$('#order_items_table').append(html);
-							location.assign("orders_edit.php?id="+$('#order_id').val());
-						}	
-					});
-               		$(this).dialog('close');
+					if ($('#item_id').val() != null && $('#item_quantity').val() != 0){				
+						var newItem = $('#newComponentForm').serialize();
+							$.ajax({
+							url: "ajax_order_item.php?"+newItem,	
+							success: function (html) {	
+								//$('#order_items_table').append(html);
+								location.assign("orders_edit.php?id="+$('#order_id').val());
+							}	
+						});
+						$(this).dialog('close');
+					} else {
+						alert("Please fill in all fields");
+					}
 			   	},
 			text: "Add",
 			class: 'btn btn-primary'			
@@ -81,7 +85,7 @@ $(function() {
 	?>	  	  
   </p>
  <p>
-<input type="number" placeholder="Quantity" style="width: 90%;" class="form-control inline" name="item_quantity"/> 
+<input type="number" placeholder="Quantity" style="width: 90%;" class="form-control inline" name="item_quantity" id="item_quantity"/> 
 </p>
 <p style="display:none" id="size_div">
 

@@ -19,6 +19,8 @@ $activeMenuItem = "Orders";
 	if ($_GET["id"] ==0){
 		// Change this to pass a parent value if creating a new record:
 		$order->set_club_id($_GET['club_id']);
+		$order->set_status(1);		
+		$order->set_active("Y");
 	} else {
 		$order->get_by_id($order_id);
 	}
@@ -43,7 +45,7 @@ $activeMenuItem = "Orders";
         <div class="col-md-12">
         <?php  include(INCLUDES . "system_messaging.php");  ?>
 
-        <h1><?php if ($_GET["id"] ==0){ ?> Add Orders<?php  } else { ?> Edit Orders<?php  } ?></h1>
+        <h1><?php if ($_GET["id"] ==0){ ?> Add Order<?php  } else { ?> Edit Order<?php  } ?></h1>
         <p><span class="red">*</span> The red asterisk indicates all mandatory fields.</p>
         <div class="errorContainer">
           <p><strong>There are errors in your form submission. Please read below for details.</strong></p>
@@ -57,12 +59,12 @@ $activeMenuItem = "Orders";
 	<div class="row">
 	<div class="col-md-6">
 	<form id="form_orders" action="<?php  echo ACTIONS_URL; ?>action_orders_edit.php" method="post">
-	<input type="hidden" name="order_id" value="<?php  echo $order->get_id();  ?>" />
+	<input type="hidden" name="id" value="<?php  echo $order->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
 	<input type="hidden" name="page_id" value="<?php  echo $page_id  ?>" />	
 	
          <table class="admin_table">
-		 	<tr><th colspan="2">Club details</th></tr>
+		 	<tr><th colspan="2">Order details</th></tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Club:</td>
 				
@@ -71,17 +73,33 @@ $activeMenuItem = "Orders";
 						$dd = new DropDown();
 						$dd->set_table("club");	
 						$dd->set_name_field("club_name");
-						$dd->set_class_name("form-control");
+						$dd->set_class_name("form-control inline");
 						$dd->set_order("ASC");						
-					//	$dd->set_preset("supplier");
-						$dd->set_name("order_club_id");						
+						$dd->set_required(true);
+						$dd->set_name("club_id");						
 						$dd->set_selected_value($order->get_club_id());
 						$dd->display();
 					 ?>											
-					
 					</td>
 				</tr>
-		
+
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Currency:</td>
+				
+					<td>
+					<?php 
+						$dd = new DropDown();
+						$dd->set_table("currency");	
+						$dd->set_name_field("name");
+						$dd->set_class_name("form-control inline");
+						$dd->set_order("ASC");						
+						$dd->set_selected_value($order->get_currency());
+						$dd->set_disabled(true);
+						$dd->display();
+					 ?>											
+					</td>
+				</tr>
+						
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Status: </td>
 				
@@ -93,7 +111,7 @@ $activeMenuItem = "Orders";
 						$dd->set_class_name("form-control");
 						$dd->set_order_by("orderstatus_order");							
 						$dd->set_order("ASC");						
-						$dd->set_name("order_status");	
+						$dd->set_name("status");	
 						$dd->set_selected_value($order->get_status());
 						$dd->display();
 					 ?>											
@@ -102,7 +120,7 @@ $activeMenuItem = "Orders";
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Notes: </td>
-            		<td><textarea id="order_notes" name="order_notes" style="width:90%" rows="4"><?php  echo $order->get_notes();  ?></textarea></td>
+            		<td><textarea id="order_notes" name="notes" style="width:90%" rows="4"><?php  echo $order->get_notes();  ?></textarea></td>
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Active: </td>
@@ -112,13 +130,26 @@ $activeMenuItem = "Orders";
 						$dd = new DropDown();
 						$dd->set_static(true);	
 						$dd->set_name("is_active");
-						$dd->set_class_name("form-control");
-						$dd->set_option_list("Y,N");						
+						$dd->set_class_name("form-control inline");
+						$dd->set_option_list("Y,N");	
+						$dd->set_required(true);											
 						$dd->set_selected_value($order->get_active());
 						$dd->display();
 					 ?>						
 					</td>
 				</tr>
+			<tr>
+				<td style="width:1px; white-space:nowrap;">Payment type: </td>
+				<td>
+					<p class="static"><?php echo $order->get_type(); ?></p>
+				</td>
+			</tr> 				
+			<tr>
+				<td style="width:1px; white-space:nowrap;">Member Payment Deadline: </td>
+				<td>
+					<p class="static"><?php echo $order->get_deadline(); ?></p>
+				</td>
+			</tr> 				
   		
 		</table>
           <br />
@@ -151,7 +182,7 @@ $activeMenuItem = "Orders";
 			$result = $dm->queryRecords($strSQL);	
 			if ($result):
 				while($row = mysqli_fetch_assoc($result)):
-					echo '<tr><td><a href="orderitem_edit.php?id=' . $row['orderitem_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td><a href="item_edit.php?id=' . $row['orderitem_item_number'] . '">' . $row['item_name'] . '</a></td><td>' . $row['orderitem_quantity'] . '</td><td>' . $row['orderitem_size'] . '</td><td style="white-space:normal">$'.sprintf("%.2f",$row['orderitem_price']) .'</td><td style="white-space:normal">$'.number_format(($row['orderitem_price']*$row['orderitem_quantity']),2) .'</td></tr>';
+					echo '<tr><td><a href="orderitem_edit.php?id=' . $row['orderitem_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td><a href="item_edit.php?id=' . $row['orderitem_item_number'] . '">' . $row['item_name'] . '</a></td><td>' . $row['orderitem_quantity'] . '</td><td>' . $row['orderitem_size'] . '</td><td style="white-space:normal; text-align:right;">$'.sprintf("%.2f",$row['orderitem_price']) .'</td><td style="white-space:normal; text-align:right;">$'.number_format(($row['orderitem_price']*$row['orderitem_quantity']),2) .'</td></tr>';
 						$subtotal = $subtotal + number_format(($row['orderitem_price']*$row['orderitem_quantity']),2);
 				endwhile;									
 			endif;
@@ -197,7 +228,7 @@ $activeMenuItem = "Orders";
 			<br>
 			<table class="admin_table">
 			<thead>
-			<tr><th colspan="5">Shipping details:<i class="fa fa-plus-circle fa-lg add-icon add-shipping"></i></th></tr>
+			<tr><th colspan="5">Shipping records:<i class="fa fa-plus-circle fa-lg add-icon add-shipping"></i></th></tr>
 			<tr><th></th><th>Date</th><th>Carrier</th><th>Tracking #</th></tr>	
 			</thead>
 			

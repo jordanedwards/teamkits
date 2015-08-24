@@ -4,6 +4,7 @@ $page_id = basename(__FILE__);
 $activeMenuItem = "Kit";				
 require(INCLUDES . "/acl_module.php");
 require_once(CLASSES . "/class_kit.php"); 
+require_once(CLASSES . "/class_club.php"); 
  
 if(!isset($_GET["id"]) && !isset($_GET['club_id'])) {
 	$session->setAlertMessage("Can not edit - the ID is invalid. Please try again.");
@@ -15,12 +16,18 @@ if(!isset($_GET["id"]) && !isset($_GET['club_id'])) {
 // load the kit		
 $kit_id = $_GET["id"];
 $kit = new Kit();
+$club = new Club();
 
 if ($_GET["id"] ==0){
 	// Change this to pass a parent value if creating a new record:
 	$kit->set_club_id($_GET['club_id']);
 } else {
 	$kit->get_by_id($kit_id);
+}
+
+// Get club specific values:
+if ($kit->get_club_id() > 0){
+	$club->get_by_id($kit->get_club_id());
 }
  ?>
 <!DOCTYPE html>

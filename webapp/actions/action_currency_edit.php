@@ -2,36 +2,34 @@
 require("../includes/init.php");
 $page_id = $_REQUEST["page_id"];
 $action = ($_REQUEST['action'] != "delete" ? "edit" : "delete");
-
 require(INCLUDES . "/acl_module.php");
-require(CLASSES . "class_kit.php");
+require(CLASSES . "class_currency.php");
 
-$item_name = ucfirst("kit");
+$item_name = ucfirst("currency");
 $action=escaped_var_from_post('action');
 $id = escaped_var_from_post('id');
-$is_active = escaped_var_from_post('is_active');
 
-$component = new Kit();
+$component = new Currency();
 
 if ($id > 0){
 	$component->get_by_id($id);
 }
 $component->load_from_post($_POST);
-if (!isset($is_active)){
+if (!isset($active)){
 	$component->set_is_active("Y");
 }
 	
 if ($action == "delete"){	
-	if($component->delete("full") == true) {
+	if($component->delete() == true) {
 		$session->setAlertMessage("The $item_name has been removed successfully.");
 		$session->setAlertColor("green");
-			header("location:". BASE_URL."/club_edit.php?id=".$component->get_club_id());
+			header("location:". BASE_URL."/" . strtolower($item_name) . "_list.php?page=".$session->getPage());
 		exit;
 	}
 	else {
 		$session->setAlertMessage("There was a problem removing the $item_name. Please try again.");
 		$session->setAlertColor("yellow");	
-			header("location:". BASE_URL."/club_edit.php?id=".$component->get_club_id());
+			header("location:". BASE_URL."/" . strtolower($item_name) . "_list.php?page=".$session->getPage());
 		exit;
 	}
 
@@ -43,19 +41,19 @@ if ($action == "delete"){
 		if($id > 0){
 			$session->setAlertMessage("The $item_name has been updated successfully.");
 			$session->setAlertColor("green");
-			header("location:". BASE_URL."/club_edit.php?id=".$component->get_club_id());
+			header("location:". BASE_URL."/" . strtolower($item_name) . "_list.php?page=".$session->getPage());
 			exit;		
 		}else{
 			$session->setAlertMessage("The $item_name has been added successfully.");
 			$session->setAlertColor("green");
-			header("location:".$_SERVER['HTTP_REFERER']);
+			header("location:". BASE_URL."/" . strtolower($item_name) . "_list.php?page=".$session->getPage());
 			exit;
 		}
 	}
 	else {
 		$session->setAlertMessage("There was a problem adding/updating the $item_name. Please make sure all fields are correct.");
 		$session->setAlertColor("yellow");
-		header("location:".$_SERVER['HTTP_REFERER']);
+			header("location:". BASE_URL."/" . strtolower($item_name) . "_list.php?page=".$session->getPage());
 		exit;
 	}	
 }

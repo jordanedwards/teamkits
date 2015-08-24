@@ -113,7 +113,8 @@
 						</a>	    
 					
 						<ul class="dropdown-menu">
-							<li><a href="/webapp/brand_list.php?reload=true">Brands</a></li>						
+							<li><a href="/webapp/brand_list.php?reload=true">Brands</a></li>		
+							<li><a href="/webapp/currency_list.php?reload=true">Currencies</a></li>																	
 							<li><a href="/webapp/item_list.php?reload=true">Items</a></li>						
 							<li><a href="/webapp/promo_list.php"><span>Promos</span></a></li>										
 							<li><a href="/webapp/user_list.php?reload=true">Users</a></li>

@@ -3,8 +3,8 @@ require("includes/init.php");
 $page_id = basename(__FILE__);
 require(INCLUDES . "/acl_module.php");
 include_once(CLASSES . "/class_user.php"); 
-include(CLASSES . "/class_orders.php");
-$activeMenuItem = "Orders";
+include(CLASSES . "/class_currency.php");
+$activeMenuItem = "Currency";
  ?>
 	
 <!DOCTYPE html>
@@ -12,7 +12,7 @@ $activeMenuItem = "Orders";
   <head>
 	<?php  include(HEAD);  ?>
     <meta name="description" content="">
-    <title><?php  echo $appConfig["app_title"];  ?> | Orders List</title>
+    <title><?php  echo $appConfig["app_title"];  ?> | Currency List</title>
   </head>
 
   <body>
@@ -25,31 +25,28 @@ $activeMenuItem = "Orders";
     <div class="row">
         <div class="col-md-12">
         <?php  include(INCLUDES . "system_messaging.php");  ?>
-        <h1>Orders List</h1>
+        <h1>Currency List</h1>
 		</div>
 	</div>
 		
       <div class="row">
         <div class="col-md-12">
 		 <p><span id="search_toggle" title="Search/Filter Results"><i class="fa fa-search"></i> Search/Filter <i class="fa fa-chevron-down"></i></span> | 
-        <i class="fa fa-plus-circle"></i> <a href="orders_edit.php?id=0">Add New Orders</a></p>
+        <i class="fa fa-plus-circle"></i> <a href="currency_edit.php?id=0">Add New Currency</a></p>
 <?php 
 
 $dm = new DataManager();
 
-	$s_order_id = escaped_var_from_post("s_order_id");
-	$s_order_club_id = escaped_var_from_post("s_order_club_id");
-	$s_order_currency = escaped_var_from_post("s_order_currency");
-	$s_order_total = escaped_var_from_post("s_order_total");
-	$s_order_status = escaped_var_from_post("s_order_status");
-	$s_order_date_created = escaped_var_from_post("s_order_date_created");
-	$s_order_date_submitted = escaped_var_from_post("s_order_date_submitted");
+	$s_id = escaped_var_from_post("s_id");
+	$s_name = escaped_var_from_post("s_name");
+	$s_shortname = escaped_var_from_post("s_shortname");
+	$s_is_active = escaped_var_from_post("s_is_active");
 	$s_sort = escaped_var_from_post('sort');
 	$s_sort_dir = escaped_var_from_post('sort_dir');
 
 	if ($s_sort == ""){
 		// if no sort is set, pick a default
-		$s_sort = "orders.order_id";
+		$s_sort = "currency.id";
 		$s_sort_dir = "desc";	
 	}
 
@@ -60,17 +57,14 @@ $dm = new DataManager();
           <form action="<?php  echo $_SERVER["PHP_SELF"]  ?>?reload=true" method="post" name="frmFilter" id="frmFilter">
             <table class="admin_table" style="display:block">
               <tr>
-			  <td>Order id</td><td>Order club id</td><td>Order currency</td><td>Order total</td><td>Order status</td><td>Order date created</td><td>Order date submitted</td>				<td><input type="button" class="clear" value="Clear" /></td>
+			  <td>Id</td><td>Name</td><td>Shortname</td><td>Is active</td>				<td><input type="button" class="clear" value="Clear" /></td>
               </tr>
 			  
               <tr>
-			  <td><input type="text" name="s_order_id"  value="<?php  echo $s_order_id  ?>"/></td>
-				<td><input type="text" name="s_order_club_id"  value="<?php  echo $s_order_club_id  ?>"/></td>
-				<td><input type="text" name="s_order_currency"  value="<?php  echo $s_order_currency  ?>"/></td>
-				<td><input type="text" name="s_order_total"  value="<?php  echo $s_order_total  ?>"/></td>
-				<td><input type="text" name="s_order_status"  value="<?php  echo $s_order_status  ?>"/></td>
-				<td><input type="text" name="s_order_date_created"  value="<?php  echo $s_order_date_created  ?>"/></td>
-				<td><input type="text" name="s_order_date_submitted"  value="<?php  echo $s_order_date_submitted  ?>"/></td>
+			  <td><input type="text" name="s_id"  value="<?php  echo $s_id  ?>"/></td>
+				<td><input type="text" name="s_name"  value="<?php  echo $s_name  ?>"/></td>
+				<td><input type="text" name="s_shortname"  value="<?php  echo $s_shortname  ?>"/></td>
+				<td><input type="text" name="s_is_active"  value="<?php  echo $s_is_active  ?>"/></td>
 								<input type="hidden" id="sort" name="sort" value="<?php echo $sort?>" />
 				<input type="hidden" id="sort_dir" name="sort_dir" value="<?php echo $sort_dir?>" />
 								
@@ -88,34 +82,22 @@ $dm = new DataManager();
 		if ($query == "" || $reload == "true") {
 		// Page set to reload (new query)		
 				 
-			if($s_order_id != ""){
-				$query_where .= ' AND order_id = "'.$s_order_id.'"';
+			if($s_id != ""){
+				$query_where .= ' AND id = "'.$s_id.'"';
 			} 
-			if($s_order_club_id != ""){
-				$query_where .= ' AND order_club_id = "'.$s_order_club_id.'"';
+			if($s_name != ""){
+				$query_where .= ' AND name = "'.$s_name.'"';
 			} 
-			if($s_order_currency != ""){
-				$query_where .= ' AND order_currency = "'.$s_order_currency.'"';
+			if($s_shortname != ""){
+				$query_where .= ' AND shortname = "'.$s_shortname.'"';
 			} 
-			if($s_order_total != ""){
-				$query_where .= ' AND order_total = "'.$s_order_total.'"';
-			} 
-			if($s_order_status != ""){
-				$query_where .= ' AND order_status = "'.$s_order_status.'"';
-			} 
-			if($s_order_date_created != ""){
-				$query_where .= ' AND order_date_created = "'.$s_order_date_created.'"';
-			} 
-			if($s_order_date_submitted != ""){
-				$query_where .= ' AND order_date_submitted = "'.$s_order_date_submitted.'"';
+			if($s_is_active != ""){
+				$query_where .= ' AND is_active = "'.$s_is_active.'"';
 			}		
 
-			$query = "SELECT *
-			FROM orders	
-			LEFT JOIN club ON orders.order_club_id = club.club_id
-			LEFT JOIN orderstatus ON orders.order_status = orderstatus.orderstatus_id	
-			LEFT JOIN currency ON orders.order_currency = currency.id				
-			WHERE 1=1 AND orders.is_active='Y' " . $query_where .$order;
+			$query = "SELECT *, currency.id AS currencyId
+			FROM currency			
+			WHERE 1=1 AND currency.is_active='Y' " . $query_where .$order;
 			
 			//Handle the sorting of the records
 			$session->setQuery($_SERVER["PHP_SELF"],$query);
@@ -130,13 +112,12 @@ $dm = new DataManager();
 		$session->setPage($page);
 		
 		require_once(CLASSES ."/class_record_pager.php");
-		$pager=new Pager($query,'paginglinks',20,0,1,'page_templates/orders_list_template.htm');
+		$pager=new Pager($query,'paginglinks',20,0,1,'page_templates/currency_list_template.htm');
 		echo $pager->displayRecords(mysqli_escape_string($dm->connection,$page));
 		
 		if ($appConfig["environment"] == "development"){
 			consoleLog($query);
 		}
-		//echo $query;
 			 ?>
         </div>
 

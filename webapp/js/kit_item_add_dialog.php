@@ -64,7 +64,7 @@ $(function() {
 	$dd->set_class_name("form-control inline");
 	$dd->set_order("ASC");
 	$dd->set_placeholder("Select item");	
-	$dd->set_where("item_club_id = 1 OR item_brand = 1 AND item_club_id = 0 OR item_brand=0 AND item_club_id = 0");
+	$dd->set_where("item_club_id = " .$kit->get_club_id() . " OR item_brand = " .$club->get_brand()." AND item_club_id = 0 OR item_brand=0 AND item_club_id = 0");
 	$dd->display();
 	?>	  	  
   </p>

@@ -1,11 +1,12 @@
 <?php 
- class Brand extends SessionManager {
+ class JerseyRecord extends SessionManager {
  
 		private $id;
-		private $name;
-		private $currency;		
- 		private $catalogue;
- 		private $active;
+		private $orderitem_id;
+ 		private $number;
+ 		private $name;
+ 		private $status;
+ 		private $is_active;
  		private $date_created;
  		private $last_updated;
  		private $last_updated_user;
@@ -16,17 +17,20 @@
 		public function get_id() { return $this->id;}
 		public function set_id($value) {$this->id=$value;}
 
+		public function get_orderitem_id() { return $this->orderitem_id;}
+		public function set_orderitem_id($value) {$this->orderitem_id=$value;}
+		
+		public function get_number() { return $this->number;}
+		public function set_number($value) {$this->number=$value;}
+		
 		public function get_name() { return $this->name;}
 		public function set_name($value) {$this->name=$value;}
-
-		public function get_currency() { return $this->currency;}
-		public function set_currency($value) {$this->currency=$value;}
-				
-		public function get_catalogue() { return $this->catalogue;}
-		public function set_catalogue($value) {$this->catalogue=$value;}
 		
-		public function get_active() { return $this->active;}
-		public function set_active($value) {$this->active=$value;}
+		public function get_status() { return $this->status;}
+		public function set_status($value) {$this->status=$value;}
+		
+		public function get_is_active() { return $this->is_active;}
+		public function set_is_active($value) {$this->is_active=$value;}
 		
 		public function get_date_created() { return $this->date_created;}
 		public function set_date_created($value) {$this->date_created=$value;}
@@ -36,7 +40,7 @@
 		
 		public function get_last_updated_user() { return $this->last_updated_user;}
 		public function set_last_updated_user() {$this->last_updated_user=$this->get_user_id();}
-	
+		
 public function __toString(){
 		// Debugging tool
 		// Dumps out the attributes and method names of this object
@@ -83,34 +87,37 @@ public function save() {
 			
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
-			
-				$strSQL = "INSERT INTO brand (brand_id, brand_name, brand_currency, brand_catalogue, is_active, brand_date_created, brand_last_updated, brand_last_updated_user) 
+				$this->is_active = "Y";
+				
+				$strSQL = "INSERT INTO jerseyRecord (id, orderitem_id, number, name, status, is_active, date_created, last_updated, last_updated_user) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_id())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_orderitem_id())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_number())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_name())."',
-				'".mysqli_real_escape_string($dm->connection, $this->get_currency())."',				
-				'".mysqli_real_escape_string($dm->connection, $this->get_catalogue())."',
-				'".mysqli_real_escape_string($dm->connection, $this->get_active())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_status())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_is_active())."',
 				NOW(),
 				NOW(),
 				'".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."')";	
 						}
 			else {
-				$strSQL = "UPDATE brand SET 
-								brand_name='".mysqli_real_escape_string($dm->connection, $this->get_name())."',		
-								brand_currency='".mysqli_real_escape_string($dm->connection, $this->get_currency())."',												 
-						 		brand_catalogue='".mysqli_real_escape_string($dm->connection, $this->get_catalogue())."',						 
-						 		is_active='".mysqli_real_escape_string($dm->connection, $this->get_active())."',						 
-						 		brand_last_updated=NOW(),						
-						 		brand_last_updated_user='".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."'
+				$strSQL = "UPDATE jerseyRecord SET 
+				orderitem_id='".mysqli_real_escape_string($dm->connection, $this->get_orderitem_id())."',						 
+						number='".mysqli_real_escape_string($dm->connection, $this->get_number())."',						 
+						name='".mysqli_real_escape_string($dm->connection, $this->get_name())."',						 
+						status='".mysqli_real_escape_string($dm->connection, $this->get_status())."',						 
+						is_active='".mysqli_real_escape_string($dm->connection, $this->get_is_active())."',						 
+						last_updated=NOW(),						
+						last_updated_user='".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."'
 							
-						 	WHERE brand_id=".mysqli_real_escape_string($dm->connection, $this->get_id());
+						WHERE id=".mysqli_real_escape_string($dm->connection, $this->get_id());
 			}		
 				
 			$result = $dm->updateRecords($strSQL);
 
 			// if this is a new record get the record id from the database
-			if(!$this->get_id() >= "0") {
+			if(!$this->id > 0) {
 				$this->set_id(mysqli_insert_id($dm->connection));
 			}
 			
@@ -138,7 +145,7 @@ public function save() {
 	public function delete() {
 		try{
 			$dm = new DataManager();
-			$strSQL = "UPDATE brand SET is_active='N' WHERE brand_id=" . $this->id;
+			$strSQL = "UPDATE jerseyRecord SET is_active='N' WHERE id=" . $this->id;
 			$result = $dm->updateRecords($strSQL);
 			return $result;
 		}
@@ -154,20 +161,22 @@ public function save() {
 	// function to fetch the record and populate the object
 	public function get_by_id($id) {
 		try{
-			$status = false;
-			$dm = new DataManager();
-			$strSQL = "SELECT * FROM brand WHERE brand_id=" . $id;
-      
-			$result = $dm->queryRecords($strSQL);
-			$num_rows = mysqli_num_rows($result);
-
-			if ($num_rows != 0){
-				$row = mysqli_fetch_assoc($result);
-        		$this->load($row);
-				$status = true;
-			}
-
-			return $status;
+			if ($id > 0){
+				$status = false;
+				$dm = new DataManager();
+				$strSQL = "SELECT * FROM jerseyRecord WHERE id=" . $id;
+		  
+				$result = $dm->queryRecords($strSQL);
+				if ($result){
+					$row = mysqli_fetch_assoc($result);
+					$this->load($row);
+					$status = true;
+				}
+	
+				return $status;
+			} else {
+			exit("id not set");
+			}				
 		}
 		catch(Exception $e) {
 			// CATCH EXCEPTION HERE -- DISPLAY ERROR MESSAGE & EMAIL ADMINISTRATOR
@@ -179,24 +188,37 @@ public function save() {
 	}
 
   	public function load_from_post($array){
+		// Pass $_POST to this function, and if the post vars match the object methods (they should, using this program), then it will populate the object
   		foreach ($array as $key => $val){
-			if(property_exists('brand',$key)):
+			if(property_exists('jerseyRecord',$key)):
 				$method_name = "set_".$key;
 				$this->$method_name($val);
 			endif;
 		}
 	} 
-	  
+
+	public function get_json_data(){
+		// Used in an ajax function to return the object properties:
+ 		$var = get_object_vars($this);
+        foreach($var as &$value){
+           if(is_object($value) && method_exists($value,'get_json_data')){
+              $value = $value->get_json_data();
+           }
+        }
+        return json_encode($var);
+	}
+		  
 	// loads the object data from a mysql assoc array
   	private function load($row){
-		$this->set_id($row["brand_id"]);
-		$this->set_name($row["brand_name"]);
-		$this->set_currency($row["brand_currency"]);		
-		$this->set_catalogue($row["brand_catalogue"]);
-		$this->set_active($row["is_active"]);
-		$this->set_date_created($row["brand_date_created"]);
-		$this->set_last_updated($row["brand_last_updated"]);
-		$this->set_last_updated_user($row["brand_last_updated_user"]);
+		$this->set_id($row["id"]);
+		$this->set_orderitem_id($row["orderitem_id"]);
+		$this->set_number($row["number"]);
+		$this->set_name($row["name"]);
+		$this->set_status($row["status"]);
+		$this->set_is_active($row["is_active"]);
+		$this->set_date_created($row["date_created"]);
+		$this->set_last_updated($row["last_updated"]);
+		$this->set_last_updated_user($row["last_updated_user"]);
 		
   }
 }

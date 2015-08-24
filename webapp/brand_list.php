@@ -4,7 +4,7 @@ $page_id = basename(__FILE__);
 require(INCLUDES . "/acl_module.php");
 include_once(CLASSES . "/class_user.php"); 
 include(CLASSES . "/class_brand.php");
-$activeMenuItem = "Manage";
+$activeMenuItem = "Brand";
  ?>
 	
 <!DOCTYPE html>
@@ -37,33 +37,46 @@ $activeMenuItem = "Manage";
 
 $dm = new DataManager();
 
-			$s_id = escaped_var_from_post("s_id");
-			$s_name = escaped_var_from_post("s_name");
-			$s_active = escaped_var_from_post("s_active");
-			$s_sort = escaped_var_from_post('sort');
-			$s_sort_dir = escaped_var_from_post('sort_dir');
-		
-			if ($s_sort == ""){
-				// if no sort is set, pick a default
-				$s_sort = "brand_id";
-				$s_sort_dir = "desc";	
-			}
+	$s_brand_id = escaped_var_from_post("s_brand_id");
+	$s_brand_name = escaped_var_from_post("s_brand_name");
+	$s_brand_currency = escaped_var_from_post("s_brand_currency");
+	$s_is_active = escaped_var_from_post("s_is_active");
+	$s_sort = escaped_var_from_post('sort');
+	$s_sort_dir = escaped_var_from_post('sort_dir');
 
-			$order = " ORDER BY " . $s_sort . " " . $s_sort_dir;		
+	if ($s_sort == ""){
+		// if no sort is set, pick a default
+		$s_sort = "brand.brand_id";
+		$s_sort_dir = "desc";	
+	}
+
+	$order = " ORDER BY " . $s_sort . " " . $s_sort_dir;		
 					
  ?>
         <div id="search">
           <form action="<?php  echo $_SERVER["PHP_SELF"]  ?>?reload=true" method="post" name="frmFilter" id="frmFilter">
             <table class="admin_table" style="display:block">
               <tr>
-			  <td>Brand Id</td><td>Brand Name</td><td>Brand Active</td>				<td><input type="button" class="clear" value="Clear" /></td>
+			  <td>Brand name</td><td>Currency</td><td>Active</td><td><input type="button" class="clear" value="Clear" /></td>
               </tr>
 			  
               <tr>
-			  <td><input type="text" name="s_id"  value="<?php  echo $s_id  ?>"/></td>
-				<td><input type="text" name="s_name"  value="<?php  echo $s_name  ?>"/></td>
-				<td><input type="text" name="s_active"  value="<?php  echo $s_active  ?>"/></td>
-								<input type="hidden" id="sort" name="sort" value="<?php echo $sort?>" />
+				<td><input type="text" name="s_brand_name"  value="<?php  echo $s_brand_name  ?>"/></td>
+				<td>
+					<?php 
+						$dd = new DropDown();
+						$dd->set_name("s_brand_currency");						
+						$dd->set_table("currency");	
+						$dd->set_name_field("name");
+						$dd->set_class_name("form-control inline");
+						$dd->set_order("ASC");						
+						$dd->set_selected_value($s_brand_currency);
+						$dd->display();
+					 ?>	
+				</td>
+				<td><input type="text" name="s_is_active"  value="<?php  echo $s_is_active  ?>"/></td>
+				
+				<input type="hidden" id="sort" name="sort" value="<?php echo $sort?>" />
 				<input type="hidden" id="sort_dir" name="sort_dir" value="<?php echo $sort_dir?>" />
 								
                 <td valign="top"><input type="submit" class="submit" value="Search" /></td>
@@ -73,42 +86,50 @@ $dm = new DataManager();
         </div>
 			<br>
 <?php 
-					
-					$query = $session->getQuery($_SERVER["PHP_SELF"]);
-					$reload = (isset($_GET['reload']) && $_GET['reload'] == "true" && isset($_GET['page']) == false ? $_GET['reload'] : "");
-					
-					if ($query == "" || $reload == "true") {
-					// Page set to reload (new query)		
-							 
-						if($s_id != ""){
-								$query_where .= ' AND brand_id = "'.$s_id.'"';
-						} 
-						if($s_name != ""){
-								$query_where .= ' AND brand_name = "'.$s_name.'"';
-						} 
-						if($s_active != ""){
-								$query_where .= ' AND brand_active = "'.$s_active.'"';
-						}		
+		$query = $session->getQuery($_SERVER["PHP_SELF"]);
+		$reload = (isset($_GET['reload']) && $_GET['reload'] == "true" && isset($_GET['page']) == false ? $_GET['reload'] : "");
+		$query_where = "";
+		
+		if ($query == "" || $reload == "true") {
+		// Page set to reload (new query)		
+				 
+			if($s_brand_id != ""){
+				$query_where .= ' AND brand_id = "'.$s_brand_id.'"';
+			} 
+			if($s_brand_name != ""){
+				$query_where .= ' AND brand_name LIKE "%'.$s_brand_name.'%"';
+			} 
+			if($s_brand_currency != ""){
+				$query_where .= ' AND brand_currency = "'.$s_brand_currency.'"';
+			} 
+			if($s_is_active != ""){
+				$query_where .= ' AND is_active = "'.$s_is_active.'"';
+			}		
 
-						$query = "SELECT * from brand WHERE 1=1" . $query_where .$order;
-						
-						//Handle the sorting of the records
-						$session->setQuery($_SERVER["PHP_SELF"],$query);
-						$session->setSort($_SERVER["PHP_SELF"],$s_sort);
-						$session->setSortDir($_SERVER["PHP_SELF"],$s_sort_dir);
-					}else{
-						//The page is not reloaded so use the query from the session
-						$query = $session->getQuery($_SERVER["PHP_SELF"]);
-					}
+			$query = "SELECT *
+			FROM brand		
+			LEFT JOIN currency ON brand.brand_currency = currency.id	
+			WHERE 1=1 AND brand.is_active='Y' " . $query_where .$order;
+			
+			//Handle the sorting of the records
+			$session->setQuery($_SERVER["PHP_SELF"],$query);
+			$session->setSort($_SERVER["PHP_SELF"],$s_sort);
+			$session->setSortDir($_SERVER["PHP_SELF"],$s_sort_dir);
+		}else{
+			//The page is not reloaded so use the query from the session
+			$query = $session->getQuery($_SERVER["PHP_SELF"]);
+		}
 
-					if(isset($_GET['page'])){$page = $_GET['page'];}else{$page = 1;}
-					$session->setPage($page);
-					
-					require_once(CLASSES ."/class_record_pager.php");
-					$pager=new Pager($query,'paginglinks',20,0,1,'page_templates/brand_list_template.htm');
-					echo $pager->displayRecords(mysqli_escape_string($dm->connection,$page));
-					
-					//echo $query;
+		if(isset($_GET['page'])){$page = $_GET['page'];}else{$page = 1;}
+		$session->setPage($page);
+		
+		require_once(CLASSES ."/class_record_pager.php");
+		$pager=new Pager($query,'paginglinks',20,0,1,'page_templates/brand_list_template.htm');
+		echo $pager->displayRecords(mysqli_escape_string($dm->connection,$page));
+		
+		if ($appConfig["environment"] == "development"){
+			consoleLog($query);
+		}
 			 ?>
         </div>
 

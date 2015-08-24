@@ -125,6 +125,7 @@ color:#333;
 		<div class="col-md-6">
 			<div id="preview_window">
 			<?php 
+if (sizeof($itemArray)>0){			
 foreach ($itemArray as $key => $val){
 		//	echo $key . " - " . $val."<br>";
 			$strSQL = "SELECT * FROM `itemImage` WHERE `itemImage_item_id` = " . $key . " AND is_active = 'Y'";
@@ -138,6 +139,7 @@ foreach ($itemArray as $key => $val){
 				endif;
 			endif;
 	}
+}
 	//print_r($images);
 ?>
 <div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -156,7 +158,8 @@ echo '<li data-target="#myCarousel" data-slide-to="' . $x . '" class=""></li>
 	  <?php 
 	$active = " active ";
 	$str = "";
-	 
+
+if (sizeof($images)>0){			 
 	 foreach ($images as $key => $val){
 		$str .='<div class="item '. $active . '">
           <img src="/webapp/images/itemimages/' . $key . '" alt="' . $val .'">
@@ -168,7 +171,7 @@ echo '<li data-target="#myCarousel" data-slide-to="' . $x . '" class=""></li>
         </div>';
 		$active = "";
 	} 
-		
+}
 	echo $str;
 	?>
       </div>

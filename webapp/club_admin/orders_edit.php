@@ -50,6 +50,8 @@ $activeMenuItem = "Orders";
 		}
 		$kit = $_GET['kit'];
 		$order->add_kit($kit);
+		$session->setAlertMessage("Order created, kit added. Please edit the quantities desired and input player numbers/names by clicking on the edit icon next to the items.");
+		$session->setAlertColor("green");		
 	}
 // Process stripe payment 
 if (isset($_POST['stripeToken'])){
@@ -83,11 +85,14 @@ if (isset($_POST['stripeToken'])){
 		$new_payment->set_active('Y');
 		$new_payment->save();
 		
-		// If full payment has been made and status was "Open", run submitted procedure
-		$order->submit();
+		// If full payment has been made and status was "Waiting for payment", change to "Submitted";
+		$order->set_status(4);
+		$order->save();
 					
 		$session->setAlertMessage("Payment processed, thank you. Your order has been submitted");
 		$session->setAlertColor("green");
+
+		
 	} catch(\Stripe\Error\Card $e) {
 	  // The card has been declined
 		$session->setAlertMessage("Credit card payment failed. Please try again.");
@@ -96,6 +101,13 @@ if (isset($_POST['stripeToken'])){
 }
 if(isset($_POST['submit'])){
 	$order->submit();
+}
+
+if (isset($_POST['member_payment'])){
+	$order->set_type("member");
+	$order->save();
+	$session->setAlertMessage("Club members will be able to pay for their own items on this order individually. Once the order deadline arrives, we'll automatically submit the order. If any items do not have a payment, they will not be included in the order. If complete payment is made before the deadline, we'll submit the order right away for you. <br>Please choose and expiry date below:");
+	$session->setAlertColor("yellow");
 }
  ?>
 <!DOCTYPE html>
@@ -130,8 +142,11 @@ cursor:pointer;
     margin-top: 5px;
     cursor: pointer;
 }
+label {
+	display: inline-block;
+	width: 5em;
+}
 </style>
-
   </head>
   <body>
 <?php  require(INCLUDES . "navbar.php");  ?>
@@ -150,7 +165,7 @@ cursor:pointer;
 	
 
 	<div class="row">
-	<div class="col-md-6">
+	<div class="col-md-8">
 	
 <table class="admin_table">
 	<tr><th colspan="2">Order Details</th></tr>
@@ -175,11 +190,24 @@ cursor:pointer;
 			<?php if ($order->get_status() >= 7){ echo " <p class='highlight'>Cancelled</p>";}?>			
 		</td>
 	</tr>
-		<tr>
+	<tr>
+		<td style="width:1px; white-space:nowrap;">Currency: </td>
+		<td>
+		<p class="static"><?php  echo $order->get_currency_shortname();  ?></p></td>
+	</tr> 	
+	<tr>
 		<td style="width:1px; white-space:nowrap;">Description: </td>
 		<td>
 		<p class="static"><?php  echo $order->get_notes();  ?></p></td>
-	</tr>  		
+	</tr> 
+	<?php if ($order->get_type() =="member"){?> 
+	<tr>
+		<td style="width:1px; white-space:nowrap;">Member Payment Deadline: </td>
+		<td>
+			<input type="text" id="deadline" name="deadline" value="<?php echo $order->get_deadline(); ?>">
+		</td>
+	</tr>  	
+	<?php } ?>
 </table>
 <br>
 <table class="admin_table">
@@ -244,9 +272,7 @@ cursor:pointer;
 		</table>
 		<br>
 		
-		<?php if($order->get_status() == 3){ ?>
-		
-		<?php if($total > 0){ ?>
+		<?php if($order->get_status() == 3 && $total > 0){ ?>
 		<form action="" method="POST" style="display: inline-block;">
 			<input type="hidden" name="payment_amount" value="<?php echo $total *100 ?>">
 			  <script
@@ -259,21 +285,21 @@ cursor:pointer;
 			  </script>
 			</form>
 		<?php } ?>
-		<?php } ?>
 	
-	<form method="post">	
+	<form method="post" style="display:inline-block">
+		<?php if($order->get_status() == 3 && $total > 0 && $order->get_type() !="member"){ ?>
+			<input type="submit" class="btn btn-success" name="member_payment" value="Payment by club members" data-toggle="tooltip" title="Choose this option and the club members will be able to pay for their own items individually. Once the order deadline arrives, we'll automatically submit the order. If any items do not have a payment, they will not be included in the order."/>
+		<?php } ?>		
 		<?php if($order->get_status() == 1){ ?>
-		
-		 <input type="submit" class="btn btn-success" name="submit" value="Submit Order" />
+		 <input type="submit" class="btn btn-success" name="submit" value="Submit for Shipping Quote" data-toggle="tooltip" title="Once your order is ready to go, we'll get an accurate shipping price from the manufacturer and add it to your order. We'll let you know by email once the shipping price has been added." />
 		   <a href="<?php  echo ACTIONS_URL  ?>action_orders_edit.php?action=delete&page_id=<?php  echo $page_id  ?>&id=<?php  echo $order->get_id()  ?>" onClick="return confirm('Cancel this order?');" class="btn btn-warning" role="button">Cancel Order</a>		
-		   
 		  <?php } ?>
           <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
 		   </form>
 		<br>			
 	
       </div>
-	<div class="col-md-6">
+	<div class="col-md-4">
 			<div id="preview_window" class="no_print">
 			
 			</div>
@@ -351,6 +377,33 @@ $(function() {
 	
 	$('.fa-print').on("click", function(){
 		window.print();
+	});
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip(); 
+	});
+</script>
+<script>
+	$( "#deadline" ).datepicker({
+		dateFormat: "yy-mm-dd",
+		changeMonth: true,
+		changeYear: true
+	});
+	
+	$( "#deadline" ).on("change",function(){
+		var id = '<?php echo $order->get_id();?>';
+		var deadline = $("#deadline").val();
+		
+		$.ajax({
+		  type: "POST",
+		  url: "ajax_update_deadline.php",
+		  data: { order_id: id, order_deadline:deadline},
+		  success: function () {	
+				$('#alert_message').removeClass();
+				$('#alert_message').addClass("green");
+				$('#alert_message').html("Payment deadline updated");
+				$('#alert_message').show();				
+			}
+		});
 	});
 </script>
 </html>

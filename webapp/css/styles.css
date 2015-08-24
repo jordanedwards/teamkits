@@ -381,7 +381,10 @@ background:#0066FF;
 color:#ccc;
 }
 form {
-    display: inline-block;
+ /*   display: inline-block;*/
+}
+.static {
+    margin: 0;
 }
 @media (max-width: 767px){
 footer {

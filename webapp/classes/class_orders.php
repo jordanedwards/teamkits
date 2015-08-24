@@ -4,11 +4,14 @@
  		private $tablename;
 		private $id;
 		private $club_id;
+		private $currency;		
  		private $subtotal;
  		private $tax;
 		private $discount;
 		private $total;
  		private $status;
+ 		private $type;
+ 		private $deadline;				
 		private $status_title;
  		private $notes;
  		private $active;
@@ -26,7 +29,21 @@
 
 		public function get_club_id() { return $this->club_id;}
 		public function set_club_id($value) {$this->club_id=$value;}
-		
+
+		public function get_currency() { return $this->currency;}
+		public function get_currency_shortname() { 
+			$dm = new DataManager();			
+			$strSQL = "SELECT shortname FROM currency WHERE id = " .$this->currency;
+			$result = $dm->queryRecords($strSQL);
+						
+			if ($result):
+				while ($line = mysqli_fetch_assoc($result)):
+					return $line['shortname'];;
+				endwhile;	
+			endif;
+		}		
+		public function set_currency($value) {$this->currency=$value;}
+			
 		public function get_subtotal() { return $this->subtotal;}
 		public function set_subtotal($value) {$this->subtotal=$value;}
 		
@@ -39,11 +56,17 @@
 		public function get_total() { return $this->total;}
 		public function set_total($value) {$this->total=$value;}
 								
-		public function get_status() { return $this->status;}
-		public function set_status($value) {$this->status=$value;}
+		public function get_type() { return $this->type;}
+		public function set_type($value) {$this->type=$value;}
 		
 		public function get_status_title() { return $this->status_title;}
 		public function set_status_title($value) {$this->status_title=$value;}
+								
+		public function get_status() { return $this->status;}
+		public function set_status($value) {$this->status=$value;}				
+								
+		public function get_deadline() { return $this->deadline;}
+		public function set_deadline($value) {$this->deadline=$value;}
 		
 		public function get_notes() { return $this->notes;}
 		public function set_notes($value) {$this->notes=$value;}
@@ -112,14 +135,17 @@ public function save() {
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
 				$this->set_active("Y");
-				$strSQL = "INSERT INTO orders (order_club_id, order_subtotal, order_tax, order_discount, order_total, order_status, order_notes, is_active, order_date_created, order_date_submitted, order_last_updated, order_last_updated_user) 
+				$strSQL = "INSERT INTO orders (order_club_id, order_currency, order_subtotal, order_tax, order_discount, order_total, order_status, order_deadline, order_type, order_notes, is_active, order_date_created, order_date_submitted, order_last_updated, order_last_updated_user) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_currency())."',				
 				'".mysqli_real_escape_string($dm->connection, $this->get_subtotal())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_tax())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_discount())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_total())."',				
 				'".mysqli_real_escape_string($dm->connection, $this->get_status())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_deadline())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_type())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_notes())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_active())."',
 				NOW(),
@@ -129,21 +155,26 @@ public function save() {
 						}
 			else {
 				$strSQL = "UPDATE orders SET 
-								order_club_id='".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',						 
-						 		order_subtotal='".mysqli_real_escape_string($dm->connection, $this->get_subtotal())."',	
-						 		order_tax='".mysqli_real_escape_string($dm->connection, $this->get_tax())."',						 
-						 		order_discount='".mysqli_real_escape_string($dm->connection, $this->get_discount())."',						 
-						 		order_total='".mysqli_real_escape_string($dm->connection, $this->get_total())."',											 
-						 		order_status='".mysqli_real_escape_string($dm->connection, $this->get_status())."',						 
-						 		order_notes='".mysqli_real_escape_string($dm->connection, $this->get_notes())."',						 
-						 		is_active='".mysqli_real_escape_string($dm->connection, $this->get_active())."',
-						 		order_date_submitted='".mysqli_real_escape_string($dm->connection, $this->get_date_submitted())."',													 
-						 		order_last_updated=NOW(),						
-						 		order_last_updated_user='".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."'
-							
-						 	WHERE order_id=".mysqli_real_escape_string($dm->connection, $this->get_id());
+					order_club_id='".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',		
+					order_currency='".mysqli_real_escape_string($dm->connection, $this->get_currency())."',												 
+					order_subtotal='".mysqli_real_escape_string($dm->connection, $this->get_subtotal())."',	
+					order_tax='".mysqli_real_escape_string($dm->connection, $this->get_tax())."',						 
+					order_discount='".mysqli_real_escape_string($dm->connection, $this->get_discount())."',						 
+					order_total='".mysqli_real_escape_string($dm->connection, $this->get_total())."',											 
+					order_status='".mysqli_real_escape_string($dm->connection, $this->get_status())."',						 
+					order_deadline='".mysqli_real_escape_string($dm->connection, $this->get_deadline())."',						 
+					order_type='".mysqli_real_escape_string($dm->connection, $this->get_type())."',						 
+					order_notes='".mysqli_real_escape_string($dm->connection, $this->get_notes())."',						 
+					is_active='".mysqli_real_escape_string($dm->connection, $this->get_active())."',
+					order_date_submitted='".mysqli_real_escape_string($dm->connection, $this->get_date_submitted())."',													 
+					order_last_updated=NOW(),						
+					order_last_updated_user='".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."'
+				
+				WHERE order_id=".mysqli_real_escape_string($dm->connection, $this->get_id());
 			}		
 				
+				addtolog($strSQL);
+							
 			$result = $dm->updateRecords($strSQL);
 
 			// if this is a new record get the record id from the database
@@ -192,14 +223,17 @@ public function save() {
 		try{
 			$dm = new DataManager();
 			if ($type == "full"){
+				$strSQL = "DELETE FROM orderitem WHERE orderitem_order_id=" . $this->id;
+				$result = $dm->updateRecords($strSQL);				
 				$strSQL = "DELETE FROM " . $this->tablename . " WHERE id=" . $this->id;
+				$result = $dm->updateRecords($strSQL);			
 			} else {
 				// just inactivate or hide
+				$strSQL = "UPDATE orderitem SET is_active='N' WHERE orderitem_order_id=" . $this->id;
+				$result = $dm->updateRecords($strSQL);						
 				$strSQL = "UPDATE " . $this->tablename . " SET is_active='N' WHERE order_id=" . $this->id;
+				$result = $dm->updateRecords($strSQL);		
 			}
-			//echo $strSQL;
-			//exit();
-			$result = $dm->updateRecords($strSQL);
 			return $result;
 		}
 		catch(Exception $e) {
@@ -367,7 +401,8 @@ WHERE orderitem_order_id = " . $this->id;
 			require_once(CLASSES."class_kit.php");
 			$kit = new Kit();
 			$kit->get_by_id($kit_id);
-					
+			
+			$this->get_by_id($this->id);
 			$this->recalculate();
 			$this->set_notes($kit->get_title());
 			$this->save();
@@ -377,6 +412,36 @@ WHERE orderitem_order_id = " . $this->id;
 		
 	}
 
+	public function notify_customer(){
+		// Find customer email address:
+		require_once(CLASSES."class_club.php");
+		$club = new Club();
+		$club->get_by_id($this->get_club_id());
+		if ($club->get_email() != ""){
+		
+		//Initiate the emailer
+		require_once(INCLUDES . 'config_mail.php');
+		require_once(CLASSES . 'class_phpmailer.php');
+			
+		$mail = new PHPMailer();
+		$mail->IsHTML(true);
+		$mail->From = $mailConfig["mail_from"];
+		$mail->FromName = $mailConfig["mail_fromname"];
+		$mail->Sender = $mailConfig["mail_sender"];
+		$mail->AddAddress("jordan@orchardcity.ca", "");		
+		$mail->AddAddress($club->get_email(), "");		
+		$mail->WordWrap = 50; // set word wrap to 50 characters
+		$mail->Subject = "Shipping quote added to your order";
+		$body = "We have received a quote for shipping, and attached it to your order #". $this->get_id() . ". Please proceed with the order now: <a href='https://teamkits.net/webapp/club_admin/orders_edit.php?id=". $this->get_id() . "'>View order</a>";
+		$mail->Body = $body;
+		
+		$mail->Send();
+		} else {
+			$this->set_success(false);
+			$this->setAlertMessage("Unable to notify customer - no address on file or customer id incorrect.");	
+		}
+	}
+	
 	public function submit(){
 		// Submit an order
 		// Rules:
@@ -403,9 +468,10 @@ WHERE orderitem_order_id = " . $this->id;
 		$mail->FromName = $mailConfig["mail_fromname"];
 		$mail->Sender = $mailConfig["mail_sender"];
 		$mail->AddAddress("info@teamkits.net", "");
+		$mail->AddAddress("jordan@orchardcity.ca", "");		
 		$mail->WordWrap = 50; // set word wrap to 50 characters
-		$mail->Subject = "Order submitted";
-			$body = "<a href='https://teamkits.net/webapp/orders_edit.php?id=". $this->get_id() . "'>Order #". $this->get_id() . "</a> has been submitted.";
+		$mail->Subject = "Order submitted for shipping quote";
+			$body = "<a href='https://teamkits.net/webapp/orders_edit.php?id=". $this->get_id() . "'>Order #". $this->get_id() . "</a> has been submitted for a shipping quote.";
 		$mail->Body = $body;
 		
 		$mail->Send();
@@ -426,11 +492,14 @@ WHERE orderitem_order_id = " . $this->id;
   	private function load($row){
 		$this->set_id($row["order_id"]);
 		$this->set_club_id($row["order_club_id"]);
+		$this->set_currency($row["order_currency"]);		
 		$this->set_subtotal($row["order_subtotal"]);
 		$this->set_tax($row["order_tax"]);	
 		$this->set_discount($row["order_discount"]);		
 		$this->set_total($row["order_total"]);			
 		$this->set_status($row["order_status"]);
+		$this->set_deadline($row["order_deadline"]);
+		$this->set_type($row["order_type"]);		
 		$this->set_status_title($row["orderstatus_title"]);		
 		$this->set_notes($row["order_notes"]);
 		$this->set_active($row["is_active"]);
