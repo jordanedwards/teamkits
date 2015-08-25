@@ -28,6 +28,9 @@
 			</a>
 			
 			<ul class="dropdown-menu">
+			<?php if ($session->getMask() > 0){ ?>
+				<li><a href="/webapp/actions/action_mask.php?return=true">Return</a></li>
+			<?php } ?>
 				<li><a href="/webapp/actions/action_logout.php">Logout</a></li>
 			</ul>
 			

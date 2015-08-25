@@ -387,6 +387,9 @@ form {
 .static {
     margin: 0;
 }
+.contact_Y{
+	background-color:#6699FF !important;
+}
 @media (max-width: 767px){
 footer {
   position: relative;

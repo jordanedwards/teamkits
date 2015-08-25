@@ -54,10 +54,13 @@ class DataManager {
 	public function queryRecords($sql) {
 		try {
 			$result = mysqli_query($this->connection, $sql);
+			if (!$result){
+				addtolog(mysqli_error($this->connection));
+			}
 			return $result;
 		}
 		catch(Exception $e) {
-		echo $e->getMessage();
+			echo $e->getMessage();
 			//throw new Exception('Class: DataManager - Method: queryRecords - File: ' . $e->getFile() . 'Line: ' . $e->getLine() . 'Reason: '. $e->getMessage());
 			include_once(CLASSES . 'class_error_handler.php');
 			$errorVar = new ErrorHandler();
@@ -74,6 +77,8 @@ class DataManager {
 			if($result != false) {
 				return true;
 			}
+
+			addtolog(mysqli_error($this->connection));
 			return false;
 		}
 		catch(Exception $e) {
@@ -96,4 +101,3 @@ class DataManager {
 	}
 	
 }
-?>

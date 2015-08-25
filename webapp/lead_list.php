@@ -46,6 +46,7 @@ $activeMenuItem = "Leads";
         <div class="col-md-12">
         <?php  include(INCLUDES . "system_messaging.php");  ?>
         <h1><?php if ($s_account_type ==3){echo "Lead List";} else{ ?>Club List<?php } ?></h1>
+		<p class="small"><em>Rows shaded blue have been contacted, grey rows have not been.</em></p>
 		</div>
 	</div>
 		
@@ -145,13 +146,16 @@ $activeMenuItem = "Leads";
 								$query_where .= ' AND club_active = "'.$s_active.'"';
 						}		
 
-						$query = "SELECT * FROM club 
-						LEFT JOIN province ON club.club_province = province.province_id
-						LEFT JOIN country ON club.club_country = country.country_id						
-						LEFT JOIN brand ON club.club_brand = brand.brand_id
-						LEFT JOIN sport ON club.club_sport = sport.sport_id
-						LEFT JOIN accounttype ON club.club_account_type = accounttype.accounttype_id
-						WHERE 1=1" . $query_where .$order;
+						$query = "
+						SELECT *, (select clubNotes.is_active from clubNotes WHERE clubNotes.clubNotes_club_id = club.club_id LIMIT 1) AS contacted 
+						FROM club 
+						LEFT JOIN province ON club.club_province = province.province_id 
+						LEFT JOIN country ON club.club_country = country.country_id	
+						LEFT JOIN brand ON club.club_brand = brand.brand_id 
+						LEFT JOIN sport ON club.club_sport = sport.sport_id 
+						LEFT JOIN accounttype ON club.club_account_type = accounttype.accounttype_id 
+						
+						WHERE 1=1". $query_where .$order;
 						
 						//Handle the sorting of the records
 						$session->setQuery($_SERVER["PHP_SELF"],$query);
@@ -167,7 +171,7 @@ $activeMenuItem = "Leads";
 					
 					require_once(CLASSES ."/class_record_pager.php");
 					$pager=new Pager($query,'paginglinks',20,0,1,'page_templates/lead_list_template.htm');
-					echo $pager->displayRecords(mysql_escape_string($page));
+					echo $pager->displayRecords($page);
 					//echo $query;
 			 ?>
         </div>

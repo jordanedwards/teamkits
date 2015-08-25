@@ -71,7 +71,10 @@ class SessionManager {
 	
 	public function getPage() { return isset($_SESSION['page']) ? $_SESSION['page'] : null; }
 	public function setPage($value) { $_SESSION['page'] = $value; }
-	
+
+	public function getMask() { return isset($_SESSION['mask']) ? $_SESSION['mask'] : null; }
+	public function setMask($value) { $_SESSION['mask'] = $value; }
+		
 	public function alertClear(){
 		$_SESSION["alert_msg"] = "";
 		$_SESSION["alert_color"] = "";

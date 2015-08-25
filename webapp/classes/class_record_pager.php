@@ -72,10 +72,10 @@
 					//(mysqli_query('SELECT 1',&$conId))?$this->conId=
 					//&$conId:die('Invalid connection identifier.');
 	
-					// validate query
-					(preg_match("/^SELECT/",$query))?$this->query=
-					 $query:die('Invalid query '.$query);
-	
+					// validate query *** HAD TO REM THIS OUT BECAUSE IT TRIPS WHEN THERE IS A SUBQUERY
+					//(preg_match("/^SELECT/",$query))?$this->query=$query:die('Invalid query<br> '.$query);
+					$this->query = $query;
+					
 					// validate paging links ID
 					(!is_numeric($linksId))?$this->linksId=
 					 $linksId:die('Invalid ID for paging links '.$linksId);
@@ -151,7 +151,7 @@
 						$field = $fieldinfo->name;
 						$qualified_names[$i]["field"]="$table.$field";		
 					}
-					
+										
 					$full_output = "";	
 					$result=$this->dm->queryRecords($this->query.' LIMIT '.($page-1)*$this->numRecs.','.$this->numRecs);
 

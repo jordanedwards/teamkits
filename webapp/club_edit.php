@@ -24,7 +24,7 @@ include(CLASSES . "/class_club.php");
 		$club->get_by_id($club_id);
 	}
 	
-	if($account_type==3) {
+	if($account_type==3 || $club->get_account_type()=="3") {
 		$club->set_account_type("3");
 		$activeMenuItem = "Leads";	
 		$title = "Lead";	
@@ -32,6 +32,7 @@ include(CLASSES . "/class_club.php");
 		$activeMenuItem = "Clubs";	
 		$title = "Club";			
 	}
+	
  ?>
 <!DOCTYPE html>
 <html lang="en">
