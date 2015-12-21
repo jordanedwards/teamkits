@@ -7,6 +7,7 @@ require(INCLUDES . "/acl_module.php");
 $item_name = ucfirst("brand");
 $id = escaped_var_from_post('id');
 
+<<<<<<< HEAD
 $component = new Brand();
 
 if ($id > 0){
@@ -83,6 +84,25 @@ if (!isset($active)){
 
 if ($action == "delete"){	
 	if($component->delete() == true) {
+=======
+		$brand_id=$_POST["brand_id"];
+		$brand_name=$_POST["brand_name"];
+		$brand_currency=$_POST["brand_currency"];		
+		$brand_catalogue=$_POST["brand_catalogue"];
+		$is_active=$_POST["is_active"];
+			// add the new record to the database
+	include(CLASSES . "class_brand.php");
+	
+		$brand = new Brand();
+		$brand->get_by_id($brand_id);
+		$brand->set_name($brand_name);
+		$brand->set_currency($brand_currency);		
+		$brand->set_catalogue($brand_catalogue);
+		$brand->set_active($is_active);
+
+if ($_GET['action'] == "delete"){	
+	if($brand->delete() == true) {
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 		$session->setAlertMessage("The $item_name has been removed successfully.");
 		$session->setAlertColor("green");
 		header("location:".$_SERVER['HTTP_REFERER']);
@@ -107,7 +127,11 @@ if ($action == "delete"){
 		}else{
 			$session->setAlertMessage("The $item_name has been added successfully.");
 			$session->setAlertColor("green");
+<<<<<<< HEAD
 			header("location:". BASE_URL."/" . strtolower($item_name) . "_list.php?page=".$session->getPage());
+=======
+			header("location:". BASE_URL."/" . $item_name . "_list.php?page=".$session->getPage());
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 			exit;
 		}
 	}

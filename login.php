@@ -76,10 +76,15 @@ if($session->get_user_id() != "") {
 				<h1>CLUB MEMBERS:</h1>						
 				<form id="form1" action="webapp/members/actions/action_login.php" method="post" class="admin_table">
 					<table class="admin_table">
+<<<<<<< HEAD
 				  <tr><td>Club Code:</td><td><input id="club_code" name="club_code" type="text" size="50" required/></td></tr>
 				  <input type="hidden" name="login_type" value="club_member">	
 				  <?php if (isset($_REQUEST['redirect'])){?><input type="hidden" name="redirect" value="<?php echo $_REQUEST['redirect'] ?>">	<?php } ?>	
 				  			  
+=======
+				  <tr><td>Club Code:</td><td><input id="club_code" name="club_code" type="text" size="50" /></td></tr>
+				  <input type="hidden" name="login_type" value="club_member">				  
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 				  <tr><td></td><td><input type="submit" value="Login" /></td></tr>
 				  </table>
 				</form>

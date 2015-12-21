@@ -394,12 +394,15 @@ form {
 .contact_Y{
 	background-color:#6699FF !important;
 }
+<<<<<<< HEAD
 .print-icon{
 	position:absolute; 
 	right:15px; 
 	top:10px;
 	cursor:pointer;
 }
+=======
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 @media (max-width: 767px){
 footer {
   position: relative;

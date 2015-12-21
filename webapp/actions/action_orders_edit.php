@@ -8,6 +8,7 @@ require(CLASSES . "class_orders.php");
 $item_name = ucfirst("order");
 $action=escaped_var_from_post('action');
 $id = escaped_var_from_post('id');
+<<<<<<< HEAD
 
 $component = new Orders();
 
@@ -22,18 +23,35 @@ if ($currentUser->get_role() == 3){
 } else {
 	$redirect = BASE_URL."/orders_list.php?page=".$session->getPage();
 }
+=======
 
+$component = new Orders();
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
+
+if ($id > 0){
+	$component->get_by_id($id);
+}
+$component->load_from_post($_POST);
+	
 if ($action == "delete"){	
 	if($component->delete() == true) {
 		$session->setAlertMessage("The $item_name has been removed successfully.");
 		$session->setAlertColor("green");
+<<<<<<< HEAD
 			header("location:". $redirect);
+=======
+			header("location:". BASE_URL);
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 		exit;
 	}
 	else {
 		$session->setAlertMessage("There was a problem removing the $item_name. Please try again.");
 		$session->setAlertColor("yellow");	
+<<<<<<< HEAD
 			header("location:". $redirect);
+=======
+			header("location:". BASE_URL);
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 		exit;
 	}
 
@@ -45,12 +63,20 @@ if ($action == "delete"){
 		if($id > 0){
 			$session->setAlertMessage("The $item_name has been updated successfully.");
 			$session->setAlertColor("green");
+<<<<<<< HEAD
 			header("location:". $redirect);
+=======
+			header("location:". BASE_URL."/orders_list.php?page=".$session->getPage());
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 			exit;		
 		}else{
 			$session->setAlertMessage("The $item_name has been added successfully.");
 			$session->setAlertColor("green");
+<<<<<<< HEAD
 			header("location: ../orders_edit.php?id=".$component->get_id());
+=======
+			header("location:". BASE_URL."/orders_edit.php?id=".$component->get_id());
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 			exit;
 		}
 	}

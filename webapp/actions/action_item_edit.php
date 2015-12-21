@@ -16,6 +16,7 @@ $itemName = "item";
 	$item_club_id=$_POST["item_club_id"];
 	$is_active=$_POST["is_active"];
 	
+<<<<<<< HEAD
 	$item = new Item();
 	
 	if ($item_id > 0){
@@ -28,6 +29,19 @@ $itemName = "item";
 	$item->set_brand($item_brand);
 	$item->set_club_id($item_club_id);
 	$item->set_active("Y");
+=======
+		$item = new Item();
+		
+		if ($item_id > 0){
+			$item->get_by_id($item_id);
+		}
+		$item->set_name($item_name);
+		$item->set_price($item_price);
+		$item->set_image($item_image);
+		$item->set_brand($item_brand);
+		$item->set_club_id($item_club_id);
+		$item->set_active("Y");
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 
 if ($action == "delete"){	
 	if($item->delete() == true) {

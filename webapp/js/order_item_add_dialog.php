@@ -69,7 +69,10 @@ $(function() {
 			$('#size_div').hide();
 			$('#item_quantity').val(1);
 			$('#item_quantity').hide();
+<<<<<<< HEAD
 			$('#notify_customer').attr("checked",true);
+=======
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 		} else {
 			$.ajax({
 				url: "ajax/ajax_get_sizes.php?item_id="+selectedItem,	
@@ -80,7 +83,10 @@ $(function() {
 			$('#item_quantity').show();	
 			$('#item_price').hide();					
 			$('#size_div').show();
+<<<<<<< HEAD
 			$('#notify_customer').attr("checked",false);			
+=======
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 		}
 	}
 	
@@ -110,7 +116,11 @@ $(function() {
 <p  id="item_price" style="display:none">
 <input type="number" min="0" step="0.01" placeholder="Price" style="width: 90%;" class="form-control inline" name="item_price" /> 
 <br />
+<<<<<<< HEAD
 <input type="checkbox" name="notify_customer" id="notify_customer" value="true"/>&nbsp;Email customer?
+=======
+<input type="checkbox" name="notify_customer" checked="checked" value="true"/>&nbsp;Email customer?
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 </p>
 <p style="display:none" id="size_div">
 

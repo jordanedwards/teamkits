@@ -36,7 +36,7 @@ $project->setConnection();
 			echo "<tr>";
 			
 			// Don't check the fields that are automatically set in the class. Probably no need to edit these:
-			if (strpos($name,"date_created",0) || strpos($name,"last_updated")){
+			if ($name == "date_created" || $name =="last_updated" || $name =="last_updated_user"){
 				$checked = "";			
 			} else {
 				$checked = " checked='checked' ";
@@ -47,7 +47,7 @@ $project->setConnection();
 			if (strpos($flags," primary_key ",0) || strpos($flags," unique_key ")){
 				echo "<td><input type='hidden' id='" . $name . "' value='" . $name . "' name='fields[" . $name . "]' readonly='true' /><p>$name (used as the edit column)</p></td>";
 			} else {	
-				echo "<td><input type='checkbox' id='" . $name . "' value='" . $name . "' name='fields[" . $name . "]' class='formCheckbox' " . $checked . "/>&nbsp; $name</td>";
+				echo "<td><input type='checkbox' id='" . $name . "' value='" . $name . "' name='fields[" . $name . "]' class='formCheckbox' " . $checked . "/>&nbsp;&nbsp; $name</td>";
 			}
 			?><td>
 									
@@ -57,7 +57,8 @@ $project->setConnection();
 		}
 		?>
 		<tr><td>
-			<a href="#" id="checkall">&raquo; Check all</a>
+			<a href="#" id="checkall">&raquo; Check all</a><br />
+			<a href="#" id="uncheckall">&raquo; Uncheck all</a>
 		</td></tr>
 		</table>
 					
@@ -71,6 +72,12 @@ $("#checkall").on("click", function (e) {
 	e.preventDefault();
             $('.formCheckbox').each(function() { //loop through each checkbox
                 this.checked = true;  //select all checkboxes with class "checkbox1"               
+            });
+});	
+$("#uncheckall").on("click", function (e) {
+	e.preventDefault();
+            $('.formCheckbox').each(function() { //loop through each checkbox
+                this.checked = false;  //select all checkboxes with class "checkbox1"               
             });
 });	
 </script>

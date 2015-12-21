@@ -142,7 +142,7 @@
 		// This is important. The selected environment can be set in the .ini file, or can bew set at runtime. Setting it determines which db to use, and which project url
 		public function get_selected_environment() { return $this->selected_environment;}
 		public function set_selected_environment($value) {
-			$this->environment=$value;	
+			$this->selected_environment=$value;	
 				
 			// Pull the correct database parameters and write to object:
 			switch ($value){

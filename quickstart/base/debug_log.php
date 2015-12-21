@@ -56,7 +56,7 @@ endif;
 	if ($num_rows != 0):
 	
 		while ($line = mysqli_fetch_assoc($result)):
-			echo "<tr><td>".$line['log_time'] . "</td><td>" . $line['log_val'] . "</td><td>" . $line['log_user'] . "</td><td align='center'><a href='debug_log.php?delete-entry=" . $line['log_id'] . "'>X</a></td></tr>";
+			echo "<tr style='vertical-align:top'><td style='vertical-align:top'>".$line['log_time'] . "</td><td><pre>" . $line['log_val'] . "</pre></td><td style='vertical-align:top'>" . $line['log_user'] . "</td><td align='center' style='vertical-align:top'><a href='debug_log.php?delete-entry=" . $line['log_id'] . "'>X</a></td></tr>";
 		endwhile;
 	else:
 		echo "<tr><td colspan='4'>No records</td></tr>";

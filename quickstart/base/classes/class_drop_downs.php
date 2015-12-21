@@ -34,6 +34,7 @@
 	$dd->set_table("student");
 	$dd->set_name_field("student_first_name");
 	$dd->set_name_field_2("student_last_name");
+	$dd->set_pattern('{student_first_name} {student_last_name} - ${program_fee}');
 	$dd->set_name("student_select");
 	$dd->set_id("student_select");	
 	$dd->set_selected_value($student_value);
@@ -46,7 +47,8 @@
 	$dd->set_order_by("student_id");
 	$dd->set_where("student_session_id = '3'");	
 	$dd->add_data("data-name",$data-value);
-	$dd->disabled("true");
+	$dd->set_disabled("true");
+	$dd->show_all(true);
 	$dd->display();
 
 // If NOT using this dynamically, but just with a static list, use like this:
@@ -60,7 +62,7 @@
 		$option_list = "Superuser,Admin,User";
 		$option_list = array("1"=>"Superuser","2"=>"Admin","3"=>"User");		
 	$dd->set_option_list($option_list);	
-	$dd->disabled("false");	
+	$dd->set_disabled("false");	
 	$dd->display();	
 */
 // Alternatively, use $dd->compile() to return the drop down as a function
@@ -77,6 +79,7 @@ class DropDown {
 	private $table;
 	private $name_field;
 	private $name_field_2;
+	private $pattern;
 	private $selected_value;
 	private $active_only;
 	private $required;
@@ -92,7 +95,8 @@ class DropDown {
 	private $preset;
 	private $data;
 	private $disabled;
-
+	private $query;
+	private $show_all;
 					
 	function __construct() {
 		$this->data=array();
@@ -116,6 +120,9 @@ class DropDown {
 		public function get_name_field_2() { return $this->name_field_2;}
 		public function set_name_field_2($value) {$this->name_field_2=$value;}
 
+		public function get_pattern() { return $this->pattern;}
+		public function set_pattern($value) {$this->pattern=$value;}
+		
 		public function get_selected_value() { return $this->selected_value;}
 		public function set_selected_value($value) {$this->selected_value=$value;}
 
@@ -155,6 +162,9 @@ class DropDown {
 		public function get_disabled() { return $this->disabled;}
 		public function set_disabled($value) {$this->disabled=$value;}	
 		
+		public function show_query() {echo $this->query;}	
+		public function show_all($value) {$this->show_all=$value;}	
+						
 public function __toString(){
 		// Debugging tool
 		// Dumps out the attributes and method names of this object
@@ -208,7 +218,22 @@ public function __toString(){
 		
 				return $index_name;
 	}
-
+	
+	private function pattern_replace($array){
+		// If the user sets a specific pattern for the option texts
+		// Field names are wrapped in curly braces and replaced with values
+		// eg: {student_last_name}, {student_first_name} - Amount paid: ${student_payment} 
+		$pattern_str = $this->pattern;
+		foreach ($array as $key => $val){
+			// look for field name in pattern:
+			if (strpos($pattern_str,$key,0) > 0){
+				// Replace
+				$pattern_str = str_replace("{".$key."}",$val,$pattern_str);
+			}
+		}
+		return $pattern_str;
+	}
+	
 	public function clear(){
 		 foreach ($this as $key => $value) {
              $this->$key=NULL;
@@ -216,9 +241,9 @@ public function __toString(){
 		$this->data=array();
 	}	
 			
-public function display(){
-	echo $this->compile();
-}
+	public function display(){
+		echo $this->compile();
+	}
 
 
 	public function compile(){
@@ -247,6 +272,10 @@ public function display(){
 			}
 			$selected_text = "";
 			
+			if ($this->show_all == true){
+				$ddl .= "<option value='All'>All</option>";
+			}
+			
 			if (is_array($this->option_list)){
 				foreach ($this->option_list as $key => $val):
 					$selected = "";
@@ -266,7 +295,6 @@ public function display(){
 				endforeach;				
 			}
 			
-
 			
 			$ddl .= '</select>';
 			return $ddl;		
@@ -299,40 +327,50 @@ public function display(){
 					$strSQL = $this->custom_sql;
 				}
 
+				// Set additional paramaters
 				$cssClass = " class='". $this->class_name . "' ";
 				$onchangeText = ($this->onchange != "" ? ' onchange="' . $this->onchange . '" ' : "");	
 				$requiredText = ($this->required ? ' required ' : " ");					
 				$disabledText = ($this->disabled ? ' disabled ' : " ");
 				
-				$result = $dm->queryRecords($strSQL);	
-				if ($result){
+				$this->query = $strSQL;
 				
-					$ddl = '<select id="'.$this->id.'" name="'.$this->name.'" ' . $cssClass . $onchangeText . $dataStr . $requiredText . $disabledText . '>';
-					if (isset($this->placeholder)){
-						if (!isset($this->selected_value)){$selected_text = "selected";}
-						$ddl .= '<option value="" disabled ' .$selected_text . ' style="font-style: italic;">' . $this->placeholder . '</option>';
-					} else { 
-						$ddl .= "<option value=''></option>";
-					}
-					$selected_text = "";
-					
+				$result = $dm->queryRecords($strSQL);	
+				$ddl = '<select id="'.$this->id.'" name="'.$this->name.'" ' . $cssClass . $onchangeText . $dataStr . $requiredText . $disabledText . '>';
+				if (isset($this->placeholder)){
+					if (!isset($this->selected_value)){$selected_text = "selected";}
+					$ddl .= '<option value="" disabled ' .$selected_text . ' style="font-style: italic;">' . $this->placeholder . '</option>';
+				} else { 
+					$ddl .= "<option value=''></option>";
+				}
+				$selected_text = "";
+
+				if ($this->show_all == true){
+					$ddl .= "<option value='All'>All</option>";
+				}					
+				if ($result &&  mysqli_num_rows($result) > 0){
+				
 					while($row = mysqli_fetch_assoc($result)) {
 						$ddl .= '<option value="'.$row[$this->index_name].'" ';
 						if($row[$this->index_name]==$this->selected_value){
 							$ddl .= 'selected="selected"';
 						}
-						if ($this->name_field_2 != null){
-							$ddl .= '>'.$row[$this->name_field].' '.$row[$this->name_field_2].'</option>';
-						} else {
-							$ddl .= '>'.$row[$this->name_field].'</option>';
+						// Set name fields & pattern (if set):
+						if (isset($this->pattern)){
+							$ddl .= '>'.$this->pattern_replace($row).'</option>';
+						}else{
+							if ($this->name_field_2 != null){
+								$ddl .= '>'.$row[$this->name_field].' '.$row[$this->name_field_2].'</option>';
+							} else {
+								$ddl .= '>'.$row[$this->name_field].'</option>';
+							}
 						}
 					}
-					$ddl .= '</select>';
-					return $ddl;
 				}else{
-					return null;
-					exit;
+					$ddl .='<option disabled>No results found</option>';
 				}
+				$ddl .= '</select>';
+				return $ddl;				
 			}
 			catch(Exception $e) {
 				echo "drop down object creation failed";
@@ -356,18 +394,19 @@ public function display(){
 				$this->set_name("is_active");
 				$this->set_class_name("form-control");
 				$this->set_option_list("Y,N");	
-			break;
-			case "active":
-				$this->set_static(true);								
-				$this->set_option_list("Y,N");
-				$this->set_name("is_active");		
 			break;				
-			case "supplier":						
-				$this->set_table("supplier");	
-				$this->set_name_field("supplier_name");
+			case "view_list":						
+				$this->set_static(true);	
+				$this->set_name("s_view_list");
 				$this->set_class_name("form-control");
-				$this->set_order("ASC");
+				$this->set_option_list("Treadpro,Dealer");						
 			break;
+			case "media_status":						
+				$this->set_static(true);	
+				$this->set_name("status");
+				$this->set_class_name("form-control inline");
+				$this->set_option_list("Unpublished, Published, Archived");						
+			break;			
 			case "province":
 				$this->set_static(true);
 				$this->set_name("province");												

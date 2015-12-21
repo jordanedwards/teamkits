@@ -15,12 +15,12 @@ if (!isset($selected_table) || !isset($environment) || !isset($project_name)){
 echo "table, environment, or project not selected";
 die();
 }
-
+/*
 function trim_from_marker($str, $marker) {
 	$marker_location = strpos($str,$marker,0);
 	return substr($str,$marker_location+1, strlen($str));
 }
-	
+	*/
 // Get project settings
 $project = new DataManager();
 $project->get_by_name($project_name);
@@ -41,16 +41,15 @@ exit();
 	if ($num_rows_index > 0){
 	while ($row = mysql_fetch_array($indexResult, MYSQL_ASSOC)) {
 		$index_name = $row['Column_name'];
-	
 	}
 	} else {
-		$index_name	= $selected_table . "_id";
+		$index_name	= "id";
 	}
 	
 	// Get field names:
 foreach($_GET['fields'] as $key => $value)
 {
-	$field_names[$key]= trim_from_marker($key,"_");
+	$field_names[$key]= $key;
 }
 
 

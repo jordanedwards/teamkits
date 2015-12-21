@@ -36,39 +36,50 @@ $dm = new DataManager($db_host,$db_user,$db_pass,$db_name);
 ?> // include necessary libraries
 require("../includes/init.php");
 $page_id = $_REQUEST["page_id"];
-$action = ($_GET['action'] != "delete" ? "edit" : "delete");
+$action = ($_REQUEST['action'] != "delete" ? "edit" : "delete");
 require(INCLUDES . "/acl_module.php");
+require(CLASSES . "class_<?php echo $selected_table ?>.php");
 
-$item_name = "<?php echo $selected_table ?>";
+$item_name = ucfirst("<?php echo $selected_table ?>");
+$action=escaped_var_from_post('action');
+$id = escaped_var_from_post('id');
 
-		<?php
+$component = new <?php echo ucfirst($selected_table) ?>();
+
+<?php
+		/*
 foreach($field_names as $key => $val){
 	if ($val != "date_created" && $val != "last_updated"  && $val != "last_updated_user"){
 		echo '$' . $key . '=$_POST["'. $key . '"];
 		';
 	}
-}
-?>
-	// add the new record to the database
-	include(CLASSES . "class_<?php echo $selected_table ?>.php");
-	
-		$<?php echo $selected_table ?> = new <?php echo ucfirst($selected_table) ?>();
-<?php 
+}*/
 
-foreach($field_names as $key => $val){
+/*foreach($field_names as $key => $val){
 if ($val == "id"){
-	echo '		$' . $selected_table . '->get_by_id($' .$key . ');
+	echo '		if( _id >0){
+	';
+	echo '			$' . $selected_table . '->get_by_id($' .$key . ');
+	';
+	echo '		}
 ';
 }elseif ($val != "date_created" && $val != "last_updated"  && $val != "last_updated_user"){
 // Strip table name from the front of $row[0] when you get time
 	echo '		$' . $selected_table . '->set_' . $val .'($' .$key . ');
 ';
 }
-}
+}*/
 ?>
-
-if ($_GET['action'] == "delete"){	
-	if($<?php echo $selected_table ?>->delete() == true) {
+if ($id > 0){
+	$component->get_by_id($id);
+}
+$component->load_from_post($_POST);
+if (!isset($active)){
+	$component->set_is_active("Y");
+}
+	
+if ($action == "delete"){	
+	if($component->delete() == true) {
 		$session->setAlertMessage("The $item_name has been removed successfully.");
 		$session->setAlertColor("green");
 		header("location:".$_SERVER['HTTP_REFERER']);
@@ -81,19 +92,20 @@ if ($_GET['action'] == "delete"){
 		exit;
 	}
 
-} else{
+} elseif($action == "add" || $action == "edit"){
+	// add the new record to the database
 
-	if($<?php echo $selected_table ?>->save() == true) {
+	if($component->save() == true) {
 		//Check if new record
-		if($<?php echo $selected_table ?>_id > 0){
+		if($id > 0){
 			$session->setAlertMessage("The $item_name has been updated successfully.");
 			$session->setAlertColor("green");
-			header("location:". BASE_URL."/" . $item_name . "_list.php?page=".$session->getPage());
+			header("location:". BASE_URL."/" . strtolower($item_name) . "_list.php?page=".$session->getPage());
 			exit;		
 		}else{
 			$session->setAlertMessage("The $item_name has been added successfully.");
 			$session->setAlertColor("green");
-			header("location:". BASE_URL."/" . $item_name . "_edit.php?id=".$<?php echo $selected_table ?>->get_id());
+			header("location:". BASE_URL."/" . strtolower($item_name) . "_edit.php?id=".$component->get_id());
 			exit;
 		}
 	}

@@ -9,10 +9,12 @@ $dm = new DataManager($db_host,$db_user,$db_pass,$db_name);
 function right($str, $length) {
      return substr($str, -$length);
 }
+/*
+use if you need to remove a prefix
 function trim_from_marker($str, $marker) {
 	$marker_location = strpos($str,$marker,0);
 	return substr($str,$marker_location+1, strlen($str));
-}
+}*/
 
 	// Build field array:
 	
@@ -22,11 +24,11 @@ function trim_from_marker($str, $marker) {
 	$num_rows = mysql_num_rows($result);
 
 	while ($row = mysql_fetch_row($result)) {
-		if (strpos($row[0],"_",0) > 0){
-			$field_names[$row[0]]= trim_from_marker($row[0],"_");
-		} else {
+	//	if (strpos($row[0],"_",0) > 0){
+	//		$field_names[$row[0]]= trim_from_marker($row[0],"_");
+	//	} else {
 			$field_names[$row[0]]= $row[0];
-		}
+	//	}
 	}
 	
 	// Get Primary Index:
@@ -41,7 +43,7 @@ function trim_from_marker($str, $marker) {
 	
 	}
 	} else {
-		$index_name	= $selected_table . "_id";
+		$index_name	= "id";
 	}
 
 	
@@ -80,11 +82,11 @@ if ($key == $index_name) {
 	echo 'public function set_id($value) {$this->id=$value;}
 
 		';
-} elseif($val == "last_updated_user"){
+} elseif(substr($val,(strlen($val)-17),17) == "last_updated_user"){
 	echo 'public function get_last_updated_user() { return $this->last_updated_user;}
-';
+		';
 	echo 'public function set_last_updated_user() {$this->last_updated_user=$this->get_user_id();}
-';
+		';
 }
 else {
 	echo 'public function get_'. $val . '() { return $this->' . $val .';}
@@ -142,7 +144,8 @@ public function save() {
 			
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
-			
+				$this->is_active = "Y";
+				
 				$strSQL = "INSERT INTO <?php echo $selected_table ?> (<?php 
 				mysql_data_seek($result, 0);
 				while ($row = mysql_fetch_row($result)) {
@@ -197,7 +200,7 @@ public function save() {
 		  ?>}
 			else {
 				$strSQL = "UPDATE <?php echo $selected_table ?> SET 
-								<?php 
+				<?php 
 				foreach($field_names as $key => $val){
 
 					++$row_num;
@@ -208,25 +211,25 @@ public function save() {
 						else {
 							if ($field_suffix == "last_updated"){
 								echo $key .'=NOW(),						
-						 		';
+						';
 							} else {
 						 		echo  $key .'=\'".mysqli_real_escape_string($dm->connection, $this->get_' . $val .'())."\',						 
-						 		';
+						';
 							}
 						}
 
 					 } else {
 					 // Last row (need to put the bracket on the end, and no semicolon)
 						if ($field_suffix == "date_created" || $key == $index_name ){echo ')."\'
-						 	';} 
+						';} 
 						elseif ($field_suffix == "last_updated"){
 							echo $key .'=NOW())
 							
-						 	';}
+						';}
 						 else {
 						 	echo $key .'=\'".mysqli_real_escape_string($dm->connection, $this->get_' . $val . '())."\'
 							
-						 	';
+						';
 						}				 
 					}
 				} 
@@ -237,7 +240,7 @@ public function save() {
 			$result = $dm->updateRecords($strSQL);
 
 			// if this is a new record get the record id from the database
-			if(!$this->get_id() >= "0") {
+			if(!$this->id > 0) {
 				$this->set_id(mysqli_insert_id($dm->connection));
 			}
 			

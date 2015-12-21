@@ -133,7 +133,7 @@
 					
 					// append template file header to final output
 					//$this->output=reset($templateContent);
-					//RMD changing to have sorting
+
 					$templateRow=reset($templateContent);
 					$tempOutput=$templateRow;
 					$tempOutput=str_replace('{sort}',$_SERVER['PHP_SELF'].'?page='.$page.'&sort=' ,$tempOutput);
@@ -144,19 +144,26 @@
 					$tempOutput=$templateRow;
 					
 					// Create array of fields:
-					while ($datafield=mysqli_fetch_field($result)):
-						$datafieldNames[$datafield->name] = $datafield->name;
-					endwhile;
-							
-					// replace placeholders with actual data:																						
-					while($row=mysqli_fetch_array($result)):	
-					$tempOutput=$templateRow;			
-						foreach ($datafieldNames as $val){
-							$tempOutput=str_replace('{'.$val.'}',$row[$val],$tempOutput);
+					$qualified_names = array();
+					for ($i = 0; $i < mysqli_num_fields($result); ++$i) {
+						$fieldinfo=mysqli_fetch_field_direct($result,$i);
+						$table = $fieldinfo->table;
+						$field = $fieldinfo->name;
+						$qualified_names[$i]["field"]="$table.$field";		
 					}
+					
+					$full_output = "";	
+					$result=$this->dm->queryRecords($this->query.' LIMIT '.($page-1)*$this->numRecs.','.$this->numRecs);
+
+					// replace placeholders with actual data:																									
+					while($row=mysqli_fetch_array($result,MYSQLI_NUM)):						
+						$tempOutput=$templateRow;			
+						foreach ($qualified_names as $key=>$val){
+							$tempOutput=str_replace('{'.$val["field"].'}',$row[$key],$tempOutput);
+						}
 							$full_output .= $tempOutput;
 					endwhile;
-							
+												
 					// remove unpopulated placeholders											
 					$this->output.=preg_replace("/{.*?}/",'',$full_output);
 
@@ -180,7 +187,7 @@
                   $name_value = explode('=', $varOne);
                  
                   //remove duplicated vars
-                  if($qsAdd)
+                  if(isset($qsAdd) && $qsAdd)
                   {
                       if(!array_key_exists($name_value[0], $varAdd_array))
                       {

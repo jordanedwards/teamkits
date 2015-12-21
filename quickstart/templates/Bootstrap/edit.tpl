@@ -3,7 +3,7 @@ require("<?php echo $this->settings['includes_url']?>/init.php");
 $page_id = basename(__FILE__);
 $activeMenuItem = "<?php echo ucfirst($this->selected_table) ?>";				
 require(INCLUDES . "/acl_module.php");
-include(CLASSES . "/class_<?php echo $this->selected_table ?>.php"); 
+require_once(CLASSES . "/class_<?php echo $this->selected_table ?>.php"); 
  
 if(!isset($_GET["id"])) {
 	$session->setAlertMessage("Can not edit - the ID is invalid. Please try again.");
@@ -61,9 +61,9 @@ foreach($field_names as $key => $val){
 	</div>
 	
 	<div class="row">
-	<div class="col-md-8">
+	<div class="col-md-6">
 	<form id="form_<?php echo $this->selected_table ?>" action="<dynamic> echo ACTIONS_URL;</dynamic>action_<?php echo $this->selected_table ?>_edit.php" method="post">
-	<input type="hidden" name="<?php echo $this->selected_table ?>_id" value="<dynamic> echo $<?php echo $this->selected_table ?>->get_id(); </dynamic>" />
+	<input type="hidden" name="id" value="<dynamic> echo $<?php echo $this->selected_table ?>->get_id(); </dynamic>" />
 	<input type="hidden" name="action" value="edit" />	
 	<input type="hidden" name="page_id" value="<dynamic> echo $page_id </dynamic>" />	
 	
@@ -80,7 +80,7 @@ if ($this->required_field_names[$key] == 1){
 
 ?>
 				<tr>
-           			<td style="width:1px; white-space:nowrap;"><?php echo ucfirst(str_replace("_"," ",$val))?>: </td>
+           			<td style="width:1px; white-space:nowrap;"><?php echo str_replace("_"," ",ucfirst($val)) ?>: </td>
 <?php
 if ($this->field_types[$key] == "dropdown_dynamic" ):
 // populate dropdowns
@@ -92,7 +92,7 @@ if ($this->field_types[$key] == "dropdown_dynamic" ):
 						$dd->set_name_field("<?php echo $this->dd_table_name_field[$key]; ?>");
 						$dd->set_class_name("form-control inline");
 						$dd->set_order("ASC");						
-						$dd->set_name("<?php echo $key?>");						
+						$dd->set_name("<?php echo $val?>");						
 						$dd->set_selected_value($<?php echo $this->selected_table; ?>->get_<?php echo $val; ?>());
 <?php if($required){ echo '						$dd->set_required("true");
 ';}?>
@@ -107,7 +107,7 @@ elseif ($this->field_types[$key] == "dropdown_static"):
 					<dynamic>					
 						$dd = new DropDown();
 						$dd->set_static(true);	
-						$dd->set_name("<?php echo $key?>");
+						$dd->set_name("<?php echo $val?>");
 						$dd->set_class_name("form-control inline");
 						$dd->set_option_list("Y,N");						
 						$dd->set_selected_value($<?php echo $this->selected_table; ?>->get_<?php echo $val; ?>());
@@ -119,7 +119,7 @@ elseif ($this->field_types[$key] == "dropdown_static"):
 <?php
 elseif ($this->field_types[$key] == "tel"):
 ?>
-					<td><input id="<?php echo $key?>" name="<?php echo $key?>" class="form-control inline" type="tel" value="<dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic>" <?php if($required){ echo " required ";}?> /></td>
+					<td><input id="<?php echo $key?>" name="<?php echo $val?>" class="form-control inline" type="tel" value="<dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic>" <?php if($required){ echo " required ";}?> /></td>
 
 <?php 
 $scripts .='
@@ -131,7 +131,8 @@ $(document).ready(function() {
 <?php
 elseif ($this->field_types[$key] == "currency"):
 ?>
-					<td>$<input id="<?php echo $key?>" name="<?php echo $key?>" class="form-control inline" type="number" step=".01" min="0" value="<dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic>"  <?php if($required){ echo " required ";}?> /></td>
+					<td>$<input id="<?php echo $key?>" name="<?php echo $val?>" class="form-control inline" type="number" step=".01" min="0" value="<dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic>"  <?php if($required){ echo " required ";}?> /></td>
+
 <?php 
 $scripts .='
 $(document).ready(function() {
@@ -139,14 +140,25 @@ $(document).ready(function() {
 });	
 ';
 ?>
+
 <?php
 elseif ($this->field_types[$key] == "textarea"):
 ?>
-					<td><textarea id="<?php echo $key?>" name="<?php echo $key?>" class="form-control inline" rows="8" <?php if($required){ echo " required ";}?>><dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic></textarea></td>
+					<td><textarea id="<?php echo $key?>" name="<?php echo $val?>" class="form-control inline" rows="8" <?php if($required){ echo " required ";}?>><dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic></textarea></td>
+					
+<?php
+elseif ($this->field_types[$key] == "password"):
+$scripts .='
+<dynamic> include(SCRIPTS . "password_strength.js"); </dynamic> 	
+';
+?>
+					<td><input id="password" name="<?php echo $val?>" class="form-control inline" <?php if($required){ echo " required ";}?> placeholder="Enter value to change password" style="width:60%">
+					<span id="result" style="display:inline-block"></span>
+					</td>
 <?php
 else:
 ?>
-            		<td><input id="<?php echo $key?>" name="<?php echo $key?>" class="form-control inline" type="<?php echo $this->field_types[$key] ?>" <?php if ($this->field_types[$key] == "number"){echo 'step="any"';} ?> value="<dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic>"  <?php if($required){ echo " required ";}?>/></td>
+            		<td><input id="<?php echo $key?>" name="<?php echo $val?>" class="form-control inline" type="<?php echo $this->field_types[$key] ?>" <?php if ($this->field_types[$key] == "number"){echo 'step="any"';} ?> value="<dynamic> echo $<?php echo $this->selected_table ?>->get_<?php echo $val?>(); </dynamic>"  <?php if($required){ echo " required ";}?>/></td>
 <?php
 endif;
 ?>				</tr>
@@ -156,8 +168,8 @@ endforeach;
   		
 		</table>
           <br />
-          <input type="submit" value="<dynamic>if ($_GET["id"] ==0){</dynamic> Add <dynamic> } else {</dynamic> Save <dynamic> }</dynamic>" />&nbsp;&nbsp;
-          <input type="button" value="Cancel" onClick="window.location ='<?php print("<?php"); ?> echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn-primary" value="<dynamic>if ($_GET["id"] ==0){</dynamic> Add <dynamic> } else {</dynamic> Save <dynamic> }</dynamic>" />&nbsp;&nbsp;
+          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php print("<?php"); ?> echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		

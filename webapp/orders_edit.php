@@ -248,7 +248,11 @@ table.admin_table td {
 				</td>
 			</tr> 				
 			<tr>
+<<<<<<< HEAD
 				<td style="width:1px; white-space:nowrap;">Payment Deadline: </td>
+=======
+				<td style="width:1px; white-space:nowrap;">Member Payment Deadline: </td>
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 				<td>
 					<p class="static"><?php echo $order->get_deadline(); ?></p>
 				</td>
@@ -257,8 +261,12 @@ table.admin_table td {
 		</table>
 	<? } ?>
           <br />
+<<<<<<< HEAD
           <input type="submit" class="btn btn-success" value="Add/Update Order" />&nbsp;
 		  <a href="<?php  echo ACTIONS_URL  ?>action_orders_edit.php?action=delete&page_id=<?php  echo $page_id  ?>&id=<?php  echo $order->get_id()  ?>" onClick="return confirm('Cancel this order?');" class="btn btn-warning" role="button">Cancel Order</a>	&nbsp;
+=======
+          <input type="submit" class="btn btn-success" value="Add/Update Orders" />&nbsp;&nbsp;
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
           <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
@@ -268,7 +276,11 @@ table.admin_table td {
         <?php  }  ?>			
 	
       </div>
+<<<<<<< HEAD
 	<div class="col-md-7">
+=======
+	<div class="col-md-6">
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 		<?php if ($order->get_id() > 0): ?>
 			<table class="admin_table">
 			<thead>
@@ -302,14 +314,22 @@ table.admin_table td {
 			$strSQL = "SELECT * from orderitem 
 			LEFT JOIN item ON orderitem.orderitem_item_number = item.item_id 
 			WHERE orderitem.orderitem_order_id=" . $order->get_id() . "
+<<<<<<< HEAD
 			AND orderitem.is_active = 'Y'
 			ORDER BY item_name ASC
 			";						
+=======
+			AND orderitem.is_active = 'Y'";						
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 
 			$result = $dm->queryRecords($strSQL);	
 			if ($result):
 				while($row = mysqli_fetch_assoc($result)):
+<<<<<<< HEAD
 					echo '<tr><td><a href="orderitem_edit.php?id=' . $row['orderitem_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['item_name'] . '</td><td>' . $row['orderitem_quantity'] . '</td><td>' . $row['orderitem_size'] . '</td><td style="white-space:normal; text-align:right;">$'.sprintf("%.2f",$row['orderitem_price']) .'</td><td style="white-space:normal; text-align:right;">$'.number_format(($row['orderitem_price']*$row['orderitem_quantity']),2) .'</td></tr>';
+=======
+					echo '<tr><td><a href="orderitem_edit.php?id=' . $row['orderitem_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td><a href="item_edit.php?id=' . $row['orderitem_item_number'] . '">' . $row['item_name'] . '</a></td><td>' . $row['orderitem_quantity'] . '</td><td>' . $row['orderitem_size'] . '</td><td style="white-space:normal; text-align:right;">$'.sprintf("%.2f",$row['orderitem_price']) .'</td><td style="white-space:normal; text-align:right;">$'.number_format(($row['orderitem_price']*$row['orderitem_quantity']),2) .'</td></tr>';
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 						$subtotal = $subtotal + number_format(($row['orderitem_price']*$row['orderitem_quantity']),2);
 				endwhile;									
 			endif;
@@ -325,9 +345,14 @@ table.admin_table td {
 			<tr><td colspan="5" style="text-align: right;"><strong>Total:</strong></td><td style="text-align:right"><strong>$<?php echo number_format($order->get_total(),2);?></strong></td></tr>			
 			</tfoot>
 		</table>
+<<<<<<< HEAD
 		<p class="small"><em>&nbsp; * Items shaded dark grey are part of a group order.</em></p>
 		
 		<table class="admin_table">
+=======
+		<br>
+			<table class="admin_table">
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 			<thead>
 			<tr><th colspan="4">Payments:<i class="fa fa-plus-circle fa-lg add-icon add-payment"></i></th></tr>
 			<tr><th></th><th>Amount</th><th>Method</th><th>Date</th></tr>	
@@ -351,8 +376,12 @@ table.admin_table td {
 		 ?>		
 			</tbody>
 			<?php $total = $order->get_total() - $payment_total; ?>
+<<<<<<< HEAD
 			<tfoot>	
 			<tr><td colspan="3">Payments:</td><td id="total" style="text-align:right">$<?php echo number_format($payment_total,2);?></td></tr>			 	 
+=======
+			<tfoot>	 	 
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 			<tr><td colspan="3">Balance:</td><td id="total" style="text-align:right">$<?php echo number_format($total,2);?></td></tr>
 			</tfoot>			
 		</table>
@@ -406,6 +435,7 @@ table.admin_table td {
 			submitHandler: function() { form.submit();  }
 		});
 
+<<<<<<< HEAD
   </script>	
   <script src="js/jquery.print.js"></script>
   <script>
@@ -413,6 +443,12 @@ table.admin_table td {
  	 $( "#customer_address_box" ).print();
   });
   </script>	
+=======
+// Include any masks here:
+		 //   $("#student_tel").mask("(999) 999-9999");
+		
+  </script>		
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 <?php require(SCRIPTS . "order_item_add_dialog.php"); ?>  
 <?php require(SCRIPTS . "shipping_add_dialog.php"); ?>  
 <?php require(SCRIPTS . "payment_add_dialog.php"); ?>  

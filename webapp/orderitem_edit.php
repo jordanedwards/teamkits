@@ -59,7 +59,11 @@ $activeMenuItem = "Orderitem";
 	</div>
 	
 	<div class="row">
+<<<<<<< HEAD
 	<div class="col-sm-6">
+=======
+	<div class="col-md-6">
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 	<form id="form_orderitem" action="<?php  echo ACTIONS_URL; ?>action_orderitem_edit.php" method="post">
 	<input type="hidden" name="orderitem_id" value="<?php  echo $orderitem->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
@@ -117,7 +121,11 @@ $activeMenuItem = "Orderitem";
           <br />
           <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
           <input type="submit" class="btn btn-warning"  value="Delete" name="delete"/>&nbsp;	  		  
+<<<<<<< HEAD
           <input type="button" class="btn btn-default" value="Back" onClick="window.location ='orders_edit.php?id=<?php echo $orderitem->get_order_id(); ?>'" />
+=======
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
         </form>
 		<br>
 		

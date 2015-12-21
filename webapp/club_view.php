@@ -241,7 +241,7 @@ $activeMenuItem = "Account info";
 		 
           <br />
           <input type="submit" class="btn-success" value="Save" />&nbsp;
-          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="button" class="btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 			

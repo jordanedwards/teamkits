@@ -93,7 +93,7 @@ return $retval;
 
 			
 			// Don't check the fields that are automatically set in the class. Probably no need to edit these:
-			if (strpos($name,"date_created",0) || strpos($name,"last_updated")){
+			if ($name == "date_created" || $name =="last_updated" || $name =="last_updated_user"){
 				$checked = "";			
 			} else {
 				$checked = " checked='checked' ";

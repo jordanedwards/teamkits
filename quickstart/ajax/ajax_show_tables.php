@@ -1,8 +1,13 @@
 <?php
-   			mysql_connect($_GET['db_host'], $_GET['db_user'], $_GET['db_pass'])
-			   or die("Database connection error");
-		    mysql_select_db($_GET['db_name']) or die("Database connection error");
-			?>
+$error = "";
+	mysql_connect($_GET['db_host'], $_GET['db_user'], $_GET['db_pass'])
+	   or $error = "Cannot connect to database";
+	mysql_select_db($_GET['db_name']) or $error = "Cannot select db";
+
+if ($error != ""){
+
+} else {
+?>
 	<select name="selected_table" id="selected_table" onChange="updateSelected(this.value)">
 	<option value=""></option>
 		<?php
@@ -14,3 +19,4 @@
 			}
 ?>
     </select>
+<?php } ?>

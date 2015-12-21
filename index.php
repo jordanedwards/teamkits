@@ -46,6 +46,7 @@ include(CLASSES . "/class_cmscomponent.php");
 	<link rel="stylesheet" href="css/combined.css">	 <!-- replaces the above stylesheets -->
 		
 	<link rel="stylesheet" href="css/styles.css">	
+<<<<<<< HEAD
 <style>
 .og-grid li>a, .og-grid li>a img {
     max-width: 150px;
@@ -62,6 +63,9 @@ include(CLASSES . "/class_cmscomponent.php");
   margin-bottom: 5px;
 }
 </style>
+=======
+
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
     </head>
     <body data-spy="scroll" data-target=".navbar">
 <script>
@@ -194,8 +198,11 @@ include(CLASSES . "/class_cmscomponent.php");
         <section id="about">
             <div class="container">
                 <h2 class="text-center">About<i class="icon-about"><img src="images/icon-about.png"></i></h2>
+<<<<<<< HEAD
 
 				<div class="col-md-8" style="padding:10px">
+=======
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 
 				
 				<p class="text-center lead"><!--<span class="little-drop-cap">T</span>eam Kits, based in Kelowna, BC, and having direct-from-factory relationships with Precision Training from the UK, Macron, Joma, Inaria, and Lotto from Italy and dealerships with Xara, Umbro, Mitre, Molten, and others believes that a uniform is not something that you just play in, but much more to make a statement of who your club or team is.</p><br>

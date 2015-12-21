@@ -149,7 +149,7 @@ $activeMenuItem = "Promos";
 		</table>
           <br />
           <input type="submit" value="Add/Update Promo" />&nbsp;&nbsp;
-          <input type="button" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="button" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		

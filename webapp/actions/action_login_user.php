@@ -15,6 +15,7 @@ require("../includes/init.php");
 	$password = $_POST["password"];
 	
 	// If the user arrived at a login-only page, redirect them to this page after login.
+<<<<<<< HEAD
 	if (isset($_REQUEST["redirect"]) && $_REQUEST['redirect'] != ""){	
 		$redirect = escaped_var_from_post("redirect");
 		$redirect = str_replace("*","?",$_REQUEST["redirect"]);
@@ -23,6 +24,12 @@ require("../includes/init.php");
 		$redirect = NULL;
 	}
 		
+=======
+	$redirect = escaped_var_from_post("redirect");
+	$redirect = str_replace("*","?",$_REQUEST["redirect"]);
+	$redirect = str_replace("~","&",$redirect);
+	
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 	require_once(CLASSES . "class_user.php"); 
 	$user = new User();
 	$user->set_password($password);
@@ -31,7 +38,11 @@ require("../includes/init.php");
 
 if($user_id != "") {
 	// if the user exists forward them to the dashboard, otherwise keep them at the login page with the appropriate login message
+<<<<<<< HEAD
 	if ($redirect == NULL){
+=======
+	if (!isset($_REQUEST["redirect"])){
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 		switch ($user->get_role()){
 			case "1":
 				$redirect = BASE_URL . "/dashboard.php";

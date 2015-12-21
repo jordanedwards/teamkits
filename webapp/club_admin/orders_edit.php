@@ -22,7 +22,10 @@ $activeMenuItem = "Orders";
 	if ($_GET["id"] ==0){
 		// Change this to pass a parent value if creating a new record:
 		$order->set_club_id($club->get_id());
+<<<<<<< HEAD
 		$order->set_type("club");
+=======
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 		$order->set_status(1);
 		$order->save();	
 		
@@ -162,12 +165,15 @@ label {
 	display: inline-block;
 	width: 5em;
 }
+<<<<<<< HEAD
 <?php if ($order->get_status() != 1){
 ?>
 .add-icon {
     color: #ccc;
 }
 <?php } ?>
+=======
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 </style>
   </head>
   <body>
@@ -234,7 +240,11 @@ label {
 <br>
 <table class="admin_table">
 			<thead>
+<<<<<<< HEAD
 			<tr><th colspan="6">Order Items: <p style="float:right; color:#<?php if ($order->get_status() == 1){ echo 'fff'; } else { echo 'ccc';} ?>" class="add-item">Add items</p><i class="fa fa-plus-circle fa-lg add-icon add-item no_print"></i></th></tr>
+=======
+			<tr><th colspan="6">Order Items:<i class="fa fa-plus-circle fa-lg add-icon add-item no_print"></i></th></tr>
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 			<tr><th ></th><th>Item:</th><th>#</th><th>Size</th><th>Price</th><th>Total</th></tr>		
 			</thead>
 			
@@ -244,12 +254,17 @@ label {
 			$strSQL = "SELECT * from orderitem 
 			LEFT JOIN item ON orderitem.orderitem_item_number = item.item_id 
 			WHERE orderitem.orderitem_order_id=" . $order->get_id() . "
+<<<<<<< HEAD
 			AND orderitem.is_active = 'Y'
 			ORDER BY item_name ASC, orderitem_size ASC";						
+=======
+			AND orderitem.is_active = 'Y'";						
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 
 			$result = $dm->queryRecords($strSQL);	
 			if ($result):
 				while($row = mysqli_fetch_assoc($result)):
+<<<<<<< HEAD
 				if ($order->get_status() == 1){
 					echo '<tr><td><a href="orderitem_edit.php?id=' . $row['orderitem_id'] .'" class="no_print"><i class="fa fa-edit fa-lg"></i></a>&nbsp;&nbsp;<a href="actions/action_orderitem_edit.php?action=delete&page_id=orderitem_edit.php&id=' . $row['orderitem_id'] . '" onclick="return confirm(\'You are about to delete this item. Continue?\');" class="editing no_print"><i class="fa fa-times-circle fa-lg"></i></a></td>';
 				} elseif ($order->get_status() == 2 && $row['item_name'] != "Shipping charges - USD" || $order->get_status() == 3 && $row['item_name'] != "Shipping charges - USD") {
@@ -259,6 +274,9 @@ label {
 					echo '<tr><td></td>';
 				}
 					echo '<td><a class="imagePreview" data-item-id="' . $row['orderitem_item_number'] . '">' . $row['item_name'] . '</a></td><td>' . $row['orderitem_quantity'] . '</td><td>' . $row['orderitem_size'] . '</td><td style="white-space:normal; text-align:right;">$'.sprintf("%.2f",$row['orderitem_price']) .'</td><td style="white-space:normal; text-align:right ">$'.number_format(($row['orderitem_price']*$row['orderitem_quantity']),2) .'</td></tr>';
+=======
+					echo '<tr><td><a href="orderitem_edit.php?id=' . $row['orderitem_id'] .'" class="no_print"><i class="fa fa-edit fa-lg"></i></a>&nbsp;&nbsp;<a href="actions/action_orderitem_edit.php?action=delete&page_id=orderitem_edit.php&id=' . $row['orderitem_id'] . '" onclick="return confirm(\'You are about to delete this item. Continue?\');" class="editing no_print"><i class="fa fa-times-circle fa-lg"></i></a></td><td><a class="imagePreview" data-item-id="' . $row['orderitem_item_number'] . '">' . $row['item_name'] . '</a></td><td>' . $row['orderitem_quantity'] . '</td><td>' . $row['orderitem_size'] . '</td><td style="white-space:normal; text-align:right;">$'.sprintf("%.2f",$row['orderitem_price']) .'</td><td style="white-space:normal; text-align:right ">$'.number_format(($row['orderitem_price']*$row['orderitem_quantity']),2) .'</td></tr>';
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 					$order_items = $order_items +$row['orderitem_quantity'];
 				endwhile;						
 			endif;

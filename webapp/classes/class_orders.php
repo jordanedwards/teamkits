@@ -4,7 +4,10 @@
  		private $tablename;
 		private $id;
 		private $club_id;
+<<<<<<< HEAD
 		private $customer_id;		
+=======
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 		private $currency;		
  		private $subtotal;
  		private $tax;
@@ -31,9 +34,12 @@
 		public function get_club_id() { return $this->club_id;}
 		public function set_club_id($value) {$this->club_id=$value;}
 
+<<<<<<< HEAD
 		public function get_customer_id() { return $this->customer_id;}
 		public function set_customer_id($value) {$this->customer_id=$value;}
 
+=======
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 		public function get_currency() { return $this->currency;}
 		public function get_currency_shortname() { 
 			$dm = new DataManager();			
@@ -139,10 +145,16 @@ public function save() {
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
 				$this->set_active("Y");
+<<<<<<< HEAD
 				$strSQL = "INSERT INTO orders (order_club_id, order_customer_id, order_currency, order_subtotal, order_tax, order_discount, order_total, order_status, order_deadline, order_type, order_notes, is_active, order_date_created, order_date_submitted, order_last_updated, order_last_updated_user) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_customer_id())."',
+=======
+				$strSQL = "INSERT INTO orders (order_club_id, order_currency, order_subtotal, order_tax, order_discount, order_total, order_status, order_deadline, order_type, order_notes, is_active, order_date_created, order_date_submitted, order_last_updated, order_last_updated_user) 
+        VALUES (
+				'".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 				'".mysqli_real_escape_string($dm->connection, $this->get_currency())."',				
 				'".mysqli_real_escape_string($dm->connection, $this->get_subtotal())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_tax())."',
@@ -154,14 +166,21 @@ public function save() {
 				'".mysqli_real_escape_string($dm->connection, $this->get_notes())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_active())."',
 				NOW(),
+<<<<<<< HEAD
 				'".mysqli_real_escape_string($dm->connection, $this->get_date_submitted())."',
+=======
+				'',
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 				NOW(),
 				'".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."')";	
 						}
 			else {
 				$strSQL = "UPDATE orders SET 
 					order_club_id='".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',		
+<<<<<<< HEAD
 					order_customer_id='".mysqli_real_escape_string($dm->connection, $this->get_customer_id())."',		
+=======
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 					order_currency='".mysqli_real_escape_string($dm->connection, $this->get_currency())."',												 
 					order_subtotal='".mysqli_real_escape_string($dm->connection, $this->get_subtotal())."',	
 					order_tax='".mysqli_real_escape_string($dm->connection, $this->get_tax())."',						 
@@ -175,10 +194,19 @@ public function save() {
 					order_date_submitted='".mysqli_real_escape_string($dm->connection, $this->get_date_submitted())."',													 
 					order_last_updated=NOW(),						
 					order_last_updated_user='".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."'
+<<<<<<< HEAD
 				
 				WHERE order_id=".mysqli_real_escape_string($dm->connection, $this->get_id());
 			}		
 											
+=======
+				
+				WHERE order_id=".mysqli_real_escape_string($dm->connection, $this->get_id());
+			}		
+				
+				addtolog($strSQL);
+							
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 			$result = $dm->updateRecords($strSQL);
 
 			// if this is a new record get the record id from the database
@@ -248,11 +276,15 @@ public function save() {
 			exit;
 		}
 	}	
+<<<<<<< HEAD
 
 	public function refresh() {
 		$this->get_by_id($this->id);
 	}
 		
+=======
+	
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 	// function to fetch the record and populate the object
 	public function get_by_id($id) {
 		try{
@@ -515,7 +547,10 @@ WHERE orderitem_order_id = " . $this->id;
   	private function load($row){
 		$this->set_id($row["order_id"]);
 		$this->set_club_id($row["order_club_id"]);
+<<<<<<< HEAD
 		$this->set_customer_id($row["order_customer_id"]);		
+=======
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 		$this->set_currency($row["order_currency"]);		
 		$this->set_subtotal($row["order_subtotal"]);
 		$this->set_tax($row["order_tax"]);	

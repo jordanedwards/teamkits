@@ -77,9 +77,13 @@ class SessionManager {
 
 	public function getMask() { return isset($_SESSION['mask']) ? $_SESSION['mask'] : null; }
 	public function setMask($value) { $_SESSION['mask'] = $value; }
+<<<<<<< HEAD
 			
 	public function getData($name) { return isset($_SESSION['data'][$name]) ? $_SESSION['data'][$name] : null; }
 			
+=======
+		
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 	public function alertClear(){
 		$_SESSION["alert_msg"] = "";
 		$_SESSION["alert_color"] = "";

@@ -34,7 +34,11 @@ $club->get_by_user_id($currentUser->get_id());
 		<?php 
 			$dm = new DataManager();
 			$query="SELECT *, (SELECT itemImage_url FROM itemImage WHERE itemImage_item_id = item_id LIMIT 1) AS image FROM item
+<<<<<<< HEAD
 			WHERE item_club_id =".$club->get_id()." AND is_active = 'Y' OR item_club_id=0 AND item_brand =" . $club->get_brand() . " AND is_active = 'Y' OR item_club_id=0 AND item_brand =0 AND item_name NOT LIKE '%Shipping charges%' AND is_active = 'Y'
+=======
+			WHERE item_club_id =".$club->get_id()." OR item_club_id=0 AND item_brand =" . $club->get_brand() . " OR item_club_id=0 AND item_brand =0 AND item_name NOT LIKE '%Shipping charges%'
+>>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 			ORDER BY `item_name` ASC ";
 			$result = $dm->queryRecords($query);
 			if($result){
