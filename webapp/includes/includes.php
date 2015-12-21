@@ -11,6 +11,15 @@
 <script>
 	$(".form-control:required").after("<span class='red'>&nbsp;*</span");
 </script>
+<script>
+	function write_sess_var(varname,val){
+		$.ajax({
+			url:"/webapp/ajax/ajax_sess_var.php?varname="+varname+"&val="+val,
+				success: function(result){
+			}
+		});
+	}
+</script>
 <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
   <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>

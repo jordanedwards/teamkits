@@ -5,13 +5,12 @@ $action = ($_GET['action'] != "delete" ? "edit" : "delete");
 require(INCLUDES . "/acl_module.php");
 
 $item_name = payment;
-	$payment_id=$_POST["payment_id"];
+	$payment_id=$_REQUEST["payment_id"];
 		$payment_order_id=$_POST["payment_order_id"];
 		$payment_transaction_number=$_POST["payment_transaction_number"];
 		$payment_amount=$_POST["payment_amount"];
 		$payment_method=$_POST["payment_method"];
 		$payment_status=$_POST["payment_status"];
-		$is_active=$_POST["is_active"];
 			// add the new record to the database
 	include(CLASSES . "class_payment.php");
 	
@@ -22,13 +21,13 @@ $item_name = payment;
 		$payment->set_amount($payment_amount);
 		$payment->set_method($payment_method);
 		$payment->set_status($payment_status);
-		$payment->set_active($is_active);
 
-if ($_POST['delete'] == "Delete" || $_GET['action'] == "delete"){	
+if ($_POST['delete'] == "Delete" || $_REQUEST['action'] == "delete"){	
 	if($payment->delete() == true) {
 		$session->setAlertMessage("The $item_name has been removed successfully.");
 		$session->setAlertColor("green");
-		header("location:". BASE_URL."/orders_edit.php?id=".$payment->get_order_id());
+		header("location:".$_SERVER['HTTP_REFERER']);	
+//		header("location:". BASE_URL."/orders_edit.php?id=".$payment->get_order_id());
 		exit;
 	}
 	else {

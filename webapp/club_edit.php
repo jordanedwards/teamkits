@@ -19,11 +19,13 @@ include(CLASSES . "/class_club.php");
 	if ($_GET["id"] ==0){
 		// Change this to pass a parent value if creating a new record:
 		$club->set_active("Y");
+		$club->set_sport(1);
+		$club->generate_code();
 	} else {
 		$club->get_by_id($club_id);
 	}
 	
-	if($account_type==3) {
+	if($account_type==3 || $club->get_account_type()=="3") {
 		$club->set_account_type("3");
 		$activeMenuItem = "Leads";	
 		$title = "Lead";	
@@ -31,6 +33,7 @@ include(CLASSES . "/class_club.php");
 		$activeMenuItem = "Clubs";	
 		$title = "Club";			
 	}
+	
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -79,8 +82,11 @@ include(CLASSES . "/class_club.php");
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Tel: </td>
 					<td><input id="club_tel" name="club_tel" type="tel" value="<?php  echo $club->get_tel();  ?>"  class="form-control inline" /></td>
-
 				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Website: </td>
+            		<td><input id="club_website" name="club_website" type="url"  value="<?php  echo $club->get_website();  ?>" class="form-control inline" /> </td>
+				</tr>				
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Address: </td>
             		<td><input id="club_address" name="club_address" type="text"  value="<?php  echo $club->get_address();  ?>" class="form-control inline" /> </td>
@@ -254,8 +260,8 @@ include(CLASSES . "/class_club.php");
 		 
           <br />
 		  <?php endif; ?>
-          <input type="submit" class="btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
-          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		
@@ -290,8 +296,8 @@ include(CLASSES . "/class_club.php");
 		<br>
 		<table class="admin_table">
 			<thead>
-			<tr><th colspan="3">Notes:<i class="fa fa-plus-circle fa-lg add-icon add-note"></i></th></tr>
-			<tr><th></th><th>Date</th><th>Note</th></tr>
+			<tr><th colspan="5">Notes:<i class="fa fa-plus-circle fa-lg add-icon add-note"></i></th></tr>
+			<tr><th></th><th>Note</th><th>Date</th><th>Followup date</th><th>Complete?</th></tr>
 			</thead>
 			
 			<tbody id="note_table">
@@ -303,7 +309,7 @@ include(CLASSES . "/class_club.php");
 			$result = $dm->queryRecords($strSQL);	
 			if ($result):
 				while($row = mysqli_fetch_assoc($result)):
-					echo '<tr><td><a href="clubNotes_edit.php?id=' . $row['clubNotes_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['clubNotes_date_created'] . '</a></td><td>' . $row['clubNotes_content'] . '</td></tr>';
+					echo '<tr><td><a href="clubNotes_edit.php?id=' . $row['clubNotes_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['clubNotes_content'] . '</td><td>' . substr($row['clubNotes_date_created'],0,10) . '</a></td><td>' . $row['clubNotes_followup_date'] . '</a></td><td>' . $row['clubNotes_followup_complete'] . '</a></td></tr>';
 				endwhile;									
 			endif;
 		 ?>
@@ -333,6 +339,28 @@ include(CLASSES . "/class_club.php");
 		 ?>		
 			</tbody>
 		</table>
+		<br>
+		<table class="admin_table">
+			<thead>
+			<tr><th colspan="3">Kits:<a href="kit_edit.php?club_id=<?php echo $club_id ?>"><i class="fa fa-plus-circle fa-lg add-icon"></i></a></th></tr>
+			<tr><th></th><th>Title:</th><th>Active</th></tr>	
+			</thead>
+			
+			<tbody>
+		 <?php 
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from kit 
+			WHERE club_id=" . $club_id;
+			
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result)):
+					echo '<tr><td><a href="kit_edit.php?id=' . $row['id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['title'] . '</a></td><td>' . $row['is_active'] . '</td></tr>';
+				endwhile;									
+			endif;
+		 ?>		
+			</tbody>
+		</table>		
 		<br>
 		<table class="admin_table">
 			<thead>

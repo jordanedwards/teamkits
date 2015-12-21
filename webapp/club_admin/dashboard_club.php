@@ -14,8 +14,8 @@ $club->get_by_user_id($currentUser->get_id());
 <head>
    <?php  include(HEAD);  ?>
     <title>Dashboard | <?php echo $appConfig["app_title"]; ?></title>
-<link href='http://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
 <style>
 .widget .widget-header.promo-header {
 	height:auto;
@@ -28,7 +28,7 @@ $club->get_by_user_id($currentUser->get_id());
 </head>
 <body>
 
-<?php require(INCLUDES . "navbar_club.php");?>
+<?php require(INCLUDES . "navbar.php");?>
 
 <div class="main">
     <div class="container">
@@ -79,11 +79,21 @@ $club->get_by_user_id($currentUser->get_id());
 			
 			if($result){
 			while ($row = mysqli_fetch_array($result)){
-				if ($row['promo_image'] != ""){
+				$filename = '../images/promo/'.$row['promo_image'];
+				if (file_exists($filename)){
 					$promo_graphic = "<img src = '/webapp/images/promo/" . $row['promo_image'] . "' style='  max-height: 150px;'>";
 				}else {
-				//Change to pull uploaded graphic from item profile:
-					$promo_graphic = "<img src = '/webapp/images/itemimages/" . $row['promo_image'] . "' style='  max-height: 150px;'>";
+					// Promo image doesn't exist, so grab the last uploaded item image:
+					$query="SELECT itemImage_url FROM itemImage
+					LEFT JOIN item ON itemImage.itemImage_item_id = item.item_id
+					WHERE itemImage.is_active = 'Y' AND item.item_id = " . $row['promo_item_id'] . "
+					ORDER BY itemImage_id DESC
+					LIMIT 1";
+					
+					$imageresult = $dm->queryRecords($query);
+					while ($imagerow = mysqli_fetch_array($imageresult)){	
+						$promo_graphic = "<img src = '/webapp/images/itemimages/" . $imagerow['itemImage_url'] . "' style='  max-height: 150px;'>";
+					}			
 				}
 					echo '
 					<tr style="border: 2px solid #222;">
@@ -175,19 +185,31 @@ $club->get_by_user_id($currentUser->get_id());
 				<div class="widget widget-table action-table">
 						
 					<div class="widget-header promo-header">
-						<h2>Custom Builds</h2>
+						<h2>Custom Kits</h2>
 					</div> <!-- /widget-header -->
 					 <div class="widget-content">
-						<table class="table table-bordered">
-							<thead>
-								<tr>
-									<th>Title</th>								
-									<th>View</th>
-								</tr>
-							</thead>
-							<tbody>
-								</tbody>
-							</table>
+		<table class="table table-bordered">
+			<thead>
+			<tr><th>Title:</th></tr>	
+			</thead>
+			
+			<tbody>
+		 <?php 
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from kit 
+			WHERE club_id=" . $club->get_id() . "
+			AND is_active = 'Y'
+			";
+			
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result)):
+					echo '<tr><td><a href="kit_view.php?id=' . $row['id'] .'">' . $row['title'] . '</a></td></tr>';
+				endwhile;									
+			endif;
+		 ?>		
+			</tbody>
+		</table>
 						
 					</div>		
 				</div>
@@ -219,6 +241,7 @@ $(function() {
 				$('#alert_message').removeClass();				
 				$('#alert_message').addClass(data.alertColor);				
 				$('#alert_message').show();
+				//console.log(data);
 			}
 		});
 	});

@@ -25,7 +25,7 @@ $activeMenuItem = "Account info";
   </head>
   <body>
 
-<?php  require(INCLUDES . "navbar_club.php");  ?>
+<?php  require(INCLUDES . "navbar.php");  ?>
 <div class="main">
 
     <div class="container">
@@ -64,8 +64,11 @@ $activeMenuItem = "Account info";
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Tel: </td>
 					<td><input id="club_tel" name="club_tel" type="tel" value="<?php  echo $club->get_tel();  ?>"  class="form-control inline" /></td>
-
 				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Website: </td>
+            		<td><input id="club_website" name="club_website" type="url"  value="<?php  echo $club->get_website();  ?>" class="form-control inline" /> </td>
+				</tr>				
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Address: </td>
             		<td><input id="club_address" name="club_address" type="text"  value="<?php  echo $club->get_address();  ?>" class="form-control inline" /> </td>
@@ -221,27 +224,12 @@ $activeMenuItem = "Account info";
 			<tr>
            		<td style="width:1px; white-space:nowrap;">Password: </td>
             	<td><input id="user_password" name="user_password" type="password"  value="" placeholder="Enter new password to update" class="form-control inline" /> </td>
-			</tr>
-			<tr>
-           		<td style="width:1px; white-space:nowrap;">Enabled: </td>
-            	<td>
-				<?php 					
-					$dd = new DropDown();
-					$dd->set_static(true);	
-					$dd->set_name("user_active");
-					$dd->set_class_name("form-control");
-					$dd->set_option_list("Y,N");						
-					$dd->set_selected_value($club->get_user_active());
-					$dd->set_disabled("true");										
-					$dd->display();
-				?>	
-				</td>
 			</tr>						 
 		 </table>
 		 
           <br />
-          <input type="submit" class="btn-success" value="Save" />&nbsp;
-          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="Save" />&nbsp;
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 			
@@ -309,7 +297,7 @@ $activeMenuItem = "Account info";
 			$result = $dm->queryRecords($strSQL);	
 			if ($result):
 				while($row = mysqli_fetch_assoc($result)):
-					echo '<tr><td><a href="clubColours_edit.php?id=' . $row['clubColours_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['clubColours_title'] . '</td><td>' . $row['clubColours_code'] . '</td><td style="background:' . $row['clubColours_hex_code'].'"></td></tr>';
+					echo '<tr><td><a href="../clubColours_edit.php?id=' . $row['clubColours_id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['clubColours_title'] . '</td><td>' . $row['clubColours_code'] . '</td><td style="background:' . $row['clubColours_hex_code'].'"></td></tr>';
 				endwhile;									
 			endif;
 		 ?>		
@@ -318,7 +306,7 @@ $activeMenuItem = "Account info";
 		<br>		
 		<table class="admin_table">
 			<thead>
-			<tr><th colspan="5">Orders:<a href="orders_edit.php"><i class="fa fa-plus-circle fa-lg add-icon"></i></a></th></tr>
+			<tr><th colspan="5">Orders:<a href="orders_edit.php?id=0"><i class="fa fa-plus-circle fa-lg add-icon"></i></a></th></tr>
 			<tr><th></th><th>Date:</th><th>Status</th></tr>	
 			</thead>
 			

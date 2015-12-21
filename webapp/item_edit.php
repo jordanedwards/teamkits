@@ -18,6 +18,7 @@ include(CLASSES . "/class_item.php");
 	if ($_GET["id"] ==0){
 		// Change this to pass a parent value if creating a new record:
 		//	$item->set_customer_id($_GET['customer_id']);
+		$item->set_id(0);
 	} else {
 		$item->get_by_id($item_id);
 	}
@@ -70,6 +71,10 @@ $activeMenuItem = "Manage";
 					<td>$<input id="item_price" name="item_price" type="text" value="<?php  echo number_format($item->get_price(),2);  ?>"  style="width:90%" /></td>
 				</tr>
 				<tr>
+           			<td style="width:1px; white-space:nowrap;">Weight: (Kgs)</td>
+					<td><input id="item_weight" name="item_weight" type="number" min="0.000" step="0.001" value="<?php  echo number_format($item->get_weight(),3);  ?>"  style="width:90%" /></td>
+				</tr>				
+				<tr>
            			<td style="width:1px; white-space:nowrap;">Brand: </td>
 				
 					<td>
@@ -106,9 +111,9 @@ $activeMenuItem = "Manage";
   		
 		</table>
           <br />
-          <input type="submit" class="btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
-          <input type="submit" class="btn-warning"  value="Delete" name="delete"/>&nbsp;	  		  
-          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
+        <!--  <input type="submit" class="btn btn-warning"  value="Delete" name="delete"/>&nbsp;	  		  -->
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		
@@ -188,8 +193,7 @@ $activeMenuItem = "Manage";
 			submitHandler: function() { form.submit();  }
 		});
 
-// Include any masks here:
-		 //   $("#student_tel").mask("(999) 999-9999");
+  $("#item_weight").mask('000.000', {reverse: true});
 		
   </script>	
 <?php include(SCRIPTS . "item_image_add_dialog.php"); ?>  

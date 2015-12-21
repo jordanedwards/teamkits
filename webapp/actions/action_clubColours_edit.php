@@ -4,24 +4,24 @@ $page_id = $_REQUEST["page_id"];
 $action = ($_GET['action'] != "delete" ? "edit" : "delete");
 require(INCLUDES . "/acl_module.php");
 
-$item_name = "clubColours";
+$item_name = "Club Colours";
 
 		$clubColours_id=$_POST["clubColours_id"];
-		$clubColours_club_id=$_POST["clubColours_club_id"];
+	//	$clubColours_club_id=$_POST["clubColours_club_id"];
 		$clubColours_code=$_POST["clubColours_code"];
 		$clubColours_hex_code=$_POST["clubColours_hex_code"];
 		$clubColours_title=$_POST["clubColours_title"];
-		$is_active=$_POST["is_active"];
-			// add the new record to the database
-	include(CLASSES . "class_clubColours.php");
+		//$is_active=$_POST["is_active"];
+		// add the new record to the database
+		include(CLASSES . "class_clubColours.php");
 	
 		$clubColours = new ClubColours();
 		$clubColours->get_by_id($clubColours_id);
-		$clubColours->set_club_id($clubColours_club_id);
+		//$clubColours->set_club_id($clubColours_club_id);
 		$clubColours->set_code($clubColours_code);
 		$clubColours->set_hex_code($clubColours_hex_code);
 		$clubColours->set_title($clubColours_title);
-		$clubColours->set_active($is_active);
+	//	$clubColours->set_active($is_active);
 
 if ($_GET['action'] == "delete"){	
 	if($clubColours->delete() == true) {
@@ -44,12 +44,12 @@ if ($_GET['action'] == "delete"){
 		if($clubColours_id > 0){
 			$session->setAlertMessage("The $item_name has been updated successfully.");
 			$session->setAlertColor("green");
-			header("location:". BASE_URL."/" . $item_name . "_list.php?page=".$session->getPage());
+			header("location:".$_SERVER['HTTP_REFERER']);
 			exit;		
 		}else{
 			$session->setAlertMessage("The $item_name has been added successfully.");
 			$session->setAlertColor("green");
-			header("location:". BASE_URL."/" . $item_name . "_edit.php?id=".$clubColours->get_id());
+			header("location:".$_SERVER['HTTP_REFERER']);
 			exit;
 		}
 	}

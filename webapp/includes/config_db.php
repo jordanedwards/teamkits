@@ -4,10 +4,10 @@
 	require('config_app.php');
 	
 	if ($appConfig["environment"] == 'development'){
-		$dbConfig['dbhost'] = "";		
-		$dbConfig['dbuser'] = "";
-		$dbConfig['dbpass'] = "";		
-		$dbConfig['dbname'] = "";		
+		$dbConfig['dbhost'] = "localhost";		
+		$dbConfig['dbuser'] = "teamkits_webapp";
+		$dbConfig['dbpass'] = "1675Thayer";		
+		$dbConfig['dbname'] = "teamkits_dev";	
 	}elseif ($appConfig["environment"] == 'local_development'){
 		$dbConfig['dbhost'] = "localhost";		
 		$dbConfig['dbuser'] = "root";
@@ -16,7 +16,7 @@
 	}else{
 		// Production		
 		$dbConfig['dbhost'] = "localhost";		
-		$dbConfig['dbuser'] = "wmore_teamkits";
-		$dbConfig['dbpass'] = "Giht5!44";		
-		$dbConfig['dbname'] = "wmorel1_2_teamkits";
+		$dbConfig['dbuser'] = "teamkits_webapp";
+		$dbConfig['dbpass'] = "1675Thayer";		
+		$dbConfig['dbname'] = "teamkits_webapp";
 	}

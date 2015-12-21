@@ -59,7 +59,7 @@
 		public function set_last_updated($value) {$this->last_updated=$value;}
 		
 		public function get_last_updated_user() { return $this->last_updated_user;}
-	public function set_last_updated_user($value) {$this->last_updated_user=$this->get_user_id();}
+		public function set_last_updated_user() {$this->last_updated_user=$this->get_user_id();}
 	
 public function __toString(){
 		// Debugging tool
@@ -146,7 +146,7 @@ public function save() {
 			$result = $dm->updateRecords($strSQL);
 
 			// if this is a new record get the record id from the database
-			if(!$this->get_id() >= "0") {
+			if(!$this->get_id() > "0") {
 				$this->set_id(mysqli_insert_id($dm->connection));
 			}
 			
@@ -174,7 +174,9 @@ public function save() {
 	public function delete() {
 		try{
 			$dm = new DataManager();
-			$strSQL = "UPDATE promo SET is_active='N' WHERE promo_id=" . $this->id;
+//			$strSQL = "UPDATE promo SET is_active='N' WHERE promo_id=" . $this->id;
+			$strSQL = "DELETE FROM promo WHERE promo_id=" . $this->id;
+			addtolog($strSQL);
 			$result = $dm->updateRecords($strSQL);
 			return $result;
 		}

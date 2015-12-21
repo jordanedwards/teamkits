@@ -20,7 +20,7 @@ $club->get_by_user_id($currentUser->get_id());
   </head>
   <body>
 
-<?php  require(INCLUDES . "navbar_club.php");  ?>
+<?php  require(INCLUDES . "navbar.php");  ?>
 
 <div class="main">
   <div class="container">
@@ -34,7 +34,7 @@ $club->get_by_user_id($currentUser->get_id());
 		
       <div class="row">
         <div class="col-md-12">
-		 <p><i class="fa fa-plus-circle"></i> <a href="../orders_edit.php?id=0">Create New Order</a></p>
+		 <p><i class="fa fa-plus-circle"></i> <a href="orders_edit.php?id=0">Create New Order</a></p>
 <?php 
 
 $dm = new DataManager();
@@ -87,16 +87,17 @@ $dm = new DataManager();
 						if($s_id != ""){
 								$query_where .= ' AND order_id = "'.$s_id.'"';
 						} 
-						$query_where .= ' AND order_club_id = "'.$club->get_id().'"';
+						$query_where .= ' AND order_club_id = "'.$club->get_id().'" AND order_type != "customer" ';
 						
 						if($s_status != ""){
 								$query_where .= ' AND order_status = "'.$s_status.'"';
 						}		
 
-						$query = "SELECT * from orders 
+						$query = "SELECT *, (SELECT SUM(payment_amount) FROM payment WHERE payment_order_id = orders.order_id OR payment_order_child_id = orders.order_id) AS paymenttotal
+						FROM orders
 						LEFT JOIN club ON orders.order_club_id = club.club_id
 						LEFT JOIN orderstatus ON orders.order_status = orderstatus.orderstatus_id
-						WHERE 1=1" . $query_where .$order;
+						WHERE 1=1 AND orders.is_active = 'Y' " . $query_where .$order;
 						
 						//Handle the sorting of the records
 						$session->setQuery($_SERVER["PHP_SELF"],$query);

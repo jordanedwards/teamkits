@@ -4,6 +4,7 @@
 		private $id;
 		private $name;
  		private $price;
+ 		private $weight;		
  		private $image;
  		private $brand;
  		private $club_id;
@@ -23,7 +24,10 @@
 		
 		public function get_price() { return $this->price;}
 		public function set_price($value) {$this->price=$value;}
-		
+
+		public function get_weight() { return $this->weight;}
+		public function set_weight($value) {$this->weight=$value;}
+				
 		public function get_image() { return $this->image;}
 		public function set_image($value) {$this->image=$value;}
 		
@@ -43,7 +47,7 @@
 		public function set_last_updated($value) {$this->last_updated=$value;}
 		
 		public function get_last_updated_user() { return $this->last_updated_user;}
-	public function set_last_updated_user($value) {$this->last_updated_user=$this->get_user_id();}
+		public function set_last_updated_user() {$this->last_updated_user=$this->get_user_id();}
 	
 public function __toString(){
 		// Debugging tool
@@ -92,11 +96,12 @@ public function save() {
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
 			
-				$strSQL = "INSERT INTO item (item_id, item_name, item_price, item_image, item_brand, item_club_id, is_active, item_date_created, item_last_updated, item_last_updated_user) 
+				$strSQL = "INSERT INTO item (item_id, item_name, item_price, item_weight, item_image, item_brand, item_club_id, is_active, item_date_created, item_last_updated, item_last_updated_user) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_name())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_price())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_weight())."',				
 				'".mysqli_real_escape_string($dm->connection, $this->get_image())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_brand())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',
@@ -109,6 +114,7 @@ public function save() {
 				$strSQL = "UPDATE item SET 
 								item_name='".mysqli_real_escape_string($dm->connection, $this->get_name())."',						 
 						 		item_price='".mysqli_real_escape_string($dm->connection, $this->get_price())."',						 
+						 		item_weight='".mysqli_real_escape_string($dm->connection, $this->get_weight())."',						 
 						 		item_image='".mysqli_real_escape_string($dm->connection, $this->get_image())."',						 
 						 		item_brand='".mysqli_real_escape_string($dm->connection, $this->get_brand())."',						 
 						 		item_club_id='".mysqli_real_escape_string($dm->connection, $this->get_club_id())."',						 
@@ -166,20 +172,24 @@ public function save() {
 	// function to fetch the record and populate the object
 	public function get_by_id($id) {
 		try{
-			$status = false;
-			$dm = new DataManager();
-			$strSQL = "SELECT * FROM item WHERE item_id=" . $id;
-      
-			$result = $dm->queryRecords($strSQL);
-			$num_rows = mysqli_num_rows($result);
-
-			if ($num_rows != 0){
-				$row = mysqli_fetch_assoc($result);
-        		$this->load($row);
-				$status = true;
-			}
-
-			return $status;
+		//	if ($id > 0){
+				$status = false;
+				$dm = new DataManager();
+				$strSQL = "SELECT * FROM item WHERE item_id=" . $id;
+		  
+				$result = $dm->queryRecords($strSQL);
+				$num_rows = mysqli_num_rows($result);
+	
+				if ($num_rows != 0){
+					$row = mysqli_fetch_assoc($result);
+					$this->load($row);
+					$status = true;
+				}
+	
+				return $status;
+		//	} else {
+		//	exit("id not set ".$id);
+		//	}
 		}
 		catch(Exception $e) {
 			// CATCH EXCEPTION HERE -- DISPLAY ERROR MESSAGE & EMAIL ADMINISTRATOR
@@ -204,6 +214,7 @@ public function save() {
 		$this->set_id($row["item_id"]);
 		$this->set_name($row["item_name"]);
 		$this->set_price($row["item_price"]);
+		$this->set_weight($row["item_weight"]);
 		$this->set_image($row["item_image"]);
 		$this->set_brand($row["item_brand"]);
 		$this->set_club_id($row["item_club_id"]);

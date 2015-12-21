@@ -568,15 +568,28 @@ class PHPMailer {
         $header = str_replace("\r\n","\n",$header_dkim) . $header;
       }
 
+	  // If this is a dev environment, only send email to the admin address (don't want emails going to customers when testing!
+	  global $appConfig;
+	  global $admin_email;
+	  
+	  if ($appConfig["environment"] == "development"){
+		$this->ClearAddresses();
+	  	$this->AddAddress($admin_email);
+		$body .= "
+		SENT FROM DEVELOPMENT ENVIRONMENT
+		";		
+	  }
+	  
       // Choose the mailer and send through it
       switch($this->Mailer) {
         case 'sendmail':
-          return $this->SendmailSend($header, $body);
+          	return $this->SendmailSend($header, $body);
         case 'smtp':
-          return $this->SmtpSend($header, $body);
+         	return $this->SmtpSend($header, $body);
         default:
-          return $this->MailSend($header, $body);
+        	return $this->MailSend($header, $body);
       }
+	  return true;
 
     } catch (phpmailerException $e) {
       $this->SetError($e->getMessage());

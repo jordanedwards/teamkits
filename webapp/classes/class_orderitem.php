@@ -6,9 +6,12 @@
  		private $item_number;
  		private $price;
  		private $quantity;
- 		private $size;		
+ 		private $size;
+		private $no;
+		private $name;		
  		private $discount;
  		private $active;
+		private $currency;
 		private $item_price;
 		private $item_name;
  		private $date_created;
@@ -37,6 +40,12 @@
 		
 		public function get_size() { return $this->size;}
 		public function set_size($value) {$this->size=$value;}
+		
+		public function get_no() { return $this->no;}
+		public function set_no($value) {$this->no=$value;}
+						
+		public function get_name() { return $this->name;}
+		public function set_name($value) {$this->name=$value;}
 				
 		public function get_discount() { return $this->discount;}
 		public function set_discount($value) {$this->discount=$value;}
@@ -94,14 +103,18 @@ public function clear(){
 		
 public function save() {
 
+	if (!$this->check_currency()){
+		// Item and order currencies do not match
+	}else{
 		try{
 			$dm = new DataManager();
 			$this->set_last_updated_user();
 			
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
+				$this->set_active("Y");
 			
-				$strSQL = "INSERT INTO orderitem (orderitem_id, orderitem_order_id, orderitem_item_number, orderitem_price, orderitem_quantity, orderitem_size, orderitem_discount, is_active, orderitem_date_created, orderitem_last_updated, orderitem_last_updated_user) 
+				$strSQL = "INSERT INTO orderitem (orderitem_id, orderitem_order_id, orderitem_item_number, orderitem_price, orderitem_quantity, orderitem_size, orderitem_no, orderitem_name, orderitem_discount, is_active, orderitem_date_created, orderitem_last_updated, orderitem_last_updated_user) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_order_id())."',
@@ -109,6 +122,8 @@ public function save() {
 				'".mysqli_real_escape_string($dm->connection, $this->get_price())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_quantity())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_size())."',				
+				'".mysqli_real_escape_string($dm->connection, $this->get_no())."',				
+				'".mysqli_real_escape_string($dm->connection, $this->get_name())."',				
 				'".mysqli_real_escape_string($dm->connection, $this->get_discount())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_active())."',
 				NOW(),
@@ -122,6 +137,8 @@ public function save() {
 						 		orderitem_price='".mysqli_real_escape_string($dm->connection, $this->get_price())."',
 						 		orderitem_quantity='".mysqli_real_escape_string($dm->connection, $this->get_quantity())."',	
 						 		orderitem_size='".mysqli_real_escape_string($dm->connection, $this->get_size())."',
+						 		orderitem_no='".mysqli_real_escape_string($dm->connection, $this->get_no())."',
+						 		orderitem_name='".mysqli_real_escape_string($dm->connection, $this->get_name())."',
 						 		orderitem_discount='".mysqli_real_escape_string($dm->connection, $this->get_discount())."',
 						 		is_active='".mysqli_real_escape_string($dm->connection, $this->get_active())."',						 
 						 		orderitem_last_updated=NOW(),						
@@ -140,12 +157,10 @@ public function save() {
           	if (!$result):
       			throw new Exception("Failed Query: ". $strSQL);
    			endif;
-      
-			// fetch data from the db to update object properties      
-      		$this->get_by_id($this->get_id());
-      
+          
+      		$this->get_by_id($this->get_id());	
+						
 			return $result;
-
 		}
 		catch(Exception $e) {
 			// CATCH EXCEPTION HERE -- DISPLAY ERROR MESSAGE & EMAIL ADMINISTRATOR
@@ -154,7 +169,7 @@ public function save() {
 			$errorVar->notifyAdminException($e);
 			exit;
 		}
-
+		}
 	}
 
 	// function to delete the record
@@ -211,13 +226,19 @@ public function save() {
 	
 	public function get_item_details(){
 		$dm = new DataManager();			
-		$strSQL = "SELECT * FROM item WHERE item_id = " .$this->item_number;
+		$strSQL = "SELECT * FROM item 
+		LEFT JOIN brand ON item.item_brand = brand.brand_id
+		WHERE item_id = " .$this->item_number;
 		$result = $dm->queryRecords($strSQL);
 					
 		if ($result):
 			while ($line = mysqli_fetch_assoc($result)):
 				$this->item_name = $line['item_name'];
 				$this->item_price = $line['item_price'];
+				$this->item_currency = $line['brand_currency'];
+				if ($this->item_currency == ""){
+					$this->item_currency = 1;
+				}
 			endwhile;	
 		endif;
 	}
@@ -232,6 +253,57 @@ public function save() {
         }
         return json_encode($var);
 	}
+	
+	public function check_currency(){
+		// Check to make sure that the manufacturer of this item has been set to the same currency as the order:
+		// Get item details if we haven't yet:
+		if($this->item_name == ""){
+			$this->get_item_details();
+		}
+		
+		$dm = new DataManager();	
+		$strSQL = "SELECT id, shortname FROM currency";
+		$result = $dm->queryRecords($strSQL);
+					
+		if ($result):
+			while ($line = mysqli_fetch_assoc($result)):
+				$currency_name[$line["id"]]=$line["shortname"];
+			endwhile;	
+		endif;
+				
+		$strSQL = "SELECT order_currency FROM orders WHERE order_id = " .$this->order_id;
+		$result = $dm->queryRecords($strSQL);
+					
+		if ($result):
+			while ($line = mysqli_fetch_assoc($result)):
+				$order_currency = $line["order_currency"];
+			endwhile;	
+		endif;
+		
+		if ($this->item_currency != $order_currency && $order_currency != 0){
+			$this->set_success(false);
+			$this->setAlertMessage("Order item (" . $currency_name[$this->item_currency].") is priced in a different currency than the order (" . $currency_name[$order_currency]."). Please <a href='orders_edit.php?id=0'>create a new order</a> for this item.");		
+			return false;
+		}else {
+		//	if ($order_currency == 0){
+				// Set order's currency from the item's currency if the order currency is not set:
+				$this->set_currency($this->item_currency);
+			//	return true;
+		//	}
+			return true;
+		}
+	}
+	
+	public function set_currency($currency){
+	addtolog("Order: " .$this->order_id . "/ item currency: " . $currency);
+		if ($this->order_id > 0 && $currency > 0){
+			include_once("class_orders.php");
+			$order= new Orders();
+			$order->get_by_id($this->order_id);
+			$order->set_currency($currency);
+			$order->save();
+		}
+	}
 		  
 	// loads the object data from a mysql assoc array
   	private function load($row){
@@ -241,6 +313,8 @@ public function save() {
 		$this->set_price($row["orderitem_price"]);
 		$this->set_quantity($row["orderitem_quantity"]);
 		$this->set_size($row["orderitem_size"]);		
+		$this->set_no($row["orderitem_no"]);		
+		$this->set_name($row["orderitem_name"]);		
 		$this->set_discount($row["orderitem_discount"]);
 		$this->set_active($row["is_active"]);
 		$this->set_date_created($row["orderitem_date_created"]);

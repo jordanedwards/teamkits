@@ -18,14 +18,26 @@ $(function() {
 		buttons: {	
 			'Add': {
 				click: function() {
+					if ($('#item_id').val() != null && $('#item_quantity').val() != 0){
 					var newItem = $('#newComponentForm').serialize();
-						$.ajax({
+					$.ajax({
 						url: "ajax/ajax_order_item.php?"+newItem,	
-						success: function (html) {	
-							$('#order_items_table').append(html);
+						dataType: "json",
+						success: function (data) {	
+							//console.log(data);
+							if(data.success){
+								//$('#order_items_table').append(html);
+								location.assign("orders_edit.php?id="+$('#order_id').val());							
+							}else{
+								location.assign("orders_edit.php?id="+$('#order_id').val());							
+							}		
 						}	
 					});
+					
                		$(this).dialog('close');
+					} else {
+						alert("Please fill in all fields");
+					}
 			   	},
 			text: "Add",
 			class: 'btn btn-primary'			
@@ -50,13 +62,26 @@ $(function() {
 
 	function updateSizeList(){
 		var selectedItem = $('#item_id').val();
-		$.ajax({
-			url: "ajax/ajax_get_sizes.php?item_id="+selectedItem,	
-			success: function (html) {	
-				$('#size_div').html(html);
-			}
-		});
-		$('#size_div').show();
+	
+		if (selectedItem == 17){
+			//Shipping charges:
+			$('#item_price').show();
+			$('#size_div').hide();
+			$('#item_quantity').val(1);
+			$('#item_quantity').hide();
+			$('#notify_customer').attr("checked",true);
+		} else {
+			$.ajax({
+				url: "ajax/ajax_get_sizes.php?item_id="+selectedItem,	
+				success: function (html) {	
+					$('#size_div').html(html);
+				}
+			});
+			$('#item_quantity').show();	
+			$('#item_price').hide();					
+			$('#size_div').show();
+			$('#notify_customer').attr("checked",false);			
+		}
 	}
 	
 </script>
@@ -75,17 +100,22 @@ $(function() {
 	$dd->set_order("ASC");
 	$dd->set_placeholder("Select item");	
 	$dd->set_onchange('updateSizeList();');
+	$dd->set_required(true);
 	$dd->display();
 	?>	  	  
   </p>
  <p>
-<input type="number" placeholder="Quantity" style="width: 90%;" class="form-control inline" name="item_quantity"/> 
+<input type="number" min="1" step="1" placeholder="Quantity" style="width: 90%;" class="form-control inline" name="item_quantity" id="item_quantity" required/> 
+</p>
+<p  id="item_price" style="display:none">
+<input type="number" min="0" step="0.01" placeholder="Price" style="width: 90%;" class="form-control inline" name="item_price" /> 
+<br />
+<input type="checkbox" name="notify_customer" id="notify_customer" value="true"/>&nbsp;Email customer?
 </p>
 <p style="display:none" id="size_div">
 
 </p>
-<input type="hidden" name="order_id" value="<?php echo  $orders_id ?>"/>
 <input type="hidden" name="action" value="add"/>
-  </p>  
+<input type="hidden" id="order_id" name="order_id" value="<?php echo $order->get_id() ?>"/>
 </form>
 </div>	

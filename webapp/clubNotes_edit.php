@@ -56,20 +56,40 @@ $activeMenuItem = "ClubNotes";
 	<div class="row">
 	<div class="col-md-8">
 	<form id="form_clubNotes" action="<?php  echo ACTIONS_URL; ?>action_clubNotes_edit.php" method="post">
-	<input type="hidden" name="clubNotes_id" value="<?php  echo $clubNotes->get_id();  ?>" />
+	<input type="hidden" name="id" value="<?php  echo $clubNotes->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
 	<input type="hidden" name="page_id" value="<?php  echo $page_id  ?>" />	
 	
          <table class="admin_table">
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Content: </td>
-            		<td><textarea id="clubNotes_content" name="clubNotes_content" type="text" class="form-control" rows="8"><?php  echo $clubNotes->get_content();  ?></textarea></td>
+            		<td><textarea id="content" name="content" type="text" class="form-control" rows="8"><?php  echo $clubNotes->get_content();  ?></textarea></td>
 				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Follow-up Date: </td>
+            		<td><input id="followup_date" name="followup_date" type="text" class="form-control" value="<?php  echo $clubNotes->get_followup_date();  ?>"></td>
+				</tr>
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Follow-up Complete: </td>
+            		<td>
+					<?php 
+					$dd = new DropDown();
+					$dd->set_static(true);	
+					$dd->set_name("followup_complete");
+					$dd->set_class_name("form-control");
+					$dd->set_selected_value($clubNotes->get_followup_complete());
+					$dd->set_option_list("Y,N");
+					$dd->display();
+					?>
+					</td>
+				</tr>									
   		
 		</table>
           <br />
-          <input type="submit" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
-          <input type="button" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
+	      <?php if ($_GET["id"] !=0){ ?>  <input type="submit" name="delete" class="btn btn-warning" value="Delete" />&nbsp;&nbsp;<?php } ?>		  
+		  
+          <input type="button" class="btn btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		
@@ -104,8 +124,11 @@ $activeMenuItem = "ClubNotes";
 			submitHandler: function() { form.submit();  }
 		});
 
-// Include any masks here:
-		 //   $("#student_tel").mask("(999) 999-9999");
+	$( "#followup_date" ).datepicker({
+		dateFormat: "yy-mm-dd",
+		changeMonth: true,
+		changeYear: true
+});
 		
   </script>		
   </body>

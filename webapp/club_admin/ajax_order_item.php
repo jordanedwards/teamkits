@@ -50,6 +50,7 @@ if (isset($_REQUEST['order_id']) || isset($_REQUEST['order_item_id']) || isset($
 			if(!$order->get_open_order($club_id)){
 				// No open order exists, so create a new one:
 				$order->set_club_id($club_id);
+				$order->set_type("club");				
 				$order->set_status(1);
 				$order->set_active("Y");				
 				$order->save();
@@ -81,12 +82,15 @@ if (isset($_REQUEST['order_id']) || isset($_REQUEST['order_item_id']) || isset($
 		if($orderitem->save() == true) {
 			// Success;
 			$orderitem->set_success(true);
-			$orderitem->setAlertMessage("Promo item added to order# " . $order->get_id());
+			$orderitem->setAlertMessage("Item added to order# " . $order->get_id());
 		}
 		else {
-			//Not successful :(
-			$orderitem->set_success(false);
-			$orderitem->setAlertMessage("Unable to save - check debug log");
+			// Not successful :(
+			// Alert message and success flag set in the class 
+			
+		//	$orderitem->set_success(false);
+		//	echo $orderitem;
+			//$orderitem->setAlertMessage("Unable to save - check debug log");
 			
 		}
 	} // End add section

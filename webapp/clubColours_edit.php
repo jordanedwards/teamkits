@@ -54,13 +54,17 @@ $activeMenuItem = "ClubColours";
 	</div>
 	
 	<div class="row">
-	<div class="col-md-8">
+	<div class="col-md-6">
 	<form id="form_clubColours" action="<?php  echo ACTIONS_URL; ?>action_clubColours_edit.php" method="post">
 	<input type="hidden" name="clubColours_id" value="<?php  echo $clubColours->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
 	<input type="hidden" name="page_id" value="<?php  echo $page_id  ?>" />	
 	
          <table class="admin_table">
+				<tr>
+           			<td style="width:1px; white-space:nowrap;">Title: </td>
+            		<td><input id="clubColours_title" name="clubColours_title" type="text"  value="<?php  echo $clubColours->get_title();  ?>" style="width:90%"  class="{validate:{required:true}}" /> <span class='red'>*</span> </td>
+				</tr>		 
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Code: </td>
             		<td><input id="clubColours_code" name="clubColours_code" type="text"  value="<?php  echo $clubColours->get_code();  ?>" style="width:90%" /> </td>
@@ -69,15 +73,11 @@ $activeMenuItem = "ClubColours";
            			<td style="width:1px; white-space:nowrap;">Hex code: </td>
             		<td><input id="clubColours_hex_code" name="clubColours_hex_code" type="text"  value="<?php  echo $clubColours->get_hex_code();  ?>" style="width:90%" /> </td>
 				</tr>
-				<tr>
-           			<td style="width:1px; white-space:nowrap;">Title: </td>
-            		<td><input id="clubColours_title" name="clubColours_title" type="text"  value="<?php  echo $clubColours->get_title();  ?>" style="width:90%"  class="{validate:{required:true}}" /> <span class='red'>*</span> </td>
-				</tr>
   		
 		</table>
           <br />
-          <input type="submit" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
-          <input type="button" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		

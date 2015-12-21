@@ -1,9 +1,15 @@
+<?php 
+$public=true;
+require("webapp/includes/init.php"); 
+include(CLASSES . "/class_cmscomponent.php");
+?>
 <!DOCTYPE html>
 <html class=" js flexbox canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths"><!--<![endif]-->
 <head>
 
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta charset="utf-8">
+	<meta http-equiv="Cache-control" content="public" max-age=3600>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<title>Teamkits</title>
 	<meta name="description" content="">
@@ -14,14 +20,10 @@
 	<link rel="apple-touch-icon" href="gfi/apple-touch-icon-57x57-precomposed.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="gfi/apple-touch-icon-72x72-precomposed.png">
 	<link rel="apple-touch-icon" sizes="114x114" href="gfi/apple-touch-icon-114x114-precomposed.png">
-	<link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic'>
-	<link href='http://fonts.googleapis.com/css?family=Rock+Salt' rel='stylesheet' type='text/css'>
-	
-	<link rel="stylesheet" href="css/bootstrap.css">
-	<link rel="stylesheet" href="css/timeline.css">
-	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="css/fonts.css" type="text/css">
-	<link rel='stylesheet' href='font-awesome/css/font-awesome.min.css'>	
+	<link href='https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Rock+Salt' rel='stylesheet' type='text/css'>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 	
 	<script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 	<script type="text/javascript">
@@ -36,13 +38,50 @@
 			})();
 		</script> 
 	<script src='https://www.google.com/recaptcha/api.js'></script>
+	
+	<!--<link rel="stylesheet" href="css/timeline.css">
+	<link rel="stylesheet" href="css/main.css">-->
+<!--	<link rel="stylesheet" href="css/responsive.css">-->
+	
+	<link rel="stylesheet" href="css/combined.css">	 <!-- replaces the above stylesheets -->
 		
 	<link rel="stylesheet" href="css/styles.css">	
-	<link rel="stylesheet" href="css/responsive.css">
-
+<style>
+.og-grid li>a, .og-grid li>a img {
+    max-width: 150px;
+}
+.og-details ul.thumbs {
+	max-width:none;
+	padding-left: 0;
+    padding-bottom: 20px;
+}
+.og-details a {
+    margin: 5px 0 0;
+}
+.item {
+  margin-bottom: 5px;
+}
+</style>
     </head>
     <body data-spy="scroll" data-target=".navbar">
-        
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '183604241973561',
+      xfbml      : true,
+      version    : 'v2.4'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+        <div id="fb-root"></div>
         <section id="home">
             <div class="container">
                 <div class="containerblack">
@@ -56,7 +95,7 @@
                         <li class="login"><a href="login.php">Login</a></li>							
 						
                     </ul>
-                    <h1><img src="gfi/img/teamkits_logo_white.png" id="logo" ></h1>
+                    <h1><img src="/images/teamkits_logo_white.png" id="logo" ></h1>
 					</div>  
                 </div>
                 <a href="#works" id="arrow_down">What we do<br><span class="glyphicon glyphicon-chevron-down"></span></a>
@@ -70,10 +109,10 @@
 	
 				<div class="navbar-inner">
 					<div class="container">
-						<a class="navbar-brand" href="#"><img src="gfi/img/teamkits.png"></a>
+						<a class="navbar-brand" href="#"><img src="/images/teamkits.png"></a>
 						<div class="pull-right">
 							<ul class="nav">
-								<li class="active" id="homelink"><a href="gfi/l#home" class="scrollto menu-item">Home</a></li>
+								<li class="active" id="homelink"><a href="#" class="scrollto menu-item">Home</a></li>
 								<li class=""><a href="#works" class="scrollto menu-item">Brands</a></li>
 								<li class=""><a href="#about" class="scrollto menu-item">About</a></li>
 								<li class=""><a href="#timeline" class="scrollto menu-item">Order INFO</a></li>							
@@ -90,72 +129,55 @@
         <section id="works">
             <div class="container">
                 <h2 class="text-center">BRANDS<i class="fa fa-tags fa-2x icon-works"></i></h2>
-                <p class="text-center lead">We are proud to work with the world's leading names in sportswear. Click to view details about these fine companies.</p>
+                <p class="text-center lead">We are proud to work with the world's leading names in sportswear. Click to view details about these fine companies:</p>
             </div> <!-- end: container -->
             <div id="works_items">
                 <ul id="og-grid" class="og-grid">
-                    <li class="brand-icons">
-                        <a href="#" data-largesrc="temp/5.jpg" data-title="Macron" data-description="Macron Sportswear">
-                            <img src="img/brands/thumb-macron.png" alt="img01">
-                            <div>Macron SP</div>
-                      </a>
-                      <div class="thumbs">
-						<a href="#" data-largesrc="temp/1.jpg" data-thumb="img/catalogues/macron/thumbs/1.jpg" data-title="Alcor" data-description=""></a>
-						<a href="#" data-largesrc="temp/2.jpg" data-thumb="img/catalogues/macron/thumbs/1.jpg" data-title="Alkaline" data-description=""></a>
-						<a href="#" data-largesrc="temp/3.jpg" data-thumb="img/catalogues/macron/thumbs/1.jpg" data-title="Andromeda" data-description=""></a>
-						<a href="#" data-largesrc="temp/4.jpg" data-thumb="img/catalogues/macron/thumbs/1.jpg" data-title="Cybele" data-description=""></a>
-						<a href="#" data-largesrc="temp/5.jpg" data-thumb="img/catalogues/macron/thumbs/1.jpg" data-title="Diadem" data-description=""></a>
-						<a href="#" data-largesrc="temp/6.jpg" data-thumb="img/catalogues/macron/thumbs/1.jpg" data-title="Elbe" data-description=""></a>
-						<a href="#" data-largesrc="temp/7.jpg" data-thumb="img/catalogues/macron/thumbs/1.jpg" data-title="Emir" data-description=""></a>
-						<a href="#" data-largesrc="temp/8.jpg" data-thumb="img/catalogues/macron/thumbs/1.jpg" data-title="Essen" data-description=""></a>
-					</div>
-                  </li>
-                    <li class="brand-icons">
-                        <a href="#" data-largesrc="temp/2.jpg" data-title="Joma" data-description="">
-                            <img src="img/brands/thumb-joma.png" alt="img02"><div>Joma</div>
-                        </a>
-						<div class="thumbs">
-							<a href="#" data-largesrc="temp/2.jpg" data-thumb="temp/thumbs/2.jpg" data-title="Sample" data-description=""></a>
-							<a href="#" data-largesrc="temp/z1.jpg" data-thumb="temp/thumbs/z1.jpg" data-title="Sample" data-description=""></a>
-							<a href="#" data-largesrc="temp/z2.jpg" data-thumb="temp/thumbs/z2.jpg" data-title="Sample" data-description=""></a>
-							<a href="#" data-largesrc="temp/z3.jpg" data-thumb="temp/thumbs/z3.jpg" data-title="Sample" data-description=""></a>
-						</div>
-                    </li>
-                    <li class="brand-icons">
-                        <a href="#" data-largesrc="temp/3.jpg" data-title="Dandelion horseradish" data-description="Cabbage bamboo shoot broccoli rabe chickpea chard sea lettuce lettuce ricebean artichoke earthnut pea aubergine okra brussels sprout avocado tomato.">
-                            <img src="img/brands/thumb-givova.png" alt="img03"><div>Givova</div>
-                        </a>
-                                                <div class="thumbs">
-                                                    <a href="#" data-largesrc="temp/3.jpg" data-thumb="temp/thumbs/3.jpg" data-title="Dandelion horseradish" data-description="Cabbage bamboo shoot broccoli rabe chickpea chard sea lettuce lettuce ricebean artichoke earthnut pea aubergine okra brussels sprout avocado tomato."></a>
-                                                    <a href="#" data-largesrc="temp/z1.jpg" data-thumb="temp/thumbs/z1.jpg" data-title="Sample" data-description=""></a>
-                                                    <a href="#" data-largesrc="temp/z2.jpg" data-thumb="temp/thumbs/z2.jpg" data-title="Sample" data-description=""></a>
-                                                    <a href="#" data-largesrc="temp/z3.jpg" data-thumb="temp/thumbs/z3.jpg" data-title="Sample" data-description=""></a>
-                                                    <a href="#" data-largesrc="temp/1.jpg" data-thumb="temp/thumbs/1.jpg" data-title="Sample" data-description=""></a>
-                                                </div>
-                    </li>
-                    <li class="brand-icons">
-                        <a href="#" data-largesrc="temp/4.jpg" data-title="Sample" data-description="">
-                            <img src="img/brands/thumb-lotto.png" alt="img01"><div>Lotto</div>
-                        </a>
-                                                <div class="thumbs">
-                                                    <a href="#" data-largesrc="temp/4.jpg" data-thumb="temp/thumbs/4.jpg" data-title="Sample" data-description=""></a>
-                                                    <a href="#" data-largesrc="temp/z1.jpg" data-thumb="temp/thumbs/z1.jpg" data-title="Sample" data-description=""></a>
-                                                    <a href="#" data-largesrc="temp/z2.jpg" data-thumb="temp/thumbs/z2.jpg" data-title="Sample" data-description=""></a>
-                                                    <a href="#" data-largesrc="temp/z3.jpg" data-thumb="temp/thumbs/z3.jpg" data-title="Sample" data-description=""></a>
-                                                </div>
-                    </li>
-                    <li class="brand-icons">
-                        <a href="#" data-largesrc="temp/5.jpg" data-title="Sample" data-description="">
-                            <img src="img/brands/thumb-xara.png" alt="img02"><div>Xara</div>
-                        </a>
-                    </li>
-                    <li class="brand-icons">
-                        <a href="#" data-largesrc="temp/6.jpg" data-title="Dandelion horseradish" data-description="">
-                            <img src="img/brands/thumb-umbro.png" alt="img03"><div>Umbro</div>
-                        </a>
-                    </li>
-                    
-                    
+				<?php 
+				
+				$dm = new DataManager(); 
+				$strSQL = "SELECT * 
+				FROM brand 
+				WHERE brand_feature='Y' AND is_active='Y'
+				ORDER BY brand_name ASC
+				";
+				
+				$result = $dm->queryRecords($strSQL);	
+				if ($result):
+					while($row = mysqli_fetch_assoc($result)):
+					?>
+					<li class="brand-icons">
+						<a href="#" data-largesrc="/img/brands/<?php echo strtolower($row['brand_name']) ?>/<?php echo $row['brand_main_image'] ?>"  data-title="<?php echo ucfirst($row['brand_name']) ?>" data-description="<?php echo $row['brand_description'] ?>">
+							<img src="img/brands/<?php echo $row['brand_logo'] ?>" alt="<?php echo ucfirst($row['brand_name']) ?>"><div><?php echo ucfirst($row['brand_name']) ?></div>
+						</a>
+						
+						<?php 
+						$brand = $row['brand_name'];
+						
+						$subSQL = "SELECT * 
+						FROM brandcatalogue
+						WHERE brand_id=" .$row['brand_id'] . " AND is_active='Y'";
+						
+						$subresult = $dm->queryRecords($subSQL);	
+						if ($subresult):
+							echo '<div class="thumbs">
+							';
+							while($subrow = mysqli_fetch_assoc($subresult)):
+								echo '<a href="' . $subrow['url']. '" data-largesrc="/img/brands/' . strtolower($brand) .'/' . $subrow['image']. '" data-thumb="/img/brands/' . strtolower($brand) .'/' . $subrow['image']. '" data-title="' . $subrow['title']. '" data-description="' . $subrow['description']. '" ></a>
+								';
+							endwhile;
+							echo '
+							</div>';
+						endif;
+						?>
+
+					</li>					
+
+					<?
+					endwhile;									
+				endif;			
+				?>
+			
                 </ul>
             </div><!-- end: #works_items -->
         </section>
@@ -171,33 +193,27 @@
 		
         <section id="about">
             <div class="container">
-                <h2 class="text-center">About<i class="icon-about"><img src="gfi/img/icon-about.png"></i></h2>
+                <h2 class="text-center">About<i class="icon-about"><img src="images/icon-about.png"></i></h2>
 
-				<div class="col-md-12" style="padding:10px">
-<!--
-                <p class="text-center lead"><span class="little-drop-cap">T</span>eam Kits is based in Kelowna BC with direct-from-factory relationships with Macron, Joma, Inaria, Lotto and dealerships with Xara, New Balance (Warrior), Umbro, Mitre, Molten, Precision Training UK and others.</p>
-								
-                <p class="text-center lead">Team Kits focuses on providing a custom look for pro teams and competitive clubs but also delivers Value Kits for recreational clubs.
-				<br><br>
-				With exclusive relationships, Team Kits is targeting teams and clubs that are tired of looking like the teams they play against and are wanting their own unique look.  As well, opportunity exists for pro teams that are looking to provide fanwear to their supporters and generate income to make their teams stronger
-				<br><br>
-				We look forward to working with clubs in the Pacific Northwest and across the USA and Canada.
-				<br>
-				-->
+				<div class="col-md-8" style="padding:10px">
+
 				
-				<p class="text-center lead"><span class="little-drop-cap">T</span>eam Kits, based in Kelowna, BC, and having direct-from-factory relationships with Precision Training from the UK, Macron, Joma, Inaria, and Lotto from Italy and dealerships with Xara, Umbro, Mitre, Molten, and others believes that a uniform is not something that you just play in, but much more to make a statement of who your club or team is.</p><br>
+				<p class="text-center lead"><!--<span class="little-drop-cap">T</span>eam Kits, based in Kelowna, BC, and having direct-from-factory relationships with Precision Training from the UK, Macron, Joma, Inaria, and Lotto from Italy and dealerships with Xara, Umbro, Mitre, Molten, and others believes that a uniform is not something that you just play in, but much more to make a statement of who your club or team is.</p><br>
 				
 <p class="text-center lead">We are happy to offer our US customers in the Pacific Northwest our unique and exclusive “Made in America” theme that provides an exclusive branded design that is yours and will be always available when you need a kit.</p><br>
 
 <p class="text-center lead">Team Kits provides a custom look for competitive and professional teams but also delivers high volume Value Kits for recreational clubs and teams.  With our designers, Team Kits provides a “Brand Concept” that makes a team or club unique, versus looking the same as the teams they play against.</p><br>
 
-<p class="text-center lead">Soccer is a business, and for a pro team, revenue generation from replica sales is a must have and can make the difference on the profit and loss statement at the end of the year.  For our pro teams, the kits become a value-added revenue source. It doesn’t make sense to ask a fan to part with $70 to buy an off-the-shelf jersey when they can buy the same jersey anywhere online for less.  While a fan is usually happy just to support the team, wanting to show off the jersey because it’s unique is something special.  All this goes towards generating income to make the team stronger.</p><br><br>
+<p class="text-center lead">Soccer is a business, and for a pro team, revenue generation from replica sales is a must have and can make the difference on the profit and loss statement at the end of the year.  For our pro teams, the kits become a value-added revenue source. It doesn’t make sense to ask a fan to part with $70 to buy an off-the-shelf jersey when they can buy the same jersey anywhere online for less.  While a fan is usually happy just to support the team, wanting to show off the jersey because it’s unique is something special.  All this goes towards generating income to make the team stronger.</p><br><br>-->
+
+<?php get_component("About us"); ?>
 				<a class="btn button-cool scrollto" href="#contact">Contact Us</a>
-				<!--<button class="button-cool">Contact Us</button>-->
 				</p>
 				</div>
 	
-				
+				<div class="col-md-4">
+					<div class="fb-page" data-href="https://www.facebook.com/teamkitscanada" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true" data-show-posts="true"> </div>
+				</div>
    				</div>
 				
             </div><!-- end: .container -->
@@ -212,7 +228,7 @@
         <section id="timeline">
             <div class="container">
 			<div class="col-md-12">
-			      <h2 class="text-center">The ordering process<i class="icon-time"><img src="gfi/img/icon-time.png"></i></h2>
+			      <h2 class="text-center">The ordering process<i class="icon-time"><img src="images/icon-time.png"></i></h2>
 			</div>
 			<div class="col-md-5" style="padding: 0 10px 0 0;">
                <!-- <p class="text-center lead">.</p> -->
@@ -256,22 +272,21 @@
             </div>
 			<div class="col-md-7" style="padding: 10px 0 0 10px;">
 				<div id="masonry-content">
-					<div class="item"><img src="img/catalogues/macron/Total Look Epic.jpg"></div>				
-					<div class="item"><img src="img/catalogues/macron/525007.jpg"></div>					
-					<div class="item"><img src="img/catalogues/macron/2.jpg"></div>
-					<div class="item"><img src="img/catalogues/macron/50520401.jpg"></div>					
-					<div class="item"><img src="img/catalogues/macron/3.jpg"></div>
-					<div class="item"><img src="img/catalogues/macron/53600201.jpg"></div>					
-					<div class="item"><img src="img/catalogues/macron/4.jpg"></div>
-					<div class="item"><img src="img/catalogues/macron/54620301.jpg"></div>					
-					<div class="item"><img src="img/catalogues/macron/5.jpg"></div>
-					<div class="item"><img src="img/catalogues/macron/55490710.jpg"></div>					
-					<div class="item"><img src="img/catalogues/macron/6.jpg"></div>
-					<div class="item"><img src="img/catalogues/macron/81180128.jpg"></div>					
-					<div class="item"><img src="img/catalogues/macron/7.jpg"></div>
-					<div class="item"><img src="img/catalogues/macron/730402.jpg"></div>					
-					<div class="item"><img src="img/catalogues/macron/8.jpg"></div>
-					<div class="item"><img src="img/catalogues/macron/91060901.jpg"></div>					
+				<?php 
+				
+				$dm = new DataManager(); 
+				$strSQL = "SELECT * 
+				FROM masonryImage 
+				WHERE is_active='Y'";
+				
+				$result = $dm->queryRecords($strSQL);	
+				if ($result):
+					while($row = mysqli_fetch_assoc($result)):
+						echo '<div class="item"><img src="img/masonry/'.$row['url'] . '"></div>
+						';
+					endwhile;
+				endif;
+				?>				
 				</div>
 			</div>
 		</div>
@@ -297,7 +312,7 @@
 <div class="col-md-12">       
         <section id="contact">
             <div class="container">
-                <h2 class="text-center">Contact<i class="icon-contact"><img src="gfi/img/icon-contact.png"></i></h2>
+                <h2 class="text-center">Contact<i class="icon-contact"><img src="/images/icon-contact.png"></i></h2>
                 <p class="text-center lead">Let`s get together and create something beautiful for you and your team.</p> 
                 
                 <div class="row"> 
@@ -349,16 +364,16 @@
 
 <div class="col-md-12">        
         <footer>
-            <a href="#home" class="scrollto"><img src="gfi/img/teamkits_logo_white.png" style="height:80px"></a>
+            <a href="#home" class="scrollto"><img src="/images/teamkits_logo_white.png" style="height:80px"></a>
 		</footer>
 		<div class="col-md-12" style="  background: #222;  text-align: right;  padding: 10px;  border-top: 1px solid #000;">
 			<div class="container">
-			<a href="https://orchardcity.ca"><img src="http://orchardcity.ca/images/orchardcity_logo_small_nb_white_letters.png" alt="Website by Orchard City Web Development" style="max-height:50px;"></a>		</div>
+			<a href="https://orchardcity.ca"><img src="https://orchardcity.ca/images/orchardcity_logo_small_nb_white_letters.png" alt="Website by Orchard City Web Development" style="max-height:50px;"></a>		</div>
 		</div>	
 </div>			
 
-        <script src="js/jquery.js"></script>  
-		<script src='js/bootstrap.js'></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>  
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<script src="js/waypoints.min.js" type="text/javascript"></script>
 		<script src="js/waypoints-sticky.js" type="text/javascript"></script>
 
@@ -367,7 +382,7 @@
 
 		<script src="js/jquery.scrollto.js"></script>
 		<script src="js/grid.js"></script>
-		<script src="gfi/js/masonry.pkgd.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.1/masonry.pkgd.min.js"></script>
 		<script src="js/jquery.validate.min.js"></script>	
 		<script src="js/scripts.js"></script>
 		<script>

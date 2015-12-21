@@ -1,31 +1,35 @@
 <?php // include necessary libraries
 require("../includes/init.php");
 $page_id = $_REQUEST["page_id"];
-$action = ($_GET['action'] != "delete" ? "edit" : "delete");
+$action = ($_REQUEST['action'] != "delete" ? "edit" : "delete");
 require(INCLUDES . "/acl_module.php");
+require(CLASSES . "class_item.php");
 
 $itemName = "item";
 
-		$item_id=$_POST["item_id"];
-		$item_name=$_POST["item_name"];
-		$item_price=$_POST["item_price"];
-		$item_image=$_POST["item_image"];
-		$item_brand=$_POST["item_brand"];
-		$item_club_id=$_POST["item_club_id"];
-		$is_active=$_POST["is_active"];
-			// add the new record to the database
-	include(CLASSES . "class_item.php");
+	$item_id=$_REQUEST["item_id"];
+	$item_name=$_POST["item_name"];
+	$item_price=$_POST["item_price"];
+	$item_weight=$_POST["item_weight"];		
+	$item_image=$_POST["item_image"];
+	$item_brand=$_POST["item_brand"];
+	$item_club_id=$_POST["item_club_id"];
+	$is_active=$_POST["is_active"];
 	
-		$item = new Item();
+	$item = new Item();
+	
+	if ($item_id > 0){
 		$item->get_by_id($item_id);
-		$item->set_name($item_name);
-		$item->set_price($item_price);
-		$item->set_image($item_image);
-		$item->set_brand($item_brand);
-		$item->set_club_id($item_club_id);
-		$item->set_active("Y");
+	}
+	$item->set_name($item_name);
+	$item->set_price($item_price);
+	$item->set_weight($item_weight);	
+	$item->set_image($item_image);
+	$item->set_brand($item_brand);
+	$item->set_club_id($item_club_id);
+	$item->set_active("Y");
 
-if ($_GET['action'] == "delete"){	
+if ($action == "delete"){	
 	if($item->delete() == true) {
 		$session->setAlertMessage("The $itemName has been removed successfully.");
 		$session->setAlertColor("green");

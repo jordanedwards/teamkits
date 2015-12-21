@@ -2,6 +2,12 @@
 $public = true;
 require("includes/init.php"); 
 
+if (isset($_GET['redirect'])){
+	$redirect = $_GET['redirect'];
+}else {
+	$redirect = "";
+}
+
 if($session->get_user_id() != "") {
 	switch ($session->get_user_role()):
 		case 1:
@@ -16,7 +22,7 @@ if($session->get_user_id() != "") {
 	endswitch;
 	exit;
 } else {
-	header("location: /login.php");
+	header("location: /login.php?redirect=".$redirect);
 	exit;
 }
 ?>

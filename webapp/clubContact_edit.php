@@ -54,7 +54,7 @@ $activeMenuItem = "ClubContact";
 	</div>
 	
 	<div class="row">
-	<div class="col-md-8">
+	<div class="col-md-6">
 	<form id="form_clubContact" action="<?php  echo ACTIONS_URL; ?>action_clubContact_edit.php" method="post">
 	<input type="hidden" name="clubContact_id" value="<?php  echo $clubContact->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
@@ -96,8 +96,9 @@ $activeMenuItem = "ClubContact";
   		
 		</table>
           <br />
-          <input type="submit" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
-          <input type="button" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
+        <?php if ($_GET["id"] !=0){ ?>  <input type="submit" class="btn btn-warning" name="delete" value="Delete" />&nbsp;&nbsp;<?php } ?>		  
+          <input type="button" value="Cancel" class="btn btn-default" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		

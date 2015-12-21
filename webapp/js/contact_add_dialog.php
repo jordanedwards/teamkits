@@ -21,7 +21,7 @@ $(function() {
 					var newItem = $('#newcontactForm').serialize();
 					//console.log(newItem);
 						$.ajax({
-						url: "ajax/ajax_contact_item.php?"+newItem,	
+						url: "/webapp/ajax/ajax_contact_item.php?"+newItem,	
 						success: function (html) {	
 							$('#contact_table').append(html);
 						}	

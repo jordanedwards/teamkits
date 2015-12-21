@@ -22,8 +22,9 @@ function addToLog($val, $notify=false){
 	//require_once('../includes/init.php');
 	$dm = new DataManager();
 	global $session;
+//	if (isset(
 	$user_id = $session->get_user_id();
-	
+	//$user_id =1;
 	// What kind of $val is this? string, array, or object:
 	ob_start();
 	if (is_object($val)){
@@ -37,7 +38,7 @@ function addToLog($val, $notify=false){
 	$result = ob_get_contents();
 	ob_end_clean();
 
-	$strSQL = "INSERT INTO log (log_user, log_val) VALUES (" . $user_id . ", '" . $result . "')";				
+	$strSQL = "INSERT INTO log (log_user, log_val) VALUES ('" . $user_id . "', '" . $result . "')";				
 	$result = $dm->updateRecords($strSQL);
 	
 	//If notify var is true, send an email to the techical contact:
@@ -67,6 +68,7 @@ function addToLog($val, $notify=false){
 }
 
 function escaped_var_from_post($varname){
+	// Return a single cleaned post or get variable/value pair
 	$dm = new DataManager();
 	if (isset($_REQUEST[$varname])){
 		$$varname = mysqli_real_escape_string($dm->connection, $_REQUEST[$varname]);
@@ -76,6 +78,16 @@ function escaped_var_from_post($varname){
 		return $$varname;
 }
 
+function extract_and_escape($array){
+//$array should be $_POST or $_GET
+// Use to get and clean all POST or GET vars:
+	$dm = new DataManager();
+	
+	foreach ($array as $key => $val){
+		global $$key;
+		$$key = mysqli_real_escape_string($dm->connection, $val);
+	}
+}
 
 /* backup the db OR just a table */
 function backup_tables($tables = '*')

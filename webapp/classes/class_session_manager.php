@@ -20,7 +20,7 @@ class SessionManager {
 	function __construct() {
 		/*******************************************************************************************************
 		********************************************************************************************************/
-             
+          session_start();   
 	}
 
 
@@ -56,7 +56,10 @@ class SessionManager {
 		
 	public function get_user_id() { return isset($_SESSION["user_id"])?$_SESSION["user_id"]:""; }
 	public function set_user_id($value) { $_SESSION["user_id"] = $value; }
-
+	
+	public function get_club() { return isset($_SESSION["club"])?$_SESSION["club"]:""; }
+	public function set_club($value) { $_SESSION["club"] = $value; }
+	
 	public function get_user_role() { return isset($_SESSION["user_role"])?$_SESSION["user_role"]:""; }
 	public function set_user_role($value) { $_SESSION["user_role"] = $value; }
 	
@@ -71,7 +74,12 @@ class SessionManager {
 	
 	public function getPage() { return isset($_SESSION['page']) ? $_SESSION['page'] : null; }
 	public function setPage($value) { $_SESSION['page'] = $value; }
-	
+
+	public function getMask() { return isset($_SESSION['mask']) ? $_SESSION['mask'] : null; }
+	public function setMask($value) { $_SESSION['mask'] = $value; }
+			
+	public function getData($name) { return isset($_SESSION['data'][$name]) ? $_SESSION['data'][$name] : null; }
+			
 	public function alertClear(){
 		$_SESSION["alert_msg"] = "";
 		$_SESSION["alert_color"] = "";

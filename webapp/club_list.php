@@ -5,6 +5,12 @@ require(INCLUDES . "/acl_module.php");
 include_once(CLASSES . "/class_user.php"); 
 include(CLASSES . "/class_club.php");
 $activeMenuItem = "Clubs";
+
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+ini_set('display_errors',1);
+ini_set('log_errors',1);
+ini_set('log_errors_max_len',0);
+ini_set('error_log','/error_log.txt');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -105,7 +111,7 @@ $activeMenuItem = "Clubs";
 				?></td>				
 				<td><?php
 					$dd->clear();
-					$dd->set_preset("active");	
+					$dd->set_preset("is_active");	
 					$dd->set_selected_value($s_active);	
 					$dd->set_name("s_active");
 					$dd->display();
@@ -162,6 +168,7 @@ $activeMenuItem = "Clubs";
 
 						$query = "SELECT * FROM club 
 						LEFT JOIN province ON club.club_province = province.province_id
+						LEFT JOIN country ON club.club_country = country.country_id
 						LEFT JOIN brand ON club.club_brand = brand.brand_id
 						LEFT JOIN sport ON club.club_sport = sport.sport_id
 						LEFT JOIN accounttype ON club.club_account_type = accounttype.accounttype_id

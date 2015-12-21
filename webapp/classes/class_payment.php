@@ -3,6 +3,7 @@
  
 		private $id;
 		private $order_id;
+		private $order_child_id;
  		private $transaction_number;
  		private $amount;
  		private $method;
@@ -20,7 +21,10 @@
 
 		public function get_order_id() { return $this->order_id;}
 		public function set_order_id($value) {$this->order_id=$value;}
-		
+
+		public function get_order_child_id() { return $this->order_child_id;}
+		public function set_order_child_id($value) {$this->order_child_id=$value;}
+				
 		public function get_transaction_number() { return $this->transaction_number;}
 		public function set_transaction_number($value) {$this->transaction_number=$value;}
 		
@@ -43,7 +47,7 @@
 		public function set_last_updated($value) {$this->last_updated=$value;}
 		
 		public function get_last_updated_user() { return $this->last_updated_user;}
-	public function set_last_updated_user($value) {$this->last_updated_user=$this->get_user_id();}
+		public function set_last_updated_user() {$this->last_updated_user=$this->get_user_id();}
 	
 public function __toString(){
 		// Debugging tool
@@ -92,10 +96,11 @@ public function save() {
 			// if record does not already exist, create a new one
 			if($this->get_id() == 0) {
 			
-				$strSQL = "INSERT INTO payment (payment_id, payment_order_id, payment_transaction_number, payment_amount, payment_method, payment_status, is_active, payment_date_created, payment_last_updated, payment_last_updated_user) 
+				$strSQL = "INSERT INTO payment (payment_id, payment_order_id, payment_order_child_id, payment_transaction_number, payment_amount, payment_method, payment_status, is_active, payment_date_created, payment_last_updated, payment_last_updated_user) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_order_id())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_order_child_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_transaction_number())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_amount())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_method())."',
@@ -108,6 +113,7 @@ public function save() {
 			else {
 				$strSQL = "UPDATE payment SET 
 								payment_order_id='".mysqli_real_escape_string($dm->connection, $this->get_order_id())."',						 
+								payment_order_child_id='".mysqli_real_escape_string($dm->connection, $this->get_order_child_id())."',						 
 						 		payment_transaction_number='".mysqli_real_escape_string($dm->connection, $this->get_transaction_number())."',						 
 						 		payment_amount='".mysqli_real_escape_string($dm->connection, $this->get_amount())."',						 
 						 		payment_method='".mysqli_real_escape_string($dm->connection, $this->get_method())."',						 
@@ -120,7 +126,6 @@ public function save() {
 			}		
 				
 			$result = $dm->updateRecords($strSQL);
-
 			// if this is a new record get the record id from the database
 			if(!$this->get_id() >= "0") {
 				$this->set_id(mysqli_insert_id($dm->connection));
@@ -203,6 +208,7 @@ public function save() {
   	private function load($row){
 		$this->set_id($row["payment_id"]);
 		$this->set_order_id($row["payment_order_id"]);
+		$this->set_order_child_id($row["payment_order_child_id"]);
 		$this->set_transaction_number($row["payment_transaction_number"]);
 		$this->set_amount($row["payment_amount"]);
 		$this->set_method($row["payment_method"]);

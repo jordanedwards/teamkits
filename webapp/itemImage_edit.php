@@ -57,6 +57,7 @@ $activeMenuItem = "ItemImage";
 	<div class="col-md-8">
 	<form id="form_itemImage" action="<?php  echo ACTIONS_URL; ?>action_itemImage_edit.php" method="post">
 	<input type="hidden" name="itemImage_id" value="<?php  echo $itemImage->get_id();  ?>" />
+	<input type="hidden" name="itemImage_item_id" value="<?php  echo $itemImage->get_item_id();  ?>" />	
 	<input type="hidden" name="action" value="edit" />	
 	<input type="hidden" name="page_id" value="<?php  echo $page_id  ?>" />	
 	
@@ -66,7 +67,7 @@ $activeMenuItem = "ItemImage";
             		<td><input id="itemImage_url" name="itemImage_url" type="text"  value="<?php  echo $itemImage->get_url();  ?>" style="width:90%" /> </td>
 				</tr>
 				<tr>
-           			<td style="width:1px; white-space:nowrap;">Description: </td>
+           			<td style="width:1px; white-space:nowrap;">Image Description: </td>
             		<td><input id="itemImage_description" name="itemImage_description" type="text"  value="<?php  echo $itemImage->get_description();  ?>" style="width:90%" /> </td>
 				</tr>
 				<tr>
@@ -87,9 +88,9 @@ $activeMenuItem = "ItemImage";
   		
 		</table>
           <br />
-          <input type="submit" class="btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
-          <input type="submit" class="btn-warning"  value="Delete" name="delete"/>&nbsp;	  		  
-          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
+          <input type="submit" class="btn btn-warning"  value="Delete" name="delete"/>&nbsp;	  		  
+          <input type="button" class="btn btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		

@@ -92,7 +92,7 @@ $(function() {
 	$dd->display();	
 	?>	  	  
   </p>
-<input type="hidden" name="order_id" value="<?php echo  $orders_id ?>"/>
+<input type="hidden" name="order_id" value="<?php echo $order->get_id() ?>"/>
 <input type="hidden" name="action" value="add"/> 
 </form>
 </div>	

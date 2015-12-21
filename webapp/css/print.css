@@ -1,8 +1,8 @@
 /*Reset Style*/
 body {margin:0; padding:0; line-height: 1.4em; word-spacing:1px; letter-spacing:0.2px; font: 1em Arial, Helvetica,"Lucida Grande", serif; color: #000; background: none;}
 /*Remove Elements and classes*/
-#left_column, #addnew, .red, .no_print, .subnavbar, .navbar, .errorContainer, #errorContainer {display:none !important;}
-.footer{
+#left_column, #addnew, .red, .no_print, .subnavbar, .navbar, .errorContainer, #errorContainer, .btn {display:none !important;}
+footer{
 display:none;
 }
 input[type="button"]

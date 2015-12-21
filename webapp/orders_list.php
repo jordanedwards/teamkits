@@ -7,11 +7,12 @@ include(CLASSES . "/class_orders.php");
 $activeMenuItem = "Orders";
 ?><!DOCTYPE html>
 <html lang="en">
-  <head>
-	<?php include(HEAD); ?>
-    <title><?php  echo $appConfig["app_title"];  ?> | Orders List</title>
-  </head>
-  <body>
+<head>
+	<?php  include(HEAD);  ?>
+	<meta name="description" content="">
+	<title><?php  echo $appConfig["app_title"];  ?> | Orders List</title>
+</head>
+<body>
 
 <?php  require(INCLUDES . "navbar.php");  ?>
 
@@ -33,21 +34,22 @@ $activeMenuItem = "Orders";
 
 $dm = new DataManager();
 
-	$s_id = escaped_var_from_post("s_id");
-	$s_club_id = escaped_var_from_post("s_club_id");
-	$s_customer = escaped_var_from_post("s_customer");
-	$s_item = escaped_var_from_post("s_item");
-	$s_quantity = escaped_var_from_post("s_quantity");
-	$s_status = escaped_var_from_post("s_status");
+	$s_order_id = escaped_var_from_post("s_order_id");
+	$s_order_club_id = escaped_var_from_post("s_order_club_id");
+	$s_order_currency = escaped_var_from_post("s_order_currency");
+	$s_order_total = escaped_var_from_post("s_order_total");
+	$s_order_status = escaped_var_from_post("s_order_status");
+	$s_order_date_created = escaped_var_from_post("s_order_date_created");
+	$s_order_type = escaped_var_from_post("s_order_type");
 	$s_sort = escaped_var_from_post('sort');
 	$s_sort_dir = escaped_var_from_post('sort_dir');
-	
+
 	if ($s_sort == ""){
 		// if no sort is set, pick a default
-		$s_sort = "order_id";
+		$s_sort = "orders.order_id";
 		$s_sort_dir = "desc";	
 	}
-	
+
 	$order = " ORDER BY " . $s_sort . " " . $s_sort_dir;		
 					
  ?>
@@ -55,17 +57,54 @@ $dm = new DataManager();
           <form action="<?php  echo $_SERVER["PHP_SELF"]  ?>?reload=true" method="post" name="frmFilter" id="frmFilter">
             <table class="admin_table" style="display:block">
               <tr>
-			  <td>Orders Id</td><td>Orders Club_id</td><td>Orders Customer</td><td>Orders Item</td><td>Orders Quantity</td><td>Orders Status</td>				<td><input type="button" class="clear" value="Clear" /></td>
+			  <td>Id</td><td>Club</td><td>Currency</td><td>Status</td><td data-toggle="tooltip" title="Three possible order types: 'Club': Order made by a club, paid by the club, and shipped to the club. 'Member': Order made by the club, paid by the members, and shipped to the club. 'Customer': Order made by, paid by, and shipped to a club member">Type</td><td><input type="button" class="clear" value="Clear" /></td>
               </tr>
 			  
               <tr>
-			  <td><input type="text" name="s_id"  value="<?php  echo $s_id  ?>"/></td>
-				<td><input type="text" name="s_club_id"  value="<?php  echo $s_club_id  ?>"/></td>
-				<td><input type="text" name="s_customer"  value="<?php  echo $s_customer  ?>"/></td>
-				<td><input type="text" name="s_item"  value="<?php  echo $s_item  ?>"/></td>
-				<td><input type="text" name="s_quantity"  value="<?php  echo $s_quantity  ?>"/></td>
-				<td><input type="text" name="s_status"  value="<?php  echo $s_status  ?>"/></td>
-								<input type="hidden" id="sort" name="sort" value="<?php echo $sort?>" />
+			  <td><input type="text" name="s_order_id"  value="<?php  echo $s_order_id  ?>"/></td>
+				<td>
+				<?php 
+					$dd = new DropDown();
+					$dd->set_table("club");	
+					$dd->set_name_field("club_name");
+					$dd->set_class_name("form-control inline");
+					$dd->set_order("ASC");						
+					$dd->set_name("s_order_club_id");						
+					$dd->set_selected_value($s_order_club_id);
+					$dd->display();
+				 ?>				
+				</td>
+				<td>
+				<?php 
+					$dd = new DropDown();
+					$dd->set_table("currency");	
+					$dd->set_name_field("shortname");
+					$dd->set_class_name("form-control inline");
+					$dd->set_order("ASC");						
+					$dd->set_name("s_order_currency");						
+					$dd->set_selected_value($s_order_currency);
+					$dd->display();
+				 ?>	</td>
+				<td>
+				<?php 
+					$dd = new DropDown();
+					$dd->set_table("orderstatus");	
+					$dd->set_name_field("orderstatus_title");
+					$dd->set_class_name("form-control inline");
+					$dd->set_order("ASC");						
+					$dd->set_name("s_order_status");						
+					$dd->set_selected_value($s_order_status);
+					$dd->display();
+				 ?></td>
+				<td>
+				<select name="s_order_type">
+					<option value=""></option>
+					<option value="club">club</option>
+					<option value="member">member</option>
+					<option value="customer">customer</option>					
+				</select>
+				</td>
+				<input type="hidden" id="sort" name="sort" value="<?php echo $sort?>" />
 				<input type="hidden" id="sort_dir" name="sort_dir" value="<?php echo $sort_dir?>" />
 								
                 <td valign="top"><input type="submit" class="submit" value="Search" /></td>
@@ -75,53 +114,59 @@ $dm = new DataManager();
         </div>
 			<br>
 <?php 
-					
-					$query = $session->getQuery($_SERVER["PHP_SELF"]);
-					$reload = (isset($_GET['reload']) && $_GET['reload'] == "true" && isset($_GET['page']) == false ? $_GET['reload'] : "");
-					
-					if ($query == "" || $reload == "true") {
-					// Page set to reload (new query)		
-							 
-						if($s_id != ""){
-								$query_where .= ' AND order_id = "'.$s_id.'"';
-						} 
-						if($s_club_id != ""){
-								$query_where .= ' AND order_club_id = "'.$s_club_id.'"';
-						} 
-						if($s_customer != ""){
-								$query_where .= ' AND order_customer = "'.$s_customer.'"';
-						} 
-						if($s_item != ""){
-								$query_where .= ' AND order_item = "'.$s_item.'"';
-						} 
-						if($s_quantity != ""){
-								$query_where .= ' AND order_quantity = "'.$s_quantity.'"';
-						} 
-						if($s_status != ""){
-								$query_where .= ' AND order_status = "'.$s_status.'"';
-						}		
+		$query = $session->getQuery($_SERVER["PHP_SELF"]);
+		$reload = (isset($_GET['reload']) && $_GET['reload'] == "true" && isset($_GET['page']) == false ? $_GET['reload'] : "");
+		$query_where = "";
+		
+		if ($query == "" || $reload == "true") {
+		// Page set to reload (new query)		
+				 
+			if($s_order_id != ""){
+				$query_where .= ' AND order_id = "'.$s_order_id.'"';
+			} 
+			if($s_order_club_id != ""){
+				$query_where .= ' AND order_club_id = "'.$s_order_club_id.'"';
+			} 
+			if($s_order_currency != ""){
+				$query_where .= ' AND order_currency = "'.$s_order_currency.'"';
+			} 
+			if($s_order_total != ""){
+				$query_where .= ' AND order_total = "'.$s_order_total.'"';
+			} 
+			if($s_order_status != ""){
+				$query_where .= ' AND order_status = "'.$s_order_status.'"';
+			} 
+			if($s_order_type != ""){
+				$query_where .= ' AND order_type = "'.$s_order_type.'"';
+			}		
 
-						$query = "SELECT * from orders 
-						LEFT JOIN club ON orders.order_club_id = club.club_id
-						LEFT JOIN orderstatus ON orders.order_status = orderstatus.orderstatus_id
-						WHERE 1=1" . $query_where .$order;
-						
-						//Handle the sorting of the records
-						$session->setQuery($_SERVER["PHP_SELF"],$query);
-						$session->setSort($_SERVER["PHP_SELF"],$s_sort);
-						$session->setSortDir($_SERVER["PHP_SELF"],$s_sort_dir);
-					}else{
-						//The page is not reloaded so use the query from the session
-						$query = $session->getQuery($_SERVER["PHP_SELF"]);
-					}
+			$query = "SELECT *, SUBSTRING(order_date_created,1,10) AS created, SUBSTRING(order_date_submitted,1,10) AS submitted
+			FROM orders	
+			LEFT JOIN club ON orders.order_club_id = club.club_id
+			LEFT JOIN orderstatus ON orders.order_status = orderstatus.orderstatus_id	
+			LEFT JOIN currency ON orders.order_currency = currency.id				
+			WHERE 1=1 AND orders.is_active='Y' " . $query_where .$order;
+			
+			//Handle the sorting of the records
+			$session->setQuery($_SERVER["PHP_SELF"],$query);
+			$session->setSort($_SERVER["PHP_SELF"],$s_sort);
+			$session->setSortDir($_SERVER["PHP_SELF"],$s_sort_dir);
+		}else{
+			//The page is not reloaded so use the query from the session
+			$query = $session->getQuery($_SERVER["PHP_SELF"]);
+		}
 
-					if(isset($_GET['page'])){$page = $_GET['page'];}else{$page = 1;}
-					$session->setPage($page);
-					
-					require_once(CLASSES ."/class_record_pager.php");
-					$pager=new Pager($query,'paginglinks',20,0,1,'page_templates/orders_list_template.htm');
-					echo $pager->displayRecords(mysql_escape_string($page));
-					//echo $query;
+		if(isset($_GET['page'])){$page = $_GET['page'];}else{$page = 1;}
+		$session->setPage($page);
+		
+		require_once(CLASSES ."/class_record_pager.php");
+		$pager=new Pager($query,'paginglinks',20,0,1,'page_templates/orders_list_template.htm');
+		echo $pager->displayRecords(mysqli_escape_string($dm->connection,$page));
+		
+		if ($appConfig["environment"] == "development"){
+			consoleLog($query);
+		}
+		 //echo $query;
 			 ?>
         </div>
 
@@ -130,8 +175,8 @@ $dm = new DataManager();
 </div>
 
 
-<?php include(INCLUDES. "footer.php");  ?>
-<?php include(INCLUDES_LIST); ?>
+<?php  include(INCLUDES. "footer.php");  ?>
+<?php  include(INCLUDES_LIST);  ?>
     
 <?php  if ($session->getSort($_SERVER["PHP_SELF"]) != ""){
   // If there is a sort saved in session, print a jquery function to add class to the selected column
@@ -175,6 +220,9 @@ $(".clear").bind("click", function() {
   $('#frmFilter').submit();  
 });
 
+	$(document).ready(function(){
+		$('[data-toggle="tooltip"]').tooltip(); 
+	});
   </script>
   </body>
 </html>

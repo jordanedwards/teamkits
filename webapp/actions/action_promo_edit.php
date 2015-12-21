@@ -1,12 +1,12 @@
 <?php // include necessary libraries
 require("../includes/init.php");
 $page_id = $_REQUEST["page_id"];
-$action = ($_GET['action'] != "delete" ? "edit" : "delete");
-require(INCLUDES . "/acl_module.php");
+$action = ($_REQUEST['action'] != "delete" ? "edit" : "delete");
+//require(INCLUDES . "/acl_module.php");
 
 $item_name = "promo";
 
-		$promo_id=$_POST["promo_id"];
+		$promo_id=$_REQUEST["promo_id"];
 		$promo_sport=$_POST["promo_sport"];
 		$promo_item_id=$_POST["promo_item_id"];
 		$promo_title=$_POST["promo_title"];
@@ -33,7 +33,7 @@ $item_name = "promo";
 		$promo->set_expiry($promo_expiry);
 		$promo->set_active($is_active);
 
-if ($_GET['action'] == "delete"){	
+if ($action == "delete"){	
 	if($promo->delete() == true) {
 		$session->setAlertMessage("The $item_name has been removed successfully.");
 		$session->setAlertColor("green");

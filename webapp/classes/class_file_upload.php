@@ -40,7 +40,7 @@ class file_upload {
 	
 	function file_upload() {
 		$this->language = "en"; // choice of en, nl, es
-		$this->rename_file = false;
+		$this->rename_file = true;
 		$this->ext_string = "";
 	}
 	function show_error_string() {

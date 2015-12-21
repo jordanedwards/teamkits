@@ -30,6 +30,11 @@ $activeMenuItem = "Orderitem";
     <meta name="description" content="">
 
     <title><?php   echo $appConfig["app_title"];  ?> | Order Item Edit</title>
+<style>
+.text-center {
+	text-align:center;
+}
+</style>
   </head>
 
   <body>
@@ -54,7 +59,7 @@ $activeMenuItem = "Orderitem";
 	</div>
 	
 	<div class="row">
-	<div class="col-md-8">
+	<div class="col-sm-6">
 	<form id="form_orderitem" action="<?php  echo ACTIONS_URL; ?>action_orderitem_edit.php" method="post">
 	<input type="hidden" name="orderitem_id" value="<?php  echo $orderitem->get_id();  ?>" />
 	<input type="hidden" name="action" value="edit" />	
@@ -63,7 +68,6 @@ $activeMenuItem = "Orderitem";
          <table class="admin_table">
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Item: </td>
-				
 					<td>
 					<?php 
 						$dd = new DropDown();
@@ -80,11 +84,11 @@ $activeMenuItem = "Orderitem";
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Price: </td>
-            		<td><input id="orderitem_price" name="orderitem_price" type="number" step="any" value="<?php  echo $orderitem->get_price();  ?>" style="width:90%" /> </td>
+            		<td>$<input id="orderitem_price" name="orderitem_price" type="number" step="any" value="<?php  echo $orderitem->get_price();  ?>" style="width:90%" /> </td>
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Quantity: </td>
-            		<td><input id="orderitem_quantity" name="orderitem_quantity" type="number" step="1" value="<?php  echo $orderitem->get_quantity();  ?>" style="width:90%" /> </td>
+            		<td><input id="orderitem_quantity" name="orderitem_quantity" type="number" step="1" min="0" value="<?php  echo $orderitem->get_quantity();  ?>" style="width:90%" /> </td>
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Size: </td>
@@ -98,7 +102,7 @@ $activeMenuItem = "Orderitem";
 						$dd->set_order("ASC");						
 						$dd->set_name("orderitem_size");						
 						$dd->set_selected_value($orderitem->get_size());
-						$dd->set_required(true);
+						$dd->set_where("itemSize_item_id = ".$orderitem->get_item_number());
 						$dd->set_active_only(false);
 						$dd->display();
 					 ?>	
@@ -111,9 +115,9 @@ $activeMenuItem = "Orderitem";
   		
 		</table>
           <br />
-          <input type="submit" class="btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
-          <input type="submit" class="btn-warning"  value="Delete" name="delete"/>&nbsp;	  		  
-          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
+          <input type="submit" class="btn btn-warning"  value="Delete" name="delete"/>&nbsp;	  		  
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='orders_edit.php?id=<?php echo $orderitem->get_order_id(); ?>'" />
         </form>
 		<br>
 		
@@ -122,6 +126,52 @@ $activeMenuItem = "Orderitem";
         <?php  }  ?>			
 	
       </div>
+	<?php if ($orderitem->get_id()>0): ?>
+	<div class="col-sm-6">
+		<table class="admin_table">
+			<thead>
+			<tr><th colspan="6">Jersey numbers/names:<i class="fa fa-plus-circle fa-lg add-icon add-item no_print"></i></th></tr>
+			<tr><th>Edit</th><th>Name</th><th>#</th><th>Paid?</th><th>Customer Order</th><th>Delete</th></tr>		
+			</thead>
+			
+			<tbody id="jerseyrecord_table">
+		 <?php 
+		 $paid = 0;
+		 $unpaid = 0;
+		 	$dm = new DataManager(); 
+			$strSQL = "SELECT * from jerseyRecord 
+			WHERE orderitem_id=" . $orderitem->get_id() . "
+			AND is_active = 'Y'
+			ORDER BY name ASC
+			";						
+
+			$result = $dm->queryRecords($strSQL);	
+			if ($result):
+				while($row = mysqli_fetch_assoc($result)):
+				if ($row['child_order_id'] > 0){
+					$customer_order_text = '<a href="orders_edit.php?id=' . $row['child_order_id'] .'"><i class="fa fa-external-link fa-lg"></i></a>';
+				} else {
+					$customer_order_text = "";
+				}
+				
+					echo '<tr><td class="text-center"><a href="jerseyRecord_edit.php?id=' . $row['id'] .'"><i class="fa fa-edit fa-lg"></i></a></td><td>' . $row['name'] . '</td><td>' . $row['number'] . '</td><td>' . $row['status'] . '</td><td class="text-center">' . $customer_order_text . '</td><td class="text-center"><a href="actions/action_jerseyRecord_edit.php?action=delete&page_id=jerseyrecord_edit.php&id=' . $row['id'] . '" onclick="return confirm(\'Delete?\');" class="editing"><i class="fa fa-times-circle fa-lg"></i></a></td></tr>';
+					if ($row['status']=="paid"){
+						$paid ++;
+					} else {
+						$unpaid ++;
+					}
+				endwhile;						
+			endif;
+		 ?>		
+			</tbody>
+			
+			<tfoot>	 	 
+			<tr><td colspan="5" style="text-align: right;"># Paid:</td><td style="text-align:right"><?php echo $paid ?></td></tr>
+			<tr><td colspan="5" style="text-align: right;"># Unpaid:</td><td style="text-align:right"><?php echo $unpaid ?></td></tr>					
+			</tfoot>
+		</table>
+	</div>
+	<?php endif; ?>	  
     </div> 
 
 </div><!-- /container -->
@@ -129,9 +179,8 @@ $activeMenuItem = "Orderitem";
 
 <?php  include(INCLUDES . "/footer.php");  ?>
 <?php  include(INCLUDES_LIST);  ?>	
-<script>
+<?php include(SCRIPTS . "jerseyrecord_add_dialog.php"); ?>  
 
-</script>
 <script type="text/javascript">
 		$(document).ready(function() {
 			var container = $("div.errorContainer");

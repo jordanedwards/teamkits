@@ -123,7 +123,7 @@ $dm = new DataManager();
 						$query = "SELECT * from item 
 						LEFT JOIN brand ON item.item_brand = brand.brand_id
 						LEFT JOIN club ON item.item_club_id = club.club_id
-						WHERE 1=1" . $query_where .$order;
+						WHERE 1=1 AND item.is_active ='Y'" . $query_where .$order;
 						
 						//Handle the sorting of the records
 						$session->setQuery($_SERVER["PHP_SELF"],$query);

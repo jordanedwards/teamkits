@@ -21,7 +21,46 @@ include(CLASSES . "/class_promo.php");
 	} else {
 		$promo->get_by_id($promo_id);
 	}
-$activeMenuItem = "Promo";				
+	
+$activeMenuItem = "Promo";
+
+if (isset($_POST['add_image']) && isset($_FILES['upload']['name'])):
+	include (CLASSES."class_file_upload.php"); //classes is the map where the class file is stored (one above the root)
+	
+	$max_size = 1024*1024; // the max. size for uploading 
+		
+	$my_upload = new file_upload;
+	$new_name = $_FILES['upload']['name'];
+	$my_upload->upload_dir = BASE ."/images/promo/"; // "files" is the folder for the uploaded files (you have to create this folder)
+	$my_upload->extensions = array(".png", ".jpg", ".gif", ".jpeg"); // specify the allowed extensions here
+	$my_upload->max_length_filename = 100; // change this value to fit your field length in your database (standard 100)
+	$my_upload->rename_file = true;
+	$my_upload->the_temp_file = $_FILES['upload']['tmp_name'];
+	$my_upload->the_file = $_FILES['upload']['name'];
+	$my_upload->http_error = $_FILES['upload']['error'];
+	$my_upload->replace = (isset($_POST['replace'])) ? $_POST['replace'] : "n"; // because only a checked checkboxes is true
+	$my_upload->do_filename_check = (isset($_POST['check'])) ? $_POST['check'] : "n"; // use this boolean to check for a valid filename
+	
+	//echo $my_upload;
+	
+	if ($my_upload->upload()) {
+		//echo $my_upload;
+	 // new name is an additional filename information, use this to rename the uploaded file
+		$full_path = $my_upload->upload_dir.$my_upload->file_copy;
+		$info = $my_upload->get_uploaded_file_info($full_path);
+		
+		//$promo->get_by_id($promo_id);
+		$promo->set_image($my_upload->get_file_copy());
+		$promo->save();
+		
+		// Success;
+		$session->setAlertMessage("Image uploaded successfully");
+		$session->setAlertColor("green");					
+	} else {
+		$session->setAlertMessage("Could not upload image: " . $my_upload->show_error_string());
+		$session->setAlertColor("red");	
+	}
+endif;
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,6 +100,7 @@ $activeMenuItem = "Promo";
 	<input type="hidden" name="page_id" value="<?php  echo $page_id  ?>" />	
 	
          <table class="admin_table">
+		 	<tr><th colspan="2">Promo Details</th></tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Sport: </td>
 				
@@ -140,12 +180,12 @@ $activeMenuItem = "Promo";
            			<td style="width:1px; white-space:nowrap;">Price: </td>
 					<td>$<input id="promo_price" name="promo_price" type="number" step=".01" value="<?php  echo $promo->get_price();  ?>"  style="width:90%" /></td>
 				</tr>
-				<tr>
+			<!--	<tr>
            			<td style="width:1px; white-space:nowrap;">Image: </td>
-            		<td><input id="promo_image" name="promo_image" type="text"  value="<?php  echo $promo->get_image();  ?>" style="width:90%" />
+            		<td><input id="promo_image" name="promo_image" type="hidden"  value="<?php echo $promo->get_image() ?>" style="width:90%" />
 					<p class="small">* PROMOTIONAL graphic, if desired, not the item image.</p>
 					</td>
-				</tr>
+				</tr>-->
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Expiry: </td>
             		<td><input id="promo_expiry" name="promo_expiry" type="text"  value="<?php  echo $promo->get_expiry();  ?>" style="width:90%" /> </td>
@@ -168,8 +208,9 @@ $activeMenuItem = "Promo";
   		
 		</table>
           <br /> 
-          <input type="submit" class="btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
-          <input type="button" class="btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+		  <input name="promo_image" type="hidden"  value="<?php echo $promo->get_image() ?>" />
+          <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
+          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>
 		
@@ -178,6 +219,22 @@ $activeMenuItem = "Promo";
         <?php  }  ?>			
 	
       </div>
+	<div class="col-md-6">
+	<?php if ($promo->get_id() > 0): ?>
+			<table class="admin_table">
+			<thead>
+			<tr><th colspan="5">Image:<i class="fa fa-plus-circle fa-lg add-icon add-image"></i></th></tr>
+			</thead>
+			
+			<tbody id="images_table">
+		 <?php 
+			echo"<tr><td><img src='images/promo/" .  $promo->get_image() . "'></td></tr>";
+		 ?>		
+			</tbody>
+		</table>
+		<br>
+	<? endif;?>
+	</div>
     </div> 
 
 </div><!-- /container -->
@@ -202,6 +259,70 @@ $(document).ready(function() {
 // Include any masks here:
 		 //   $("#student_tel").mask("(999) 999-9999");
 		
-  </script>		
-  </body>
+  </script>	
+
+<script>
+
+$(function() {
+	$( "#image_add_dialog" ).dialog({
+	// Select item
+		width: 550,	
+		modal: true,		
+		autoOpen: false,
+		show: {
+			 effect: "fade",
+			duration: 300
+		},
+		hide: {
+			effect: "puff",
+			percent:110,
+			duration: 200
+			},
+		buttons: {	
+			'Add': {
+				click: function() {
+					$('#newImageForm').submit();	
+			   	},
+			text: "Add",
+			class: 'btn btn-primary'			
+            },				
+			"Cancel": {
+				click: function() {
+						$( this ).dialog( "close" );
+					},
+				text: "Cancel",
+				class: 'btn btn-primary'
+			}
+		}
+	});
+
+	// Add component click:
+	$(".add-image").on("click", function (e) {
+		e.preventDefault();
+		$('#image_add_dialog').dialog('open');
+	});
+});
+</script>
+
+<div id="image_add_dialog" title="Image upload" style="display:none">
+	<form id="newImageForm" enctype="multipart/form-data"  method="post">
+		<input type="hidden" name="id" value="<?php echo $promo->get_id() ?>"/>
+		<input type="hidden" name="add_image" value="1"/>
+         <table class="admin_table">
+				<tr>
+            		<td style="background: lightsteelblue;">
+					<label for="upload">Select a file...</label><input type="file" name="upload" size="30">
+					<br>					
+					<!--<input type="submit" name="uploadSubmit" value="Upload">-->
+					<p class="small_text">
+					* Max upload size 600kb<br>
+					* This will overwrite the current image, if set
+					</p></td>
+				</tr>								 		
+		</table>
+          <br />
+        </form>
+</div>	
+  	
+  </body>  
 </html>

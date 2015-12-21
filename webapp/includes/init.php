@@ -1,6 +1,5 @@
 <?php
-	ob_start();
-	session_start();
+	ob_start(); 
 	date_default_timezone_set("America/Vancouver");
 	
 	define("BASE",$_SERVER['DOCUMENT_ROOT'] . "/webapp");
@@ -21,9 +20,13 @@
 	require_once(CLASSES . 'class_data_manager.php');
 	include_once(CLASSES . 'class_drop_downs.php');	
 
+	spl_autoload_register(function ($class) {
+		include (CLASSES .'class_' . strtolower($class) . '.php');
+	});
+	
 	define("HEAD", INCLUDES . "head.php");	
 	define("INCLUDES_LIST", INCLUDES . "includes.php");
-		
+		 
 	// Get settings:
 	//Show if you have a settings table and want to write the settings as constants:
 	$dm = new DataManager(); 
@@ -36,7 +39,18 @@
 			define($const_name,$row['settings_value']);
 		endwhile;
 	endif;
-		
+
+	// API Keys:
+	if (STRIPE_ENVIRONMENT == "live" && $appConfig["environment"] != "development"){
+		define("STRIPE_API_KEY",STRIPE_API_KEY_LIVE);
+		define("STRIPE_API_KEY_PUBLIC",STRIPE_API_KEY_LIVE_PUBLIC);		
+	} else {
+		// testing
+		define("STRIPE_API_KEY",STRIPE_API_KEY_TEST);
+		define("STRIPE_API_KEY_PUBLIC",STRIPE_API_KEY_TEST_PUBLIC);		
+	}
+	// End API keys
+	
 	$session = new SessionManager();
 		
 	$alert_msg = $session->getAlertMessage();
@@ -51,6 +65,7 @@ if($session->get_user_id() == "" && $public != true):
 	$publicPageArray = array(
 	BASE_URL . "/index.php",
 	BASE_URL . "/actions/action_login_user.php",
+	BASE_URL . "/members/actions/action_login.php",	
 	BASE_URL . "/forgot_password.php",
 	BASE_URL . "/actions/action_forgot_password_admin.php"
 	);
