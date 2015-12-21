@@ -58,28 +58,11 @@ if($session->get_user_id() != "") {
 			
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
-				<h1>ADMINISTRATORS:</h1>						
-				<form id="form1" action="webapp/actions/action_login_user.php" method="post" class="admin_table">
-				<input type="hidden" name="login_type" value="admin">				
-				<table class="admin_table">
-				  <tr><td>Email:</td><td><input id="email" name="email" type="email" size="50" /></td></tr>
-				  <tr><td>Password:</td><td><input id="password" name="password" type="password" /></td></tr>
-				  				  				  
-				  <tr><td></td><td><input type="submit" value="Login" /></td></tr>
-				  </table>
-				</form>
-					<br />
-					<a href="webapp/forgot_password.php">Reset Your Password</a>				</div>
-		</div>
-		<br>
-		<div class="row">
-			<div class="col-md-6 col-md-offset-3">
-				<h1>CLUB ADMINISTRATORS:</h1>						
+				<h1>CLUBS & ADMINISTRATORS:</h1>						
 				<form id="form1" action="webapp/actions/action_login_user.php" method="post" class="admin_table">
 					<table class="admin_table">
 				  <tr><td>Email:</td><td><input id="email" name="email" type="email" size="50" /></td></tr>
 				  <tr><td>Password:</td><td><input id="password" name="password" type="password" /></td></tr>
-				  <input type="hidden" name="login_type" value="club">				  
 				  <tr><td></td><td><input type="submit" value="Login" /></td></tr>
 				  </table>
 				</form>
@@ -90,10 +73,9 @@ if($session->get_user_id() != "") {
 		<div class="row">
 			<div class="col-md-6 col-md-offset-3">
 				<h1>CLUB MEMBERS:</h1>						
-				<form id="form1" action="webapp/actions/action_login_user.php" method="post" class="admin_table">
+				<form id="form1" action="webapp/actions/action_login_club_member.php" method="post" class="admin_table">
 					<table class="admin_table">
 				  <tr><td>Club ID:</td><td><input id="club_code" name="club_code" type="text" size="50" /></td></tr>
-				  <input type="hidden" name="login_type" value="club_member">				  
 				  <tr><td></td><td><input type="submit" value="Login" /></td></tr>
 				  </table>
 				</form>

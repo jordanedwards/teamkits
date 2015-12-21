@@ -19,6 +19,7 @@ $activeMenuItem = "Orders";
 	if ($_GET["id"] ==0){
 		// Change this to pass a parent value if creating a new record:
 		$orders->set_club_id($_GET['club_id']);
+		$orders->set_status(1);		
 	} else {
 		$orders->get_by_id($orders_id);
 	}
