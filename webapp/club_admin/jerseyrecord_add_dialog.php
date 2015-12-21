@@ -37,7 +37,7 @@ $(function() {
 				click: function() {
 						$( this ).dialog( "close" );
 					},
-				text: "Cancel",
+				text: "Close",
 				class: 'btn btn-primary'
 			}
 		}

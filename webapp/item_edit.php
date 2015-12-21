@@ -112,11 +112,7 @@ $activeMenuItem = "Manage";
 		</table>
           <br />
           <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
-<<<<<<< HEAD
         <!--  <input type="submit" class="btn btn-warning"  value="Delete" name="delete"/>&nbsp;	  		  -->
-=======
-          <input type="submit" class="btn btn-warning"  value="Delete" name="delete"/>&nbsp;	  		  
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
           <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>
 		<br>

@@ -39,14 +39,9 @@
 			define($const_name,$row['settings_value']);
 		endwhile;
 	endif;
-<<<<<<< HEAD
 
 	// API Keys:
 	if (STRIPE_ENVIRONMENT == "live" && $appConfig["environment"] != "development"){
-=======
-	
-	if (STRIPE_ENVIRONMENT == "live"){
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 		define("STRIPE_API_KEY",STRIPE_API_KEY_LIVE);
 		define("STRIPE_API_KEY_PUBLIC",STRIPE_API_KEY_LIVE_PUBLIC);		
 	} else {
@@ -54,10 +49,7 @@
 		define("STRIPE_API_KEY",STRIPE_API_KEY_TEST);
 		define("STRIPE_API_KEY_PUBLIC",STRIPE_API_KEY_TEST_PUBLIC);		
 	}
-<<<<<<< HEAD
 	// End API keys
-=======
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 	
 	$session = new SessionManager();
 		

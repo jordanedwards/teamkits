@@ -109,7 +109,8 @@ $activeMenuItem = "Orderitem";
           <br />
           <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
           <input type="submit" class="btn btn-warning"  value="Delete" name="delete"/>&nbsp;	  		  
-          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
+        <!--  <input type="button" class="btn btn-default" value="Back" onClick="window.location ='orders_edit.php?id=<?php echo $orderitem->get_order_id(); ?>'" />-->
+		  <a class="btn btn-default" href="orders_edit.php?id=<?php echo $orderitem->get_order_id(); ?>">Back</a>
         </form>
 		<br>
 		
@@ -132,7 +133,9 @@ $activeMenuItem = "Orderitem";
 		 	$dm = new DataManager(); 
 			$strSQL = "SELECT * from jerseyRecord 
 			WHERE orderitem_id=" . $orderitem->get_id() . "
-			AND is_active = 'Y'";						
+			AND is_active = 'Y'
+			ORDER BY name ASC
+			";						
 
 			$result = $dm->queryRecords($strSQL);	
 			if ($result):

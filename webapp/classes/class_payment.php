@@ -126,10 +126,6 @@ public function save() {
 			}		
 				
 			$result = $dm->updateRecords($strSQL);
-<<<<<<< HEAD
-=======
-addtolog($strSQL);
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 			// if this is a new record get the record id from the database
 			if(!$this->get_id() >= "0") {
 				$this->set_id(mysqli_insert_id($dm->connection));

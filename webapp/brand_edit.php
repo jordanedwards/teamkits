@@ -56,13 +56,8 @@ $activeMenuItem = "Manage";
 	
 	<div class="row">
 	<div class="col-md-6">
-<<<<<<< HEAD
 	<form id="form_brand" enctype="multipart/form-data" action="<?php  echo ACTIONS_URL; ?>action_brand_edit.php" method="post">
 	<input type="hidden" name="id" value="<?php  echo $brand->get_id();  ?>" />
-=======
-	<form id="form_brand" action="<?php  echo ACTIONS_URL; ?>action_brand_edit.php" method="post">
-	<input type="hidden" name="brand_id" value="<?php  echo $brand->get_id();  ?>" />
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 	<input type="hidden" name="action" value="edit" />	
 	<input type="hidden" name="page_id" value="<?php  echo $page_id  ?>" />	
 	
@@ -76,11 +71,7 @@ $activeMenuItem = "Manage";
 					<td>
 					<?php 
 						$dd = new DropDown();
-<<<<<<< HEAD
 						$dd->set_name("currency");						
-=======
-						$dd->set_name("brand_currency");						
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 						$dd->set_table("currency");	
 						$dd->set_name_field("name");
 						$dd->set_class_name("form-control inline");
@@ -91,13 +82,8 @@ $activeMenuItem = "Manage";
 					</td>
 				</tr>				
 				<tr>
-<<<<<<< HEAD
            			<td style="width:1px; white-space:nowrap;">Description: </td>
             		<td><textarea id="description" name="description" rows="20" style="width:90%" /><?php  echo $brand->get_description();  ?></textarea></td>
-=======
-           			<td style="width:1px; white-space:nowrap;">Catalogue: </td>
-            		<td><input id="brand_catalogue" name="brand_catalogue" type="text"  value="<?php  echo $brand->get_catalogue();  ?>" style="width:90%" /> </td>
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 				</tr>
 				<tr>
            			<td style="width:1px; white-space:nowrap;">Logo: </td>

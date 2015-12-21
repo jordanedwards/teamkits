@@ -46,13 +46,8 @@ $dm = new DataManager();
 
 	if ($s_sort == ""){
 		// if no sort is set, pick a default
-<<<<<<< HEAD
 		$s_sort = "brand.brand_name";
 		$s_sort_dir = "asc";	
-=======
-		$s_sort = "brand.brand_id";
-		$s_sort_dir = "desc";	
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 	}
 
 	$order = " ORDER BY " . $s_sort . " " . $s_sort_dir;		

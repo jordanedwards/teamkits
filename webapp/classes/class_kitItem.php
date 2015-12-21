@@ -1,7 +1,6 @@
 <?php 
  class KitItem extends Item {
  
- 		private $tablename = "kitItem";
 		private $id;
 		private $build_id;
  		private $item_id;
@@ -93,13 +92,13 @@ public function save() {
 						}
 			else {
 				$strSQL = "UPDATE kitItem SET 
-					build_id='".mysqli_real_escape_string($dm->connection, $this->get_build_id())."',						 
-					item_id='".mysqli_real_escape_string($dm->connection, $this->get_item_id())."',						 
-					is_active='".mysqli_real_escape_string($dm->connection, $this->get_is_active())."',						 
-					last_updated=NOW(),						
-					last_updated_user='".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."'
-						
-					WHERE id=".mysqli_real_escape_string($dm->connection, $this->get_id());
+				build_id='".mysqli_real_escape_string($dm->connection, $this->get_build_id())."',						 
+						item_id='".mysqli_real_escape_string($dm->connection, $this->get_item_id())."',						 
+						is_active='".mysqli_real_escape_string($dm->connection, $this->get_is_active())."',						 
+						last_updated=NOW(),						
+						last_updated_user='".mysqli_real_escape_string($dm->connection, $this->get_last_updated_user())."'
+							
+						WHERE id=".mysqli_real_escape_string($dm->connection, $this->get_id());
 			}		
 				
 			$result = $dm->updateRecords($strSQL);
@@ -129,14 +128,10 @@ public function save() {
 	}
 
 	// function to delete the record
-	public function delete($type) {
+	public function delete() {
 		try{
 			$dm = new DataManager();
-			if ($type == "full"){
-				$strSQL = "DELETE FROM " . $tablename . " WHERE id=" . $this->id;
-			} else {
-				$strSQL = "UPDATE " . $tablename . " SET is_active='N' WHERE id=" . $this->id;
-			}
+			$strSQL = "UPDATE kitItem SET is_active='N' WHERE id=" . $this->id;
 			$result = $dm->updateRecords($strSQL);
 			return $result;
 		}
@@ -155,7 +150,7 @@ public function save() {
 			if ($id > 0){		
 				$status = false;
 				$dm = new DataManager();
-				$strSQL = "SELECT * FROM " . $tablename . " WHERE id=" . $id;
+				$strSQL = "SELECT * FROM kitItem WHERE id=" . $id;
 		  
 				$result = $dm->queryRecords($strSQL);
 				if ($result){
@@ -188,7 +183,7 @@ public function save() {
   	public function load_from_post($array){
 		// Pass $_POST to this function, and if the post vars match the object methods (they should, using this program), then it will populate the object
   		foreach ($array as $key => $val){
-			if(property_exists($tablename,$key)):
+			if(property_exists('kitItem',$key)):
 				$method_name = "set_".$key;
 				$this->$method_name($val);
 			endif;
@@ -208,11 +203,20 @@ public function save() {
 		  
 	// loads the object data from a mysql assoc array
   	private function load($row){
+	
   		foreach ($row as $key => $val){
-			if(property_exists($tablename,$key)):
+			if(property_exists('kitItem',$key)):
 				$method_name = "set_".$key;
 				$this->$method_name($val);
 			endif;
-		}
+		}		
+	/*	$this->set_id($row["id"]);
+		$this->set_build_id($row["build_id"]);
+		$this->set_item_id($row["item_id"]);
+		$this->set_is_active($row["is_active"]);
+		$this->set_date_created($row["date_created"]);
+		$this->set_last_updated($row["last_updated"]);
+		$this->set_last_updated_user($row["last_updated_user"]);*/
+		
   }
 }

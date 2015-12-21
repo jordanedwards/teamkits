@@ -108,11 +108,7 @@ $activeMenuItem = "Payment";
           <br />
           <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;
           <input type="submit" class="btn btn-warning"  value="Delete" name="delete"/>&nbsp;	  		  
-<<<<<<< HEAD
           <input type="button" class="btn btn-default" value="Cancel" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />		  
-=======
-          <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />		  
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
         </form>
 		<br>
 		

@@ -16,6 +16,7 @@ $(function() {
 			duration: 200
 			},
 		buttons: {	
+		<?php if ($order->get_status() == 1){ ?>
 			'Add': {
 				click: function() {
 					if ($('#item_id').val() != null && $('#item_quantity').val() != 0){				
@@ -34,7 +35,7 @@ $(function() {
 			   	},
 			text: "Add",
 			class: 'btn btn-primary'			
-            },				
+            },	<? } ?>		
 			"Cancel": {
 				click: function() {
 						$( this ).dialog( "close" );
@@ -66,7 +67,7 @@ $(function() {
 	
 </script>
 
-
+<?php if ($order->get_status() == 1){ ?>
 <div id="order_item_add_dialog" title="Add Order Item" style="display:none">
 <form id="newComponentForm" method="post">
  <p>
@@ -95,3 +96,14 @@ $(function() {
   </p>  
 </form>
 </div>	
+
+<?php 
+} else { 
+?>
+
+<div id="order_item_add_dialog" title="Add Order Item" style="display:none">
+<p>
+Unable to add items, order has already been submitted.
+</p>
+</div>	
+<?php } ?>

@@ -208,10 +208,7 @@ endif;
   		
 		</table>
           <br /> 
-<<<<<<< HEAD
 		  <input name="promo_image" type="hidden"  value="<?php echo $promo->get_image() ?>" />
-=======
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
           <input type="submit" class="btn btn-success" value="<?php if ($_GET["id"] ==0){ ?> Add <?php  } else { ?> Save <?php  } ?>" />&nbsp;&nbsp;
           <input type="button" class="btn btn-default" value="Back" onClick="window.location ='<?php echo $_SERVER["HTTP_REFERER"];?>'" />
         </form>

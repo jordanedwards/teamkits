@@ -5,26 +5,14 @@ require(INCLUDES . "/acl_module.php");
 include_once(CLASSES . "/class_user.php"); 
 include(CLASSES . "/class_orders.php");
 $activeMenuItem = "Orders";
- ?>
-	
-<!DOCTYPE html>
+?><!DOCTYPE html>
 <html lang="en">
-<<<<<<< HEAD
 <head>
 	<?php  include(HEAD);  ?>
 	<meta name="description" content="">
 	<title><?php  echo $appConfig["app_title"];  ?> | Orders List</title>
 </head>
 <body>
-=======
-  <head>
-	<?php  include(HEAD);  ?>
-    <meta name="description" content="">
-    <title><?php  echo $appConfig["app_title"];  ?> | Orders List</title>
-  </head>
-
-  <body>
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 
 <?php  require(INCLUDES . "navbar.php");  ?>
 
@@ -52,11 +40,7 @@ $dm = new DataManager();
 	$s_order_total = escaped_var_from_post("s_order_total");
 	$s_order_status = escaped_var_from_post("s_order_status");
 	$s_order_date_created = escaped_var_from_post("s_order_date_created");
-<<<<<<< HEAD
 	$s_order_type = escaped_var_from_post("s_order_type");
-=======
-	$s_order_date_submitted = escaped_var_from_post("s_order_date_submitted");
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 	$s_sort = escaped_var_from_post('sort');
 	$s_sort_dir = escaped_var_from_post('sort_dir');
 
@@ -73,16 +57,11 @@ $dm = new DataManager();
           <form action="<?php  echo $_SERVER["PHP_SELF"]  ?>?reload=true" method="post" name="frmFilter" id="frmFilter">
             <table class="admin_table" style="display:block">
               <tr>
-<<<<<<< HEAD
 			  <td>Id</td><td>Club</td><td>Currency</td><td>Status</td><td data-toggle="tooltip" title="Three possible order types: 'Club': Order made by a club, paid by the club, and shipped to the club. 'Member': Order made by the club, paid by the members, and shipped to the club. 'Customer': Order made by, paid by, and shipped to a club member">Type</td><td><input type="button" class="clear" value="Clear" /></td>
-=======
-			  <td>Order id</td><td>Order club id</td><td>Order currency</td><td>Order total</td><td>Order status</td><td>Order date created</td><td>Order date submitted</td>				<td><input type="button" class="clear" value="Clear" /></td>
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
               </tr>
 			  
               <tr>
 			  <td><input type="text" name="s_order_id"  value="<?php  echo $s_order_id  ?>"/></td>
-<<<<<<< HEAD
 				<td>
 				<?php 
 					$dd = new DropDown();
@@ -126,15 +105,6 @@ $dm = new DataManager();
 				</select>
 				</td>
 				<input type="hidden" id="sort" name="sort" value="<?php echo $sort?>" />
-=======
-				<td><input type="text" name="s_order_club_id"  value="<?php  echo $s_order_club_id  ?>"/></td>
-				<td><input type="text" name="s_order_currency"  value="<?php  echo $s_order_currency  ?>"/></td>
-				<td><input type="text" name="s_order_total"  value="<?php  echo $s_order_total  ?>"/></td>
-				<td><input type="text" name="s_order_status"  value="<?php  echo $s_order_status  ?>"/></td>
-				<td><input type="text" name="s_order_date_created"  value="<?php  echo $s_order_date_created  ?>"/></td>
-				<td><input type="text" name="s_order_date_submitted"  value="<?php  echo $s_order_date_submitted  ?>"/></td>
-								<input type="hidden" id="sort" name="sort" value="<?php echo $sort?>" />
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 				<input type="hidden" id="sort_dir" name="sort_dir" value="<?php echo $sort_dir?>" />
 								
                 <td valign="top"><input type="submit" class="submit" value="Search" /></td>
@@ -166,22 +136,11 @@ $dm = new DataManager();
 			if($s_order_status != ""){
 				$query_where .= ' AND order_status = "'.$s_order_status.'"';
 			} 
-<<<<<<< HEAD
 			if($s_order_type != ""){
 				$query_where .= ' AND order_type = "'.$s_order_type.'"';
 			}		
 
 			$query = "SELECT *, SUBSTRING(order_date_created,1,10) AS created, SUBSTRING(order_date_submitted,1,10) AS submitted
-=======
-			if($s_order_date_created != ""){
-				$query_where .= ' AND order_date_created = "'.$s_order_date_created.'"';
-			} 
-			if($s_order_date_submitted != ""){
-				$query_where .= ' AND order_date_submitted = "'.$s_order_date_submitted.'"';
-			}		
-
-			$query = "SELECT *
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 			FROM orders	
 			LEFT JOIN club ON orders.order_club_id = club.club_id
 			LEFT JOIN orderstatus ON orders.order_status = orderstatus.orderstatus_id	
@@ -207,11 +166,7 @@ $dm = new DataManager();
 		if ($appConfig["environment"] == "development"){
 			consoleLog($query);
 		}
-<<<<<<< HEAD
 		 //echo $query;
-=======
-		//echo $query;
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 			 ?>
         </div>
 

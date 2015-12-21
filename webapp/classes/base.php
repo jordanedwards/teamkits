@@ -63,7 +63,89 @@
 			 $this->$key=NULL;
 		}
 	}	
-	
+
+	public function save() {
+
+		try{
+			$dm = new DataManager();
+			$this->set_last_updated_user();
+			$this->set_last_updated(date("Y-m-d g:h:i",time()));
+			
+			// Fetch all the database fields and match them to methods, then grab method value and write to array:
+			$strSQL = "SELECT * from " . $this->table_name;
+			$result = $dm->queryRecords($strSQL);
+			$fields = mysqli_num_fields($result);
+
+			while ($fieldinfo=mysqli_fetch_field($result)) {
+				if(property_exists($this->table_name,$fieldinfo->name)):
+					$method_name = "get_".$fieldinfo->name;
+					$tablefields[$fieldinfo->name] = $this->$method_name();
+				endif;
+			}	
+
+			// if record does not already exist, create a new one
+			if($this->get_id() == 0) {
+				// remove 'id' key so that it doesn't write it an empty value
+				unset($tablefields['id']);
+				$this->set_date_created(date("Y-m-d g:h:i",time()));
+				
+				$strSQL = "INSERT INTO " . $this->table_name. " (";
+				$strSQL .= implode(", ",array_keys($tablefields));
+				$strSQL .= ") VALUES (";
+				
+				$i = 1;
+				foreach($tablefields as $key => $val){
+					$i++;
+					if ($i < $fields){
+						$strSQL .= "'" . $val . "', "; 
+					}else {
+						$strSQL .= "'" . $val . "'"; 
+					}
+				}
+				
+				$strSQL .= ")";
+			}
+			else {
+			// Record already exists, so just update
+				$strSQL = "UPDATE " . $this->table_name. " SET ";
+				$i = 0;
+				foreach($tablefields as $key => $val){
+					$i++;
+					if ($i < $fields){
+						$strSQL .= $key."='" . $val . "', "; 
+					}else {
+						$strSQL .= $key."='" . $val . "'"; 
+					}
+				}
+				$strSQL .= " WHERE id=".mysqli_real_escape_string($dm->connection, $this->get_id());
+			}		
+
+			$result = $dm->updateRecords($strSQL);
+			// if this is a new record get the record id from the database
+			if(!$this->id > 0) {
+				$this->set_id(mysqli_insert_id($dm->connection));
+			}
+			
+          	if (!$result):
+      			throw new Exception("Failed Query: ". $strSQL);
+   			endif;
+      
+			// fetch data from the db to update object properties      
+      		$this->get_by_id($this->get_id());
+      
+			return $result;
+
+		}
+		catch(Exception $e) {
+			// CATCH EXCEPTION HERE -- DISPLAY ERROR MESSAGE & EMAIL ADMINISTRATOR
+			include_once(CLASSES . 'class_error_handler.php');
+			$errorVar = new ErrorHandler();
+			$errorVar->notifyAdminException($e);
+			exit;
+		}
+
+	}
+		
 	// function to delete or inactivate the record
 	public function delete($type = "") {
 		try{
@@ -115,15 +197,17 @@
 		}
 	}
 
-  	public function load_from_post($array){
+  	public function load($array){
 		// Pass $_POST to this function, and if the post vars match the object methods (they should, using this program), then it will populate the object
+		// loads the object data from a mysql assoc array
+
   		foreach ($array as $key => $val){
-			if(property_exists($tablename,$key)):
+			if(property_exists('cmscomponent',$key)):
 				$method_name = "set_".$key;
 				$this->$method_name($val);
 			endif;
 		}
-	} 
+	}  
 
 	public function get_json_data(){
 		// Used in an ajax function to return the object properties:
@@ -135,14 +219,5 @@
         }
         return json_encode($var);
 	}
-		  
-	// loads the object data from a mysql assoc array
-  	private function load($row){
-  		foreach ($row as $key => $val){
-			if(property_exists($tablename,$key)):
-				$method_name = "set_".$key;
-				$this->$method_name($val);
-			endif;
-		}
-  }
+
 }

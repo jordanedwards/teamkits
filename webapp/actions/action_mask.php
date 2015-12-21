@@ -4,10 +4,12 @@ require_once(CLASSES . "class_user.php");
 $user = new User();
 	
 if (isset($_GET["return"])){
-	$user_id = $user->get_by_id($session->getMask());	
-		
-	$session->set_user_id($user_id);
-	$session->set_user_role($user->get_role());
+	// For some goofy reason, the next line doesn't work here; It just returns $user_id =1;
+	//$user_id = $user->get_by_id($session->getMask());	
+	//addtolog("mask: " .$session->getMask(). " / user_id: " . $user_id);
+	$session->set_user_id($session->getMask());
+	$session->set_user_role(1);
+	$session->setMask("");
 	$session->setAlertColor("green");			
 	$session->setAlertMessage("Returned to Admin");
 	header("location: /webapp/dashboard.php");

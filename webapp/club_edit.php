@@ -20,10 +20,7 @@ include(CLASSES . "/class_club.php");
 		// Change this to pass a parent value if creating a new record:
 		$club->set_active("Y");
 		$club->set_sport(1);
-<<<<<<< HEAD
 		$club->generate_code();
-=======
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 	} else {
 		$club->get_by_id($club_id);
 	}

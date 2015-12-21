@@ -15,12 +15,14 @@ if ($id > 0){
 	$component->get_by_id($id);
 }
 $component->load_from_post($_POST);
+$component->set_name(trim(escaped_var_from_post('name')));
+
 if (!isset($active)){
 	$component->set_is_active("Y");
 }
 	
 if ($action == "delete"){	
-	if($component->delete() == true) {
+	if($component->delete("full") == true) {
 		$session->setAlertMessage("The $item_name has been removed successfully.");
 		$session->setAlertColor("green");
 		header("location:".$_SERVER['HTTP_REFERER']);

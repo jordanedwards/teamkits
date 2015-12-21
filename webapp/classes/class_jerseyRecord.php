@@ -3,8 +3,10 @@
  
 		private $id;
 		private $orderitem_id;
+		private $child_order;
  		private $number;
  		private $name;
+ 		private $price;
  		private $status;
  		private $is_active;
  		private $date_created;
@@ -20,11 +22,17 @@
 		public function get_orderitem_id() { return $this->orderitem_id;}
 		public function set_orderitem_id($value) {$this->orderitem_id=$value;}
 		
+		public function get_child_order_id() { return $this->child_order_id;}
+		public function set_child_order_id($value) {$this->child_order_id=$value;}
+		
 		public function get_number() { return $this->number;}
 		public function set_number($value) {$this->number=$value;}
 		
 		public function get_name() { return $this->name;}
 		public function set_name($value) {$this->name=$value;}
+				
+		public function get_price() { return $this->price;}
+		public function set_price($value) {$this->price=$value;}
 		
 		public function get_status() { return $this->status;}
 		public function set_status($value) {$this->status=$value;}
@@ -89,12 +97,14 @@ public function save() {
 			if($this->get_id() == 0) {
 				$this->is_active = "Y";
 				
-				$strSQL = "INSERT INTO jerseyRecord (id, orderitem_id, number, name, status, is_active, date_created, last_updated, last_updated_user) 
+				$strSQL = "INSERT INTO jerseyRecord (id, orderitem_id, number, name, price, child_order_id, status, is_active, date_created, last_updated, last_updated_user) 
         VALUES (
 				'".mysqli_real_escape_string($dm->connection, $this->get_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_orderitem_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_number())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_name())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_price())."',
+				'".mysqli_real_escape_string($dm->connection, $this->get_child_order_id())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_status())."',
 				'".mysqli_real_escape_string($dm->connection, $this->get_is_active())."',
 				NOW(),
@@ -106,6 +116,8 @@ public function save() {
 				orderitem_id='".mysqli_real_escape_string($dm->connection, $this->get_orderitem_id())."',						 
 						number='".mysqli_real_escape_string($dm->connection, $this->get_number())."',						 
 						name='".mysqli_real_escape_string($dm->connection, $this->get_name())."',						 
+						price='".mysqli_real_escape_string($dm->connection, $this->get_price())."',						 
+						child_order_id='".mysqli_real_escape_string($dm->connection, $this->get_child_order_id())."',						 
 						status='".mysqli_real_escape_string($dm->connection, $this->get_status())."',						 
 						is_active='".mysqli_real_escape_string($dm->connection, $this->get_is_active())."',						 
 						last_updated=NOW(),						
@@ -142,10 +154,15 @@ public function save() {
 	}
 
 	// function to delete the record
-	public function delete() {
+	public function delete($type = "") {
 		try{
 			$dm = new DataManager();
-			$strSQL = "UPDATE jerseyRecord SET is_active='N' WHERE id=" . $this->id;
+			if ($type == "full"){
+				$strSQL = "DELETE FROM jerseyRecord WHERE id=" . $this->id;
+			} else {
+				// just inactivate or hide
+				$strSQL = "UPDATE jerseyRecord SET is_active='N' WHERE id=" . $this->id;
+			}
 			$result = $dm->updateRecords($strSQL);
 			return $result;
 		}
@@ -157,7 +174,7 @@ public function save() {
 			exit;
 		}
 	}	
-
+	
 	// function to fetch the record and populate the object
 	public function get_by_id($id) {
 		try{
@@ -207,13 +224,39 @@ public function save() {
         }
         return json_encode($var);
 	}
-		  
+
+	public function get_order_id() {
+		try{
+			$order_id = 0;
+			$dm = new DataManager();
+			$strSQL = "SELECT orderitem_order_id FROM orderitemd WHERE orderitem_id=" . $this->orderitem_id;
+	  
+			$result = $dm->queryRecords($strSQL);
+			if ($result){
+				while($row = mysqli_fetch_assoc($result)):
+					$order_id = $row['orderitem_order_id'];
+				endwhile;	
+			}
+
+			return $order_id;
+		}
+		catch(Exception $e) {
+			// CATCH EXCEPTION HERE -- DISPLAY ERROR MESSAGE & EMAIL ADMINISTRATOR
+			include_once(CLASSES . 'class_error_handler.php');
+			$errorVar = new ErrorHandler();
+			$errorVar->notifyAdminException($e);
+			exit;
+		}
+	}
+			  
 	// loads the object data from a mysql assoc array
   	private function load($row){
 		$this->set_id($row["id"]);
 		$this->set_orderitem_id($row["orderitem_id"]);
 		$this->set_number($row["number"]);
 		$this->set_name($row["name"]);
+		$this->set_price($row["price"]);
+		$this->set_child_order_id($row["child_order_id"]);
 		$this->set_status($row["status"]);
 		$this->set_is_active($row["is_active"]);
 		$this->set_date_created($row["date_created"]);

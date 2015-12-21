@@ -257,11 +257,7 @@ public function __toString(){
 			foreach ($dataArray as $dataItem => $dataValue) {
 				$dataStr.= " data-" . $dataItem . "='" . $dataValue . "' ";
 			}
-<<<<<<< HEAD
 		}		
-=======
-		}
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 		
 		if ($this->get_static()):
 			// Static drop down	
@@ -347,13 +343,9 @@ public function __toString(){
 				$onchangeText = ($this->onchange != "" ? ' onchange="' . $this->onchange . '" ' : "");	
 				$requiredText = ($this->required ? ' required ' : " ");					
 				$disabledText = ($this->disabled ? ' disabled ' : " ");
-<<<<<<< HEAD
 				
 				$this->query = $strSQL;
 				
-=======
-				//echo $strSQL;
->>>>>>> f757d9f435864e736cc3bdfe6a140d905e3687d4
 				$result = $dm->queryRecords($strSQL);	
 				$ddl = '<select id="'.$this->id.'" name="'.$this->name.'" ' . $cssClass . $onchangeText . $dataStr . $requiredText . $disabledText . '>';
 				if (isset($this->placeholder)){
