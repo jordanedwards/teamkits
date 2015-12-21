@@ -1,0 +1,1 @@
+[30-Aug-2015 15:34:14 America/Detroit] PHP Warning:  parse_ini_file(/home/teamkits/public_html/webapp/cpc_api/../user.ini): failed to open stream: No such file or directory in /home/teamkits/public_html/webapp/cpc_api/GetRates.php on line 15

@@ -1,0 +1,44 @@
+[27-Aug-2015 17:48:59 America/Detroit] PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in /home/teamkits/public_html/webapp/members/catalogue.php on line 3
+[27-Aug-2015 17:49:50 America/Detroit] PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in /home/teamkits/public_html/webapp/members/catalogue.php on line 3
+[27-Aug-2015 17:50:23 America/Detroit] PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in /home/teamkits/public_html/webapp/members/catalogue.php on line 3
+[27-Aug-2015 17:50:26 America/Detroit] PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in /home/teamkits/public_html/webapp/members/catalogue.php on line 3
+[27-Aug-2015 17:50:36 America/Detroit] PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in /home/teamkits/public_html/webapp/members/catalogue.php on line 3
+[27-Aug-2015 17:51:15 America/Detroit] PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in /home/teamkits/public_html/webapp/members/catalogue.php on line 3
+[27-Aug-2015 17:51:24 America/Detroit] PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in /home/teamkits/public_html/webapp/members/catalogue.php on line 3
+[27-Aug-2015 17:51:25 America/Detroit] PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in /home/teamkits/public_html/webapp/members/catalogue.php on line 3
+[27-Aug-2015 22:11:14 America/Detroit] PHP Warning:  include_once(CLASSESclass_Cart.php): failed to open stream: No such file or directory in /home/teamkits/public_html/webapp/includes/init.php on line 29
+[27-Aug-2015 22:11:14 America/Detroit] PHP Warning:  include_once(): Failed opening 'CLASSESclass_Cart.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php:/usr/local/php54/lib/php') in /home/teamkits/public_html/webapp/includes/init.php on line 29
+[27-Aug-2015 22:11:16 America/Detroit] PHP Warning:  include_once(CLASSESclass_Cart.php): failed to open stream: No such file or directory in /home/teamkits/public_html/webapp/includes/init.php on line 29
+[27-Aug-2015 22:11:16 America/Detroit] PHP Warning:  include_once(): Failed opening 'CLASSESclass_Cart.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php:/usr/local/php54/lib/php') in /home/teamkits/public_html/webapp/includes/init.php on line 29
+[27-Aug-2015 22:12:17 America/Detroit] PHP Warning:  include_once(CLASSESclass_Cart.php): failed to open stream: No such file or directory in /home/teamkits/public_html/webapp/includes/init.php on line 29
+[27-Aug-2015 22:12:17 America/Detroit] PHP Warning:  include_once(): Failed opening 'CLASSESclass_Cart.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php:/usr/local/php54/lib/php') in /home/teamkits/public_html/webapp/includes/init.php on line 29
+[27-Aug-2015 22:12:19 America/Detroit] PHP Warning:  include_once(CLASSESclass_Cart.php): failed to open stream: No such file or directory in /home/teamkits/public_html/webapp/includes/init.php on line 29
+[27-Aug-2015 22:12:19 America/Detroit] PHP Warning:  include_once(): Failed opening 'CLASSESclass_Cart.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php:/usr/local/php54/lib/php') in /home/teamkits/public_html/webapp/includes/init.php on line 29
+[27-Aug-2015 22:12:50 America/Detroit] PHP Warning:  require(CLASSESclass_cart.php): failed to open stream: No such file or directory in /home/teamkits/public_html/webapp/members/cart.php on line 17
+[27-Aug-2015 22:12:50 America/Detroit] PHP Fatal error:  require(): Failed opening required 'CLASSESclass_cart.php' (include_path='.:/usr/lib/php:/usr/local/lib/php:/usr/local/php54/lib/php') in /home/teamkits/public_html/webapp/members/cart.php on line 17
+[27-Aug-2015 22:18:16 America/Detroit] PHP Fatal error:  main(): The script tried to execute a method or access a property of an incomplete object. Please ensure that the class definition &quot;Cart&quot; of the object you are trying to operate on was loaded _before_ unserialize() gets called or provide a __autoload() function to load the class definition  in /home/teamkits/public_html/webapp/members/cart.php on line 53
+[27-Aug-2015 22:19:09 America/Detroit] PHP Fatal error:  main(): The script tried to execute a method or access a property of an incomplete object. Please ensure that the class definition &quot;Cart&quot; of the object you are trying to operate on was loaded _before_ unserialize() gets called or provide a __autoload() function to load the class definition  in /home/teamkits/public_html/webapp/members/cart.php on line 53
+[27-Aug-2015 22:25:08 America/Detroit] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/teamkits/public_html/webapp/members/cart.php on line 21
+[27-Aug-2015 22:26:28 America/Detroit] PHP Parse error:  syntax error, unexpected 'else' (T_ELSE) in /home/teamkits/public_html/webapp/members/cart.php on line 21
+[27-Aug-2015 22:35:05 America/Detroit] PHP Parse error:  syntax error, unexpected '<' in /home/teamkits/public_html/webapp/members/cart.php on line 64
+[28-Aug-2015 21:19:23 America/Detroit] PHP Parse error:  syntax error, unexpected ';', expecting ']' in /home/teamkits/public_html/webapp/classes/class_cart.php on line 130
+[28-Aug-2015 21:20:37 America/Detroit] PHP Parse error:  syntax error, unexpected ';', expecting ']' in /home/teamkits/public_html/webapp/classes/class_cart.php on line 130
+[29-Aug-2015 17:21:37 America/Detroit] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/teamkits/public_html/webapp/members/cart.php on line 61
+[29-Aug-2015 17:22:49 America/Detroit] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/teamkits/public_html/webapp/members/cart.php on line 61
+[29-Aug-2015 17:23:38 America/Detroit] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/teamkits/public_html/webapp/members/cart.php on line 52
+[29-Aug-2015 17:25:09 America/Detroit] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/teamkits/public_html/webapp/members/cart.php on line 64
+[29-Aug-2015 17:27:23 America/Detroit] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/teamkits/public_html/webapp/members/cart.php on line 64
+[29-Aug-2015 17:29:01 America/Detroit] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/teamkits/public_html/webapp/members/cart.php on line 64
+[29-Aug-2015 17:29:54 America/Detroit] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/teamkits/public_html/webapp/members/cart.php on line 64
+[29-Aug-2015 17:34:53 America/Detroit] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/teamkits/public_html/webapp/members/cart.php on line 64
+[29-Aug-2015 17:35:59 America/Detroit] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/teamkits/public_html/webapp/members/cart.php on line 64
+[29-Aug-2015 17:36:47 America/Detroit] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/teamkits/public_html/webapp/members/cart.php on line 64
+[29-Aug-2015 17:37:50 America/Detroit] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/teamkits/public_html/webapp/members/cart.php on line 64
+[29-Aug-2015 17:38:15 America/Detroit] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/teamkits/public_html/webapp/members/cart.php on line 64
+[29-Aug-2015 17:38:37 America/Detroit] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in /home/teamkits/public_html/webapp/members/cart.php on line 64
+[29-Aug-2015 18:50:27 America/Detroit] PHP Parse error:  syntax error, unexpected '}' in /home/teamkits/public_html/webapp/members/ajax_cart.php on line 28
+[01-Sep-2015 15:27:26 America/Detroit] PHP Parse error:  syntax error, unexpected '$new_payment' (T_VARIABLE) in /home/teamkits/public_html/webapp/members/cart.php on line 88
+[01-Sep-2015 16:20:41 America/Detroit] PHP Parse error:  syntax error, unexpected 'endif' (T_ENDIF) in /home/teamkits/public_html/webapp/classes/class_cart.php on line 161
+[01-Sep-2015 16:20:43 America/Detroit] PHP Parse error:  syntax error, unexpected 'endif' (T_ENDIF) in /home/teamkits/public_html/webapp/classes/class_cart.php on line 161
+[13-Sep-2015 16:18:11 America/Detroit] PHP Parse error:  syntax error, unexpected '?>' in /home/teamkits/public_html/webapp/members/cart_beta.php on line 262
+[17-Sep-2015 14:27:44 America/Detroit] PHP Fatal error:  Can't use method return value in write context in /home/teamkits/public_html/webapp/members/cart_beta.php on line 312
